@@ -1,0 +1,343 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+	<dimen name="tool_bar_default_height">56dip</dimen>
+
+	<dimen name="chat_avatar_size">38.0dip</dimen>
+	<dimen name="chat_avatar_padding">4.0dip</dimen>
+	<dimen name="chat_avatar_stroke_width">3.0dip</dimen>
+	<dimen name="chat_seen_right_margin">52.0dip</dimen>
+	<dimen name="chat_image_margin_top">0.0dip</dimen>
+	<dimen name="chat_sticker_margin_top">0.0dip</dimen>
+	<dimen name="chat_doodle_margin_top">0.0dip</dimen>
+	<dimen name="chat_voice_seekbar_min_width">89.0dip</dimen>
+	<dimen name="chat_minigame_star_margin_left">136.0dip</dimen>
+	<dimen name="chat_setting_padding_left">16.0dip</dimen>
+	<dimen name="chat_setting_padding_right">10.0dip</dimen>
+	<dimen name="chat_setting_label_left_padding">4.0dip</dimen>
+	<dimen name="chat_time_padding_left">15.0dip</dimen>
+	<dimen name="chat_time_margin_top">4.0dip</dimen>
+	<dimen name="chat_time_margin_left">3.0dip</dimen>
+	<dimen name="chat_seekbar_padding">0.0dip</dimen>
+	<dimen name="chat_seekbar_progress_radius">0.0dip</dimen> <!-- 4.0 -->
+    <dimen name="chat_upload_progress_height">5.0dip</dimen>
+    <dimen name="chat_upload_progress_stroke_width">3.0dip</dimen>
+	<dimen name="chat_left_flow_margin">14.0dip</dimen>
+	<dimen name="chat_text_font_size">15.0dip</dimen>
+	<dimen name="chat_function_item_stroke_width">1.0px</dimen>
+    <dimen name="chat_secrete_timer_width">30.0dip</dimen>
+    <dimen name="chat_secrete_timer_height">30.0dip</dimen>
+    <dimen name="chat_secrete_timer_spacing">5.0dip</dimen>
+	
+    <dimen name="chat_bubble_radius">3.0dip</dimen>
+    <dimen name="chat_bubble_arrow_width">7.0dip</dimen>
+    <dimen name="chat_bubble_right_avatar_spacing_pos">42.0dip</dimen>
+    <dimen name="chat_bubble_right_noavatar_spacing_pos">7.0dip</dimen>
+    <dimen name="chat_bubble_left_negative_margin">-3.5dip</dimen>
+    <dimen name="chat_bubble_shadow_width">1.0dip</dimen>
+    <dimen name="chat_location_map_height">220dip</dimen>
+    <dimen name="chat_spacing_height_small">3.0dip</dimen>
+    <dimen name="chat_spacing_height_large">9.0dip</dimen>
+    
+	<!-- Bubble Right Type I (image, share media, doodle, rich message) -->
+	<dimen name="chat_bubble_right_padding_left">12.0dip</dimen> 
+	<dimen name="chat_bubble_right_padding_top">12.0dip</dimen> 
+	<dimen name="chat_bubble_right_padding_right">12.0dip</dimen>  
+	<dimen name="chat_bubble_right_padding_bottom">12.0dip</dimen>   
+	
+	<!-- Bubble Right Type II (text, sticker, share contact) -->
+	<dimen name="chat_bubble_right_padding_left_text">12.0dip</dimen> 
+	<dimen name="chat_bubble_right_padding_top_text">12.0dip</dimen> 
+	<dimen name="chat_bubble_right_padding_right_text">12.0dip</dimen>	 	
+	<dimen name="chat_bubble_right_padding_bottom_text">12.0dip</dimen> 
+	
+	<!-- Bubble Left Type I (image, share media, doodle, rich message) -->
+	<dimen name="chat_bubble_left_padding_left">23.0dip</dimen>    <!--  12 + 11 (arrow width) -->
+	<dimen name="chat_bubble_left_padding_top">12.0dip</dimen> 
+	<dimen name="chat_bubble_left_padding_right">12.0dip</dimen> 
+	<dimen name="chat_bubble_left_padding_bottom">12dip</dimen> 
+	<dimen name="chat_bubble_left_margin_top">5.0dip</dimen>
+	
+	<!-- Bubble Right Type II (text, sticker, share contact) -->
+	<dimen name="chat_bubble_left_padding_left_text">12.0dip</dimen>  
+	<dimen name="chat_bubble_left_padding_top_text">12.0dip</dimen> 
+	<dimen name="chat_bubble_left_padding_right_text">12.0dip</dimen> 
+	<dimen name="chat_bubble_left_padding_bottom_text">12dip</dimen> 	
+	
+	<dimen name="feed_avatar_size">51.0dip</dimen>
+	<dimen name="feed_avatar_margin_left">6.0dip</dimen>
+	<dimen name="feed_content_margin_top">34.0dip</dimen> 
+	<dimen name="feed_content_margin_left">18.0dip</dimen>
+    <dimen name="feed_content_margin_left_with_padding">28.0dip</dimen>
+    <dimen name="feed_child_content_margin_left_with_padding">36.0dip</dimen>
+	<dimen name="feed_content_margin_right">12.0dip</dimen>
+    <dimen name="feed_content_margin_right_with_padding">22.0dip</dimen>
+	<dimen name="feed_content_padding">10.0dip</dimen>
+	<dimen name="feed_content_vertical_group_margin">20.0dip</dimen>
+	<dimen name="feed_content_vertical_group_padding">12.0dip</dimen>
+	<dimen name="feed_status_padding_left">0.0dip</dimen>  <!-- 18 -->
+	<dimen name="feed_status_padding_left_link">10.0dip</dimen>	
+	<dimen name="feed_status_padding_right">10.0dip</dimen>
+	<dimen name="feed_status_flow_margin_left">35.0dip</dimen>
+	<dimen name="feed_status_text_size">14.0dip</dimen>
+	<dimen name="feed_content_text_padding">7.0dip</dimen>
+	<dimen name="feed_caption_margin_top">8.0dip</dimen>
+	<dimen name="feed_divider_height">1.0dip</dimen>
+	<dimen name="profile_avatar_dimen">96.0dip</dimen>
+	<dimen name="profile_feed_gridmedia_item_spacing">1.0dip</dimen>
+	<dimen name="profile_feedlist_top_divider_height">8.0dip</dimen>
+	<dimen name="feed_post_ui_margin">8.0dip</dimen>
+	<dimen name="feed_post_ui_padding">12.0dip</dimen>
+	<dimen name="feed_timebar_appicon_size">40.0dip</dimen>
+	<dimen name="feed_timebar_width">56.0dip</dimen>
+	<dimen name="feed_timebar_sticky_screen_location_top">122.0dip</dimen>
+	<dimen name="feed_group_btnmenu_margin_right">4.0dip</dimen>
+	<dimen name="feed_group_btnmenu_margin_top">5.5dip</dimen>
+	
+    <dimen name="normal_height">50.0dip</dimen>
+    <dimen name="asktoexit_frame">280.0dip</dimen>
+    <dimen name="login_frame">280.0dip</dimen>
+    <dimen name="login_button_width">250.0dip</dimen>
+    <dimen name="header_height">46.0dip</dimen>
+    <dimen name="search_bar_height">50.0dip</dimen>
+    <dimen name="search_edittext_height">40.0dip</dimen>
+    <dimen name="avatar_height">70.0dip</dimen>
+    <dimen name="conversation_row_margin_left">9.0dip</dimen>
+    <dimen name="conversation_row_margin_right">9.0dip</dimen>
+    <dimen name="conversation_control_button_width">145.0dip</dimen>
+    <dimen name="share_edit_options_bar_height">36.0dip</dimen>
+    <dimen name="options_bar_button_width">52.0dip</dimen>
+    <dimen name="menu_bar_height">62.0dip</dimen>
+    <dimen name="top_tab_bar_height">46.0dip</dimen>
+    <dimen name="connection_bar_height">50.0dip</dimen>
+    <dimen name="emo_tab_bar_height">45.0dip</dimen>
+    <dimen name="grid_emoticon_height">200.0dip</dimen>
+    <dimen name="grid_emoticon_margin_right">30.0dip</dimen>
+    <dimen name="item_emoticon_height">24.0dip</dimen>
+    <dimen name="image_chat_height">190.0dip</dimen>
+    <dimen name="item_sticker_height">68.0dip</dimen> <!-- 60 -->
+    <dimen name="sticker_height">100.0dip</dimen>
+    <dimen name="sticker_max_width">260.0dip</dimen>
+    <dimen name="sticker_max_height">250.0dip</dimen>
+    <dimen name="sticker_download_margin_top">8.0dip</dimen>
+    <dimen name="sticker_download_margin_right">5.0dip</dimen>
+    <dimen name="menu_finger_paint_margin">2.0dip</dimen>
+    <dimen name="menu_finger_paint_margin_handwriting">4.0dip</dimen>
+    <dimen name="tw_indexview_index_textsize">56.0sp</dimen>
+    <dimen name="tw_indexview_second_handle_toppading">10.599976dip</dimen>
+    <dimen name="tw_indexview_first_handle_toppading">7.299988dip</dimen>
+    <dimen name="tw_indexview_first_handle_textgap">12.6dip</dimen>
+    <dimen name="tw_indexview_first_handle_top_margin">1.0dip</dimen>
+    <dimen name="tw_indexview_first_handle_width">18.0dip</dimen>
+    <dimen name="tw_indexview_first_handle_width_clock">28.0dip</dimen>
+    <dimen name="tw_indexview_second_handle_width">19.299988dip</dimen>
+    <dimen name="tw_indexview_second_handle_gap">9.299988dip</dimen>
+    <dimen name="tw_indexview_characters_width">40.0dip</dimen>
+    <dimen name="tw_indexview_first_handle_textsize">11.299976sp</dimen>
+    <dimen name="image_width">74.0dip</dimen>
+    <dimen name="tile_width">74.0dip</dimen>
+    <dimen name="min_width">107.0dip</dimen>
+    <dimen name="max_width">165.0dip</dimen>
+    <dimen name="gap">4.0dip</dimen>
+    <dimen name="minwidth_bubble_chatcontent">140.0dip</dimen>
+    <dimen name="minheight_bubble_chatcontent">41.0dip</dimen>
+    <dimen name="maxwidth_namesender_chatcontent">100.0dip</dimen>
+    <dimen name="chat_status_text_size">12dip</dimen>
+    <dimen name="indicator_right_padding">10dp</dimen>
+    <dimen name="indicator_corner_radius">12dp</dimen>
+    <dimen name="indicator_internal_padding">4dp</dimen>
+    <dimen name="header_footer_left_right_padding">25dp</dimen>
+    <dimen name="header_footer_top_bottom_padding">10dp</dimen>
+    <dimen name="header_footer_internal_padding">20dp</dimen>
+    <dimen name="emoticon_gridview_height">145dp</dimen>
+    <dimen name="emoticon_circleflow_margin">5dp</dimen>
+    <dimen name="page_margin_width">1.0dp</dimen>
+    <dimen name="link_gridview_height">230dp</dimen>
+    <dimen name="chat_name_text_size">14dip</dimen>
+    <dimen name="cover_height">251.0dip</dimen>
+    <dimen name="slidingmenu_with">260dp</dimen>
+    <dimen name="slidingmenu_offset">140dp</dimen>
+    <dimen name="divider_height">1.0dip</dimen>
+    <dimen name="slidingmenu_divider_margin">10.0dip</dimen>
+    
+
+    <integer name="num_cols">2</integer>
+
+    <dimen name="shadow_width">2dp</dimen>
+    <dimen name="shadow_width_chat_sliding">1.0dip</dimen> <!-- 15.0dip -->
+    <dimen name="menu_item_width">70.66dip</dimen>
+    <dimen name="menu_item_height">70.66dip</dimen>
+    <dimen name="item_list_default_minheight">64.0dip</dimen>
+    <dimen name="feed_photo_size">300dp</dimen>
+    <dimen name="pb_size">30dp</dimen>
+    <dimen name="XLargeTextSize">20.0dip</dimen>
+    <dimen name="LargerTextSize">17.0dip</dimen>
+    <dimen name="LargeTextSize">16.0dip</dimen>
+    <dimen name="BasicTextSize">15.0dip</dimen>
+    <dimen name="TitleTextSize">18.0dip</dimen>
+    <dimen name="SmallTextSize">14.0dip</dimen>
+    <dimen name="SmallerTextSize">13.0dip</dimen>
+    <dimen name="SmallestTextSize">12.0dip</dimen>
+    <dimen name="LargestTextSize">30.0dip</dimen>
+    <dimen name="standard_spacing">5.0dip</dimen>
+    <dimen name="standard_spacing_large">8.0dip</dimen>
+    <dimen name="standard_padding">8.0dip</dimen>
+    <dimen name="effect_checkbox_width">55.0dip</dimen> <!-- ensure checkbox background is NOT clipped (effect & crop activity) -->
+
+    <dimen name="qrcode_capture_margin">25dp</dimen>
+    <dimen name="title_bar_height">54.0dip</dimen>
+    <dimen name="multipicker_grid_size">100.0dip</dimen>
+    <dimen name="multipicker_spacing">2.0dip</dimen>
+    <dimen name="layout_voice_width">178.0dip</dimen>
+    <dimen name="frameinset">1.0dip</dimen>
+    <dimen name="chatFunc_gridview_height">230.0dip</dimen>
+    <dimen name="chatFunc_flowview_chat_func_height">220.0dip</dimen>
+    <dimen name="emoticon_bottom_tab_height">51.0dip</dimen>
+    <dimen name="emoticon_button_tab_height">51.0dip</dimen>
+    <dimen name="emoticon_button_tab_width">48.0dip</dimen>
+    <dimen name="sharemain_margin_top">30dp</dimen>
+    <dimen name="tag_bubble_width">80.0dip</dimen>
+
+    <!-- for counting timer view -->
+    <dimen name="big_font_size">120dp</dimen>
+    <dimen name="small_font_size">48sp</dimen>
+    <dimen name="medium_font_size">60dp</dimen>
+    <dimen name="label_font_size">14sp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="push_to_talk_timer_view">140dp</dimen>
+    <dimen name="push_to_talk_waveview_size">420dp</dimen>
+    <dimen name="push_to_talk_waveview_margin_right">-210dp</dimen>
+    <dimen name="push_to_talk_circle_size">180dp</dimen>
+    <dimen name="push_to_talk_circle_outtercircle_size">220dp</dimen>
+    <dimen name="likes_dialog_padding_left">13.0dp</dimen>
+    <dimen name="likes_dialog_padding_top">23.0dp</dimen>
+    <dimen name="likes_dialog_padding_right">13.0dp</dimen>
+    <dimen name="likes_dialog_padding_bottom">20.0dp</dimen>
+
+    <!-- Timeline Clock -->
+    <dimen name="feed_clock_spacer_width_12hour">85.0dip</dimen>
+    <dimen name="feed_clock_spacer_width_24hour">68.0dip</dimen>
+    <dimen name="feed_clock_face_canvas_size">24.0dip</dimen>
+    <dimen name="feed_audio_popup_width">68.0dip</dimen>
+
+    <!-- chat inputrow view -->
+    <dimen name="layout_margin_top">6.0dip</dimen>
+    <dimen name="layout_margin_bottom">6.0dip</dimen>
+    <dimen name="chat_input_button_width">50.0dip</dimen>
+    <dimen name="chat_input_button_height">60.0dip</dimen>
+    <dimen name="chat_button_push_to_talk_height">60.0dip</dimen>
+    <dimen name="chat_input_msg_height">48.0dip</dimen>        
+    <dimen name="count_timer_view_width">110.0dp</dimen>
+    <dimen name="count_timer_view_height">60.0dp</dimen>
+    <dimen name="count_timer_view_margin_top">148.0dip</dimen>    
+    <dimen name="soft_input_controller_estimated_keyboard_height">200.0dip</dimen>
+    
+    <dimen name="layout_anim_voice_width">300.0dip</dimen>
+    <dimen name="layout_anim_voice_height">300.0dip</dimen>    
+        
+    <dimen name="push_to_talk_background_height">120.0dip</dimen>            
+    <dimen name="hint_record_font_size">12.0dip</dimen>
+    
+    <dimen name="min_height_input_row">50.0dip</dimen>
+
+    <!-- Dialog -->
+    <dimen name="dialog_min_width">280dp</dimen>
+    <dimen name="dialog_header_height">54.0dp</dimen>
+    <dimen name="dialog_header_title_size">22.0dp</dimen>
+    
+    <dimen name="dialog_header_title_margin_left">10.0dp</dimen>
+    <dimen name="dialog_header_icon_margin_right">10.0dp</dimen>        
+    
+    
+    <!-- Photo reminder -->
+    <dimen name="photo_reminder_image_size">52.0dip</dimen>
+    <dimen name="photo_reminder_padding">9.0dip</dimen>
+    <dimen name="photo_reminder_translation_y">19.5dip</dimen>
+    
+    <dimen name="avt_image_size_big_maintab">62.0dip</dimen>
+    <dimen name="avt_image_size_default">48.0dip</dimen>
+    <dimen name="avt_image_size_comment">38.0dip</dimen>
+    <dimen name="margin_top_cover_image_maintab">-40dp</dimen>
+    
+    
+    <!-- THEME -->
+    <!-- The width of the big icons in notifications. -->
+    <dimen name="notification_large_icon_width">64dp</dimen>
+    <!-- The width of the big icons in notifications. -->
+    <dimen name="notification_large_icon_height">64dp</dimen>
+
+    <dimen name="stencils_btn_height">32dip</dimen>
+    <dimen name="stencils_default_btn_height">36dip</dimen>
+    <dimen name="stencils_btn_corner_radius">2.0dip</dimen>
+    
+    <!-- Buttons -->
+    <dimen name="btn_style_04_padding_left">8.0dip</dimen>
+    <dimen name="btn_style_04_padding_top">7.0dip</dimen>
+    <dimen name="btn_style_04_padding_right">8.0dip</dimen>
+    <dimen name="btn_style_04_padding_bottom">7.0dip</dimen>   
+    
+    <!-- Messages Fragment Footer -->    
+    <dimen name="layoutFooterFunction_parent_height">62dip</dimen>
+    <dimen name="button_record_main_tab_height">62dip</dimen>
+    
+    <dimen name="default_separate_line_padding">8.0dip</dimen>
+    
+    <dimen name="msgtab_separate_line_padding">8.0dip</dimen>
+    
+    <dimen name="default_msg_item_padding_top">8.0dip</dimen>
+    <dimen name="default_bigavt_item_padding_top">12.0dip</dimen>
+    <dimen name="default_msg_item_padding_left">8.0dip</dimen>
+    <dimen name="default_distance_avt_content">12.0dip</dimen>
+    
+    <dimen name="default_contactlist_marging_left">7.0dip</dimen>
+    
+    <!-- a = 62 -->
+    <dimen name="group_avatar_view_container_size">62.0dip</dimen>
+    <dimen name="group_avatar_view_style2_base_size">36.32dip</dimen><!-- (2 - sqrt(2)) * a -->
+    <dimen name="group_avatar_view_style4_base_size">30.3dip</dimen><!-- a/2  -->
+    <dimen name="group_avatar_view_style3_base_size">30.3dip</dimen><!-- a/2  -->
+    <dimen name="group_avatar_view_style3_container_width">62.0dip</dimen>
+    <dimen name="group_avatar_view_style3_container_height">57.85dip</dimen><!-- (sqrt(3)+2) / 4 * a  -->
+    
+    <!-- a = 48 -->
+    <dimen name="group_avatar_view_container_small_size">62.0dip</dimen>
+    <dimen name="group_avatar_view_style2_base_small_size">28.11dip</dimen><!-- (2 - sqrt(2)) * a -->
+    <dimen name="group_avatar_view_style4_base_small_size">24.0dip</dimen><!-- a/2  -->
+    <dimen name="group_avatar_view_style3_base_small_size">24.0dip</dimen><!-- a/2  -->
+    <dimen name="group_avatar_view_style3_container_small_width">48.0dip</dimen>
+    <dimen name="group_avatar_view_style3_container_small_height">44.78dip</dimen><!-- (sqrt(3)+2) / 4 * a  -->
+    
+    <!-- StartUp Flow -->
+    <dimen name="startup_contentbox_padding">12.0dip</dimen>
+    <dimen name="root_content_padding">8.0dip</dimen>
+    <!-- gallery -->
+    <dimen name="gallery_selectable_area_thumb_padding_top_bottom">6.0dip</dimen>
+    <dimen name="gallery_selectable_area_thumb_padding_left_right">3.0dip</dimen>
+    <dimen name="gallery_selectable_area_height">75.0dip</dimen>
+    <dimen name="gallery_selectable_area_height_with_padding">87.0dip</dimen>
+    
+    <dimen name="stencils_button_text_size">16.0dip</dimen>
+    <dimen name="stencils_button_padding">15dip</dimen>
+    <!-- ZALO POPUP V2 -->
+    <dimen name="popup_title_marginLeft_with_shadowline">20.0dip</dimen>
+    <dimen name="popup_title_marginLeft">16.0dip</dimen>
+    <dimen name="popup_content_marginLeft">16.0dip</dimen>
+    <dimen name="popup_title_area_height">50.0dip</dimen>
+    <dimen name="popup_content_text_size">16.0dip</dimen>
+    <dimen name="popup_content_list_item_text_size">19.0dip</dimen>
+    
+    <!-- ZALO LISTVIEW V2 -->
+    <dimen name="item_list_content_text_size">16.0dip</dimen>
+    <dimen name="item_header_list_text_size">12.0dip</dimen>
+    <dimen name="item_header_list_text_marginTop">20.0dip</dimen>
+    <dimen name="item_list_description_text_size">14.0dip</dimen>
+    
+    <dimen name="general_default_text_size">16.0dip</dimen>
+    <dimen name="footer_fucn_margin_size">15.0dip</dimen>
+    <dimen name="tab_title_text_size">14.0dip</dimen>
+
+    <dimen name="game_center_btn_width">90dip</dimen>
+    <dimen name="feed_menu_btn_width">32.0dip</dimen>
+
+    <dimen name="navigation_drawer_width">280dp</dimen>
+</resources>

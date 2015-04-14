@@ -1,0 +1,20 @@
+<com.zing.demo.uicontrol.ListItemLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context=".ActMain">
+
+    <Button
+        android:id="@+id/btnNormal"
+        android:layout_width="100.0dip"
+        android:layout_height="wrap_content"
+        android:text="Normal"/>
+    <Button
+        android:id="@+id/btnStyle"
+        android:layout_width="100.0dip"
+        android:layout_height="wrap_content"
+        android:text="Style"/>
+
+</com.zing.demo.uicontrol.ListItemLayout>
