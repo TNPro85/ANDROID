@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SwipeListViewLib</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="reveal">Reveal</string>
+    <string name="todo">Todo</string>
+    <string name="menu_all">MenuFillAll</string>
+    <string name="menu_part">MenuFillPart</string>
+</resources>

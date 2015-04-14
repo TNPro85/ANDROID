@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@id/back_view_id"
+        android:gravity="center"
+        android:background="@color/gray"
+        android:layout_width="match_parent"
+        android:layout_height="90dp">
+
+        <Button
+            android:id="@+id/undo_dismiss"
+            android:text="Undo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@id/front_view_id"
+        android:padding="8dp"
+        android:layout_width="match_parent"
+        android:background="@color/red"
+        android:gravity="center"
+        android:layout_height="90dp">
+        <TextView
+            android:id="@+id/name"
+            android:text="Test"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</FrameLayout>

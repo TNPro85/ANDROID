@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+    <item android:id="@+id/action_reveal" android:title="@string/reveal"
+        android:orderInCategory="100" app:showAsAction="never" />
+
+    <item android:id="@+id/action_todo" android:title="@string/todo"
+        android:orderInCategory="100" app:showAsAction="never"/>
+
+    <item android:id="@+id/action_menu_fill_all" android:title="@string/menu_all"
+        android:orderInCategory="100" app:showAsAction="never"/>
+    <item android:id="@+id/action_menu_fill_part" android:title="@string/menu_part"
+        android:orderInCategory="100" app:showAsAction="never"/>
+</menu>
