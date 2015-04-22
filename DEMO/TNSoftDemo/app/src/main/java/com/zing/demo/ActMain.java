@@ -43,7 +43,9 @@ public class ActMain extends ActionBarActivity {
         s = new String[] {
                 "Unique Id",
                 "Subsequence Emoji",
-                "Xml 2 Java"};
+                "Xml 2 Java",
+                "File Observer"
+        };
         Arrays.sort(s);
 
         mDemoCategoryAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, s);
@@ -62,6 +64,9 @@ public class ActMain extends ActionBarActivity {
                         break;
                     case "Xml 2 Java":
                         intent = new Intent(ActMain.this, ActXml2Java.class);
+                        break;
+                    case "File Observer":
+                        intent = new Intent(ActMain.this, ActFileObserver.class);
                         break;
                 }
 

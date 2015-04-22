@@ -31,9 +31,10 @@
             android:configChanges="orientation|keyboard|screenSize|screenLayout"></activity>
         <activity
             android:name=".ActSubsequenceEmoji"
-            android:configChanges="orientation|keyboard|screenSize|screenLayout">
-            >
-        </activity>
+            android:configChanges="orientation|keyboard|screenSize|screenLayout"></activity>
+        <activity
+            android:name=".ActFileObserver"
+            android:configChanges="orientation|keyboard|screenSize|screenLayout"></activity>
     </application>
 
 </manifest>
