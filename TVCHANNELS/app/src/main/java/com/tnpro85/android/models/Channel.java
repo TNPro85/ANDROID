@@ -22,8 +22,6 @@ public abstract class Channel implements Comparable<Channel> {
 
     @Override
     public int compareTo(Channel another) {
-        if(this.cNum < another.cNum) return -1;
-        if(this.cNum == another.cNum) return 0;
-        return 1;
+        return Integer.compare(this.cNum, another.cNum);
     }
 }
