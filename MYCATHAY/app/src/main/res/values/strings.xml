@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">My Cathay Life</string>
+
+    <string name="dev">2015 Copyright by Cathay Vietnam</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- LOADING -->
+    <string name="str_loading">Đang tải&#8230;</string>
+    <string name="str_loading_location">Đang xác định vị trí của bạn&#8230;</string>
+</resources>
