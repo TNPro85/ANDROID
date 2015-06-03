@@ -26,8 +26,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ActMain"></activity>
-        <activity android:name=".ActBase"></activity>
+        <activity
+            android:name=".ActMain"
+            android:configChanges="orientation|screenSize">
+
+        </activity>
+        <activity
+            android:name=".ActBase"
+            android:configChanges="orientation|screenSize"></activity>
     </application>
 
 </manifest>

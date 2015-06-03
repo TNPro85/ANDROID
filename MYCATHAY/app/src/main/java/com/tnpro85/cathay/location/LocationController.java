@@ -3,12 +3,15 @@ package com.tnpro85.cathay.location;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
-import android.widget.Toast;
+import android.os.Bundle;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.tnpro85.cathay.application.MainApplication;
+import com.tnpro85.cathay.utils.AlertUtils;
 
 import java.util.List;
 
@@ -33,18 +36,51 @@ public class LocationController {
         return mLocationController;
     }
 
-    public Location getCurrentLocation() {
-        LocationRequest locationRequest = new LocationRequest();
+    LocationListener mLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            AlertUtils.showMes("Changed: " + location.getLongitude() + "/" + location.getLatitude());
+        }
+    };
 
-        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
+    GoogleApiClient mGoogleApiClient;
+    public Location getCurrentLocation(Context context) {
+
+
+        mGoogleApiClient = new GoogleApiClient.Builder(context)
+                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(Bundle bundle) {
+                        getLocation();
+                    }
+
+                    @Override
+                    public void onConnectionSuspended(int i) {
+
+                    }
+                })
+                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+                    }
+                })
                 .addApi(LocationServices.API)
                 .build();
 
 
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest,  );
+
+        mGoogleApiClient.connect();
         return null;
+    }
+
+    private void getLocation() {
+        final LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, mLocationListener);
     }
 
     public Location getLastKnownLocation() {

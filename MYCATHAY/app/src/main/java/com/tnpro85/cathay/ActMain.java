@@ -26,9 +26,10 @@ public class ActMain extends ActBase {
         setTitle(getString(R.string.app_name));
 
         if(LocationController.getInstance().isLocationEnable()) {
-            Location location = LocationController.getInstance().getLastKnownLocation();
-            if(location != null)
-                AlertUtils.showMes("long: " + location.getLongitude() + "/ lat: " + location.getLatitude());
+            LocationController.getInstance().getCurrentLocation(this);
+//            Location location = LocationController.getInstance().getLastKnownLocation();
+//            if(location != null)
+//                AlertUtils.showMes("long: " + location.getLongitude() + "/ lat: " + location.getLatitude());
         }
         else
             AlertUtils.showMes("Location is not DISABLED");
