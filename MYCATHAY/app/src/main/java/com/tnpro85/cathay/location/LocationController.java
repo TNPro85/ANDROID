@@ -74,7 +74,7 @@ public class LocationController {
 
     private void getLocation() {
         final LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
+        mLocationRequest.setInterval(30000);
         mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
@@ -96,6 +96,6 @@ public class LocationController {
     public boolean isLocationEnable() {
         boolean enabledGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         boolean enabledNetwork = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        return enabledGPS && enabledGPS;
+        return enabledGPS && enabledNetwork;
     }
 }
