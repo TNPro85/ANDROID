@@ -36,42 +36,40 @@ public class LocationController {
         return mLocationController;
     }
 
-    LocationListener mLocationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(Location location) {
-            AlertUtils.showMes("Changed: " + location.getLongitude() + "/" + location.getLatitude());
-        }
-    };
+    private LocationListener mLocationListener;
+    private GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(MainApplication.getAppContext())
+            .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                @Override
+                public void onConnected(Bundle bundle) {
+                    getLocation();
+                }
 
-    GoogleApiClient mGoogleApiClient;
-    public Location getCurrentLocation(Context context) {
+                @Override
+                public void onConnectionSuspended(int i) {
+                    AlertUtils.showMes("Cannot to Google Location Service has been suspended.");
+                }
+            })
+            .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                @Override
+                public void onConnectionFailed(ConnectionResult connectionResult) {
+                    AlertUtils.showMes("Cannot connect to Google Location Service.");
+                }
+            })
+            .addApi(LocationServices.API)
+            .build();
 
-
-        mGoogleApiClient = new GoogleApiClient.Builder(context)
-                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                    @Override
-                    public void onConnected(Bundle bundle) {
-                        getLocation();
-                    }
-
-                    @Override
-                    public void onConnectionSuspended(int i) {
-
-                    }
-                })
-                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-                    }
-                })
-                .addApi(LocationServices.API)
-                .build();
-
-
-
-        mGoogleApiClient.connect();
+    public Location getCurrentLocation(LocationListener locationListener) {
+        mLocationListener = locationListener;
+        if(mGoogleApiClient.isConnected())
+            getLocation();
+        else
+            mGoogleApiClient.connect();
         return null;
+    }
+
+    public void closeGoogleApiClient() {
+        if(mGoogleApiClient != null && mGoogleApiClient.isConnected())
+            mGoogleApiClient.disconnect();
     }
 
     private void getLocation() {

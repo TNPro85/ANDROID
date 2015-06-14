@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.android.gms.location.LocationListener;
 import com.tnpro85.cathay.location.LocationController;
 import com.tnpro85.cathay.models.LocationItem;
 import com.tnpro85.cathay.uicontrols.LayoutLoading;
@@ -119,33 +120,42 @@ public class ActMain extends ActBase {
     private void loadLocation() {
         try {
             if(LocationController.getInstance().isLocationEnable()) {
-                Location location = LocationController.getInstance().getCurrentLocation(this);
-                if(location == null)
-                    location = LocationController.getInstance().getLastKnownLocation();
-
-                if(location != null)
-                    AlertUtils.showMes("long: " + location.getLongitude() + "/ lat: " + location.getLatitude());
-                else
-                    AlertUtils.showMes("long: " + location.getLongitude() + "/ lat: " + location.getLatitude());
-
-                layoutLoading.hide();
-
-                filterList = new ArrayList<>(locationList);
-                Iterator<LocationItem> iterator = filterList.iterator();
-                while(iterator.hasNext()) {
-                    LocationItem item = iterator.next();
-                    if(location.distanceTo(item.mLocation) / 1000 > 10)
-                        iterator.remove();
-                }
-
-                mLocationAdapter.setData(filterList);
-                mLocationAdapter.notifyDataSetChanged();
+                LocationController.getInstance().getCurrentLocation(new LocationListener() {
+                    @Override
+                    public void onLocationChanged(Location location) {
+                        LocationController.getInstance().closeGoogleApiClient();
+                        updateLocation(location);
+                    }
+                });
             }
             else
                 AlertUtils.showMes("Location is not DISABLED");
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void updateLocation(Location location) {
+        if(location == null)
+            location = LocationController.getInstance().getLastKnownLocation();
+
+        if(location != null) {
+            AlertUtils.showMes("long: " + location.getLongitude() + "/ lat: " + location.getLatitude());
+            layoutLoading.hide();
+
+            filterList = new ArrayList<>(locationList);
+            Iterator<LocationItem> iterator = filterList.iterator();
+            while(iterator.hasNext()) {
+                LocationItem item = iterator.next();
+                if(location.distanceTo(item.mLocation) / 1000 > 10)
+                    iterator.remove();
+            }
+
+            mLocationAdapter.setData(filterList);
+            mLocationAdapter.notifyDataSetChanged();
+        }
+        else
+            AlertUtils.showMes("Cannot get location!!!");
     }
 
     public static void openGoogleMapApp(Context context, String address, Location location) {
