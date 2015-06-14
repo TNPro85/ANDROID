@@ -4,5 +4,15 @@
     android:layout_height="match_parent"
     tools:context="com.tnpro85.cathay.ActMain">
 
-    <include layout="@layout/layout_loading"/>
+    <ListView
+        android:id="@+id/lvLocation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="#ffffffff"
+        android:divider="#c8c8c8"
+        android:dividerHeight="1px">
+
+    </ListView>
+
+    <include layout="@layout/layout_loading" />
 </RelativeLayout>

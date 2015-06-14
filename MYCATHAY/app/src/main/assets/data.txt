@@ -1,0 +1,12 @@
+[
+{"name": "XÍ NGHIỆP Ô TÔ TOYOTA BẾN THÀNH", "address": "262 Trần Hưng Đạo, Quận.1, TP.HCM", "lat": 10.760309, "long": 106.687568},
+{"name": "CÔNG TY CP TM Ô TÔ TOÀN CẦU", "address": "2 Bis Phạm Phú Thứ, P11, Q Tân Bình", "lat": 10.788934, "long": 106.651690},
+{"name": "TOYOTA PHÚ MỸ HƯNG", "address": "806 nguyễn Văn Linh, P.Tân Phú, Quận 7, TP HCM", "lat": 10.730425, "long": 106.718728},
+{"name": "DNTN QUỐC VIỆT", "address": "Số 20, Đường số 2, KP6, P. Trường Thọ, Thủ Đức", "lat": 10.832294, "long": 106.755130},
+{"name": "CTY TNHH BÁ THÀNH", "address": "95 Lê Lợi, P.4, Q. Gò Vấp, TPHCM", "lat": 10.819235, "long": 106.685529},
+{"name": "CÔNG TY TNHH MTV TẤN HẢI", "address": "19/9 Nguyễn Văn Trỗi, P. Hòa Bình, Biên Hòa", "lat": 10.956940, "long": 106.812359},
+{"name": "CÔNG TY TMDV TẤN PHÁT ĐẠT - ĐỒNG NAI FORD", "address": "25A-26A/61 QL1A, p.Tam Hòa, BH, ĐN", "lat": 10.946795, "long": 106.868933},
+{"name": "CÔNG TY CỔ PHẦN Ô TÔ MẠNH PHÁT", "address": "96 Lê Hồng Phong, Khu phố 5, P.Phú Lợi, TX Thủ Dầu Một, Bình Dương", "lat": 10.988927, "long": 106.677262},
+{"name": "CÔNG TY CỔ PHẦN Ô TÔ HUY HOÀNG", "address": "479 Tam Trinh, Quận Hoàng Mai, Hà Nội", "lat": 20.981869, "long": 105.864387},
+{"name": "CÔNG TY CỔ PHẦN Ô TÔ HUYNDAI ĐÔNG NAM", "address": "Km 14, QL1A, Ngọc Hồi, Thanh Trì, Hà Nội", "lat": 20.917475, "long": 105.852849}
+]

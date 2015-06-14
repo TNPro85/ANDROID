@@ -18,7 +18,7 @@ public class ActBase extends ActionBarActivity {
     protected void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) {
-            actionBar.setBackgroundDrawable(getDrawable(R.drawable.bg_header));
+            actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_header));
         }
     }
 }

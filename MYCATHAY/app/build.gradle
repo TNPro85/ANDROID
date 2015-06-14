@@ -1,9 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('D:/PROJECTS/GIT/ANDROID/MYCATHAY/androidebug.keystore')
+        }
+    }
     compileSdkVersion 22
     buildToolsVersion "22.0.0"
-
     defaultConfig {
         applicationId "com.tnpro85.cathay"
         minSdkVersion 9
@@ -15,6 +19,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.debug
         }
     }
 }
