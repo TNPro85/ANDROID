@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Bảo hiểm Cathay</string>
+
+    <string name="dev">2015 Bản quyền của Cathay Vietnam</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- LOADING -->
+    <string name="str_loading">Đang tải&#8230;</string>
+    <string name="str_loading_data">Đang tải dữ liệu. Vui lòng chờ&#8230;</string>
+    <string name="str_loading_location">Đang xác định vị trí của bạn&#8230;</string>
+</resources>
