@@ -44,7 +44,8 @@ public class ActMain extends ActionBarActivity {
                 "Unique Id",
                 "Subsequence Emoji",
                 "Xml 2 Java",
-                "File Observer"
+                "File Observer",
+                "Convert number to K,M,B"
         };
         Arrays.sort(s);
 
@@ -67,6 +68,9 @@ public class ActMain extends ActionBarActivity {
                         break;
                     case "File Observer":
                         intent = new Intent(ActMain.this, ActFileObserver.class);
+                        break;
+                    case "Convert number to K,M,B":
+                        intent = new Intent(ActMain.this, ActConvertNumToKMB.class);
                         break;
                 }
 
