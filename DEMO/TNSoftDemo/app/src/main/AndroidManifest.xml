@@ -38,6 +38,9 @@
         <activity
             android:name=".ActConvertNumToKMB"
             android:configChanges="orientation|keyboard|screenSize|screenLayout"></activity>
+        <activity
+            android:name=".ActDrawOnView"
+            android:configChanges="orientation|keyboard|screenSize|screenLayout"></activity>
     </application>
 
 </manifest>

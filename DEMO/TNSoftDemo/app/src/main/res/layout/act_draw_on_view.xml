@@ -1,0 +1,17 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
+
+    <com.zing.demo.uicontrol.DrawImage
+        android:id="@+id/imvDemo"
+        android:layout_width="28.0dip"
+        android:layout_height="28.0dip"
+        android:layout_gravity="center"
+        android:src="@drawable/profile_icon_halloween"/>
+
+</LinearLayout>

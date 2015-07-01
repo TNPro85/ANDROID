@@ -45,7 +45,8 @@ public class ActMain extends ActionBarActivity {
                 "Subsequence Emoji",
                 "Xml 2 Java",
                 "File Observer",
-                "Convert number to K,M,B"
+                "Convert number to K,M,B",
+                "Draw on View"
         };
         Arrays.sort(s);
 
@@ -71,6 +72,9 @@ public class ActMain extends ActionBarActivity {
                         break;
                     case "Convert number to K,M,B":
                         intent = new Intent(ActMain.this, ActConvertNumToKMB.class);
+                        break;
+                    case "Draw on View":
+                        intent = new Intent(ActMain.this, ActDrawOnView.class);
                         break;
                 }
 
