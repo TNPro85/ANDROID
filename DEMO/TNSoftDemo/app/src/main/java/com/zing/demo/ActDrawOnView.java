@@ -24,5 +24,29 @@ public class ActDrawOnView extends ActBase {
         setTitle("Draw on view");
 
         imvDemo = (DrawImage) findViewById(R.id.imvDemo);
+
+        findViewById(R.id.btn1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imvDemo.setImageResource(R.drawable.profile_icon_valentine);
+                imvDemo.requestLayout();
+            }
+        });
+
+        findViewById(R.id.btn2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imvDemo.setImageResource(R.drawable.profile_icon_halloween);
+                imvDemo.requestLayout();
+            }
+        });
+
+        findViewById(R.id.btn3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imvDemo.setImageResource(R.drawable.profile_icon_women);
+                imvDemo.requestLayout();
+            }
+        });
     }
 }

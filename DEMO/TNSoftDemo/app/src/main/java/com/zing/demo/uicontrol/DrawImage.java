@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -93,28 +92,24 @@ public class DrawImage extends ImageView {
                 float scaleW = scale * sourceW;
                 float scaleH = scale * sourceH;
 
-                float l = center - x, t = center + x;
+                float l = center - scaleW/2, t = center - scaleH/2;
 
-                drawableBitmap = Bitmap.createScaledBitmap(drawableBitmap, (int)scaleW, (int)scaleH, false);
-                RectF rectF = new RectF(l, l, t, t);
+                drawableBitmap = scaleToFill(drawableBitmap, (int)scaleW, (int)scaleH);
+                RectF rectF = new RectF(l, t, l + scaleW, t + scaleH);
 
                 paint.setColor(Color.RED);
                 paint.setStyle(Paint.Style.STROKE);
                 canvas.drawRect(rectF, paint);
+
                 canvas.drawBitmap(drawableBitmap, null, rectF, null);
             }
         }
     }
 
-    public static Bitmap scaleToFill(Bitmap b, int width, int height) {
+    private Bitmap scaleToFill(Bitmap b, int width, int height) {
         float factorH = height / (float) b.getWidth();
         float factorW = width / (float) b.getWidth();
         float factorToUse = (factorH > factorW) ? factorW : factorH;
-        return Bitmap.createScaledBitmap(b, (int) (b.getWidth() * factorToUse), (int) (b.getHeight() * factorToUse), false);
-    }
-
-    public static Bitmap scaleToFitHeight(Bitmap b, int height) {
-        float factor = height / (float) b.getHeight();
-        return Bitmap.createScaledBitmap(b, (int) (b.getWidth() * factor), height, false);
+        return Bitmap.createScaledBitmap(b, (int) (b.getWidth() * factorToUse), (int) (b.getHeight() * factorToUse), true);
     }
 }
