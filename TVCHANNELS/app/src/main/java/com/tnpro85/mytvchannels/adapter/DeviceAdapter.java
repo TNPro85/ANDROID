@@ -1,4 +1,4 @@
-package com.tnpro85.cathay;
+package com.tnpro85.mytvchannels.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,23 +7,24 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.tnpro85.cathay.models.LocationItem;
+import com.tnpro85.mytvchannels.R;
+import com.tnpro85.mytvchannels.models.Device;
 
 import java.util.ArrayList;
 
 /**
  * Created by TUAN on 14/06/2015.
  */
-public class LocationAdapter extends BaseAdapter {
+public class DeviceAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
-    private ArrayList<LocationItem> data;
+    private ArrayList<Device> data;
 
-    public LocationAdapter(Context context) {
+    public DeviceAdapter(Context context) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void setData(ArrayList<LocationItem> data) {
+    public void setData(ArrayList<Device> data) {
         this.data = new ArrayList<>(data);
     }
 
@@ -35,7 +36,7 @@ public class LocationAdapter extends BaseAdapter {
     }
 
     @Override
-    public LocationItem getItem(int position) {
+    public Device getItem(int position) {
         if (data != null && position >= 0 && position < data.size())
             return data.get(position);
         return null;
@@ -51,27 +52,27 @@ public class LocationAdapter extends BaseAdapter {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = mInflater.inflate(R.layout.layout_location_row, null);
-            holder.tvLocationTitle = (TextView) convertView.findViewById(R.id.tvName);
-            holder.tvLocationAddress = (TextView) convertView.findViewById(R.id.tvAddress);
-            holder.tvLocationIndex = (TextView) convertView.findViewById(R.id.tvIndex);
+            convertView = mInflater.inflate(R.layout.row_device, null);
+            holder.tvDeviceName = (TextView) convertView.findViewById(R.id.tvName);
+            holder.tvDeviceDesc = (TextView) convertView.findViewById(R.id.tvDesc);
+            holder.tvDeviceIndex = (TextView) convertView.findViewById(R.id.tvIndex);
 
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
 
-        LocationItem item = getItem(position);
-        holder.tvLocationIndex.setText(position + 1 + "");
+        Device item = getItem(position);
+        holder.tvDeviceIndex.setText(position + 1 + "");
 
         if(item != null) {
-            holder.tvLocationTitle.setText(item.mTitle);
-            holder.tvLocationAddress.setText(item.mDesc);
+            holder.tvDeviceName.setText(item.dName);
+            holder.tvDeviceDesc.setText(item.dDesc);
         }
 
         return convertView;
     }
 
     public class ViewHolder {
-        public TextView tvLocationTitle, tvLocationAddress, tvLocationIndex;
+        public TextView tvDeviceName, tvDeviceDesc, tvDeviceIndex;
     }
 }
