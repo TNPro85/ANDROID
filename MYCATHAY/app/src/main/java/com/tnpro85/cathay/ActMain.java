@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.android.gms.location.LocationListener;
+import com.tnpro85.cathay.adapter.LocationAdapter;
 import com.tnpro85.cathay.location.LocationController;
 import com.tnpro85.cathay.models.LocationItem;
 import com.tnpro85.cathay.uicontrols.LayoutLoading;
@@ -23,7 +24,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 
