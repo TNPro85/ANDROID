@@ -1,20 +1,16 @@
 package com.tnpro85.mytvchannels;
 
-import android.support.v7.app.ActionBarActivity;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.tnpro85.mytvchannels.models.Device;
 
 import java.util.ArrayList;
 
 
-public class ActMain extends ActionBarActivity {
+public class ActMain extends AppCompatActivity {
 
     private ArrayList<Device> lsDevices;
 

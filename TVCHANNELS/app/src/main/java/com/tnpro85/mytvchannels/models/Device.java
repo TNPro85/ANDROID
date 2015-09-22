@@ -1,4 +1,4 @@
-package com.tnpro85.android.models;
+package com.tnpro85.mytvchannels.models;
 
 import android.provider.BaseColumns;
 

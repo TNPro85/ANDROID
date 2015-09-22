@@ -1,27 +1,11 @@
-package com.tnpro85.android;
+package com.tnpro85.mytvchannels;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
+import android.os.Handler;
 import android.view.Window;
 import android.widget.TextView;
-
-import com.tnpro85.android.models.Device;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-
 
 public class ActSplash extends Activity {
 

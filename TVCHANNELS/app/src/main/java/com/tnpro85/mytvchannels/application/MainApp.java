@@ -1,4 +1,4 @@
-package com.tnpro85.android.application;
+package com.tnpro85.mytvchannels.application;
 
 import android.app.Application;
 import android.content.Context;
