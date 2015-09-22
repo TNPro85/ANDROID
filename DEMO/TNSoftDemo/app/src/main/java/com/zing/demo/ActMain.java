@@ -46,7 +46,9 @@ public class ActMain extends ActionBarActivity {
                 "Xml 2 Java",
                 "File Observer",
                 "Convert number to K,M,B",
-                "Draw on View"
+                "Draw on View",
+                "Split string and combine",
+                "Folder last access"
         };
         Arrays.sort(s);
 
@@ -75,6 +77,12 @@ public class ActMain extends ActionBarActivity {
                         break;
                     case "Draw on View":
                         intent = new Intent(ActMain.this, ActDrawOnView.class);
+                        break;
+                    case "Split string and combine":
+                        intent = new Intent(ActMain.this, ActSplitString.class);
+                        break;
+                    case "Folder last access":
+                        intent = new Intent(ActMain.this, ActFolderAttribute.class);
                         break;
                 }
 

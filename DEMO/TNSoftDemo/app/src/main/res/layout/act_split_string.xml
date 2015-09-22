@@ -1,0 +1,82 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <EditText
+            android:id="@+id/etInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Input string"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/etSeparator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Separator (like , . ; and so on)"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/btnSplit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SPLIT" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvResult"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/gray_bgtabbar" />
+
+            <LinearLayout
+                android:layout_width="100dip"
+                android:layout_height="match_parent"
+                android:layout_margin="8.0dip"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/etOmit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Omit value"
+                    android:inputType="text" />
+
+                <Button
+                    android:id="@+id/btnMerge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MERGE" />
+
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tvResultMerge"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/gray_bgtabbar" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</ScrollView>

@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">Your TV Channels</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">TV Channels</string>
+    <string name="app_copyright">(C) TNPro85 2015</string>
+    <string name="app_version">Version %s</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_act_main">TV Channels</string>
+
 </resources>

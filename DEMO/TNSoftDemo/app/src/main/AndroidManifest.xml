@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zing.demo">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name=".application.Application"
         android:allowBackup="true"
@@ -40,6 +42,12 @@
             android:configChanges="orientation|keyboard|screenSize|screenLayout"></activity>
         <activity
             android:name=".ActDrawOnView"
+            android:configChanges="orientation|keyboard|screenSize|screenLayout"></activity>
+        <activity
+            android:name=".ActSplitString"
+            android:configChanges="orientation|keyboard|screenSize|screenLayout"></activity>
+        <activity
+            android:name=".ActFolderAttribute"
             android:configChanges="orientation|keyboard|screenSize|screenLayout"></activity>
     </application>
 
