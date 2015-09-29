@@ -21,34 +21,37 @@
         </activity>
         <activity
             android:name=".ActUniqueId"
-            android:configChanges="orientation|keyboard|screenSize|screenLayout"></activity>
+            android:configChanges="orientation|keyboard|screenSize|screenLayout" />
         <activity
             android:name=".ActXml2Java"
-            android:configChanges="orientation|keyboard|screenSize|screenLayout"></activity>
+            android:configChanges="orientation|keyboard|screenSize|screenLayout" />
         <activity
             android:name=".ActXml2JavaNormal"
-            android:configChanges="orientation|keyboard|screenSize|screenLayout"></activity>
+            android:configChanges="orientation|keyboard|screenSize|screenLayout" />
         <activity
             android:name=".ActXml2JavaStyle"
-            android:configChanges="orientation|keyboard|screenSize|screenLayout"></activity>
+            android:configChanges="orientation|keyboard|screenSize|screenLayout" />
         <activity
             android:name=".ActSubsequenceEmoji"
-            android:configChanges="orientation|keyboard|screenSize|screenLayout"></activity>
+            android:configChanges="orientation|keyboard|screenSize|screenLayout" />
         <activity
             android:name=".ActFileObserver"
-            android:configChanges="orientation|keyboard|screenSize|screenLayout"></activity>
+            android:configChanges="orientation|keyboard|screenSize|screenLayout" />
         <activity
             android:name=".ActConvertNumToKMB"
-            android:configChanges="orientation|keyboard|screenSize|screenLayout"></activity>
+            android:configChanges="orientation|keyboard|screenSize|screenLayout" />
         <activity
             android:name=".ActDrawOnView"
-            android:configChanges="orientation|keyboard|screenSize|screenLayout"></activity>
+            android:configChanges="orientation|keyboard|screenSize|screenLayout" />
         <activity
             android:name=".ActSplitString"
-            android:configChanges="orientation|keyboard|screenSize|screenLayout"></activity>
+            android:configChanges="orientation|keyboard|screenSize|screenLayout" />
         <activity
             android:name=".ActFolderAttribute"
-            android:configChanges="orientation|keyboard|screenSize|screenLayout"></activity>
+            android:configChanges="orientation|keyboard|screenSize|screenLayout" />
+        <activity
+            android:name=".ActCustomViewGroup"
+            android:configChanges="orientation|keyboard|screenSize|screenLayout" />
     </application>
 
 </manifest>

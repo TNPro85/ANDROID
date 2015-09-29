@@ -48,7 +48,8 @@ public class ActMain extends ActionBarActivity {
                 "Convert number to K,M,B",
                 "Draw on View",
                 "Split string and combine",
-                "Folder last access"
+                "Folder last access",
+                "Custom View Group"
         };
         Arrays.sort(s);
 
@@ -83,6 +84,9 @@ public class ActMain extends ActionBarActivity {
                         break;
                     case "Folder last access":
                         intent = new Intent(ActMain.this, ActFolderAttribute.class);
+                        break;
+                    case "Custom View Group":
+                        intent = new Intent(ActMain.this, ActCustomViewGroup.class);
                         break;
                 }
 

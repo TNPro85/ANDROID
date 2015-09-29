@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zing.demo.uicontrol.MyCustomViewGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:id="@+id/child_linear_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#0000ff"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight=".5"
+            android:paddingRight="20dip"
+            android:text="abc\nabc\nabc\nabc\nabc\nabc\nabc\nabc\nabc\nabc\nabc" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight=".5"
+            android:background="#ff00ff" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#ff0000" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#00ff00" />
+
+</com.zing.demo.uicontrol.MyCustomViewGroup>
