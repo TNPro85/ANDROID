@@ -1,23 +1,40 @@
 package com.tnpro85.mytvchannels;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.tnpro85.mytvchannels.models.Device;
 
 import java.util.ArrayList;
 
 
-public class ActMain extends AppCompatActivity {
+public class ActMain extends ActBase {
 
+    private View vContainer;
     private ArrayList<Device> lsDevices;
 
+    private FloatingActionButton fabAddDevice;
+    private Snackbar sbError;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_main);
+
+        vContainer = findViewById(R.id.container);
+
+        fabAddDevice = (FloatingActionButton) findViewById(R.id.myFAB);
+        fabAddDevice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sbError = Snackbar.make(vContainer, "Clicked", Snackbar.LENGTH_SHORT);
+                sbError.show();
+            }
+        });
     }
 
     @Override
