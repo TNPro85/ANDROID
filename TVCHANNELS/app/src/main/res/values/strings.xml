@@ -5,4 +5,6 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_act_main">TV Channels</string>
 
+    <string name="str_empty_devices">No devices</string>
+
 </resources>

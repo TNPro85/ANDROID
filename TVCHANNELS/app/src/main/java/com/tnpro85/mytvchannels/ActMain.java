@@ -6,7 +6,10 @@ import android.support.design.widget.Snackbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 
+import com.tnpro85.mytvchannels.adapter.DeviceAdapter;
+import com.tnpro85.mytvchannels.db.DBHelper;
 import com.tnpro85.mytvchannels.models.Device;
 
 import java.util.ArrayList;
@@ -14,18 +17,26 @@ import java.util.ArrayList;
 
 public class ActMain extends ActBase {
 
-    private View vContainer;
     private ArrayList<Device> lsDevices;
+    private DeviceAdapter adapDevices;
 
+    private ListView lvDevices;
     private FloatingActionButton fabAddDevice;
     private Snackbar sbError;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initUI(savedInstanceState);
+    }
+
+    @Override
+    protected void initUI(Bundle savedInstanceState) {
         setContentView(R.layout.act_main);
 
         vContainer = findViewById(R.id.container);
+
+        lvDevices = (ListView) findViewById(R.id.lvDevices);
 
         fabAddDevice = (FloatingActionButton) findViewById(R.id.myFAB);
         fabAddDevice.setOnClickListener(new View.OnClickListener() {
@@ -35,6 +46,25 @@ public class ActMain extends ActBase {
                 sbError.show();
             }
         });
+
+        super.initUI(savedInstanceState);
+    }
+
+    @Override
+    protected void initData(Bundle savedInstanceState) {
+        super.initData(savedInstanceState);
+
+        adapDevices = new DeviceAdapter(this);
+        lvDevices.setAdapter(adapDevices);
+
+        lsDevices = DBHelper.getInstance().getDeviceList();
+        if(lsDevices != null) {
+            adapDevices.setData(lsDevices);
+            adapDevices.notifyDataSetChanged();
+        }
+        else {
+
+        }
     }
 
     @Override

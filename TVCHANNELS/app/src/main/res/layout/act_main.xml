@@ -7,6 +7,44 @@
     tools:context=".ActMain"
     tools:ignore="MergeRootFrame">
 
+    <ListView
+        android:id="@+id/lvDevices"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <FrameLayout
+        android:id="@+id/layoutMultiStateView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:id="@+id/layoutLoading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:layout_width="30.0dip"
+                android:layout_height="30.0dip" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tvEmptyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_empty_devices" />
+        </LinearLayout>
+    </FrameLayout>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/myFAB"
         android:layout_width="wrap_content"
