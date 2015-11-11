@@ -56,15 +56,6 @@ public class ActMain extends ActBase {
 
         adapDevices = new DeviceAdapter(this);
         lvDevices.setAdapter(adapDevices);
-
-        lsDevices = DBHelper.getInstance().getDeviceList();
-        if(lsDevices != null) {
-            adapDevices.setData(lsDevices);
-            adapDevices.notifyDataSetChanged();
-        }
-        else {
-
-        }
     }
 
     @Override
