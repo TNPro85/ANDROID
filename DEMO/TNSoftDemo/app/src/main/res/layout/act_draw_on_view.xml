@@ -44,17 +44,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15.0dip"
         android:gravity="center"
-        android:orientation="horizontal">
-
-        <View
-            android:layout_width="100.0dip"
-            android:layout_height="100.0dip"
-            android:background="@drawable/bg_gradient" />
+        android:orientation="vertical">
 
         <com.zing.demo.uicontrol.GradientView
-            android:layout_width="100.0dip"
-            android:layout_height="100.0dip"
-            android:layout_marginLeft="5.0dip">
+            android:layout_width="match_parent"
+            android:layout_height="100.0dip">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -63,6 +57,11 @@
                 android:gravity="center"
                 android:text="Drawable\nCode" />
         </com.zing.demo.uicontrol.GradientView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="100.0dip"
+            android:background="@drawable/bg_gradient" />
     </LinearLayout>
 
 </LinearLayout>

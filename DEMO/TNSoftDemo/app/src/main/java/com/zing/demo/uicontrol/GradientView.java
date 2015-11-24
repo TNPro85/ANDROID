@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
@@ -36,7 +37,8 @@ public class GradientView extends RelativeLayout {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         Paint p = new Paint();
-        p.setShader(new LinearGradient(0, 0, 0, getWidth(), 0x00000000, 0x60000000, Shader.TileMode.CLAMP));
+        p.setShader(new LinearGradient(0, 0, 0, getHeight(), 0x000000FF, 0x600000FF, Shader.TileMode.CLAMP));
+//        canvas.drawRect(new RectF(0, 0, getWidth(), getHeight()), p);
         canvas.drawPaint(p);
     }
 }
