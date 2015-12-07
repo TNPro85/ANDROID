@@ -21,6 +21,8 @@ public class DrawImage extends ImageView {
 
     public int mStrokeColor, mMainColor;
     private float mDensity;
+    private Paint paint = new Paint();
+    private RectF rectF = new RectF();
 
     public DrawImage(Context context) {
         super(context);
@@ -54,10 +56,10 @@ public class DrawImage extends ImageView {
         int bgRadius = strokeRadius - 1;
         int mainRadius = strokeRadius - mPaddingLeft;
 
-        Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setXfermode(null);
         paint.setColor(mStrokeColor);
+        paint.setStyle(Paint.Style.FILL);
         canvas.drawCircle(center, center, strokeRadius, paint);
 
         paint.setColor(Color.parseColor("#ffffff"));
@@ -83,7 +85,8 @@ public class DrawImage extends ImageView {
             if(localDrawable instanceof BitmapDrawable) {
                 Bitmap drawableBitmap = ((BitmapDrawable)localDrawable).getBitmap();
                 int sourceW = drawableBitmap.getWidth(), sourceH = drawableBitmap.getHeight();
-                int newW = (x * 2) - (int)(2 * mDensity);
+                int newW = (x * 2) - (int)(4 * mDensity);
+                if(newW > mainRadius) newW = mainRadius;
 
                 float xScale = (float) newW / sourceW;
                 float yScale = (float) newW / sourceH;
@@ -94,8 +97,8 @@ public class DrawImage extends ImageView {
 
                 float l = center - scaleW/2, t = center - scaleH/2;
 
-                drawableBitmap = scaleToFill(drawableBitmap, (int)scaleW, (int)scaleH);
-                RectF rectF = new RectF(l, t, l + scaleW, t + scaleH);
+//                drawableBitmap = scaleToFill(drawableBitmap, (int)scaleW, (int)scaleH);
+                rectF.set(l, t, l + scaleW, t + scaleH);
 
                 paint.setColor(Color.RED);
                 paint.setStyle(Paint.Style.STROKE);
@@ -106,10 +109,10 @@ public class DrawImage extends ImageView {
         }
     }
 
-    private Bitmap scaleToFill(Bitmap b, int width, int height) {
-        float factorH = height / (float) b.getWidth();
-        float factorW = width / (float) b.getWidth();
-        float factorToUse = (factorH > factorW) ? factorW : factorH;
-        return Bitmap.createScaledBitmap(b, (int) (b.getWidth() * factorToUse), (int) (b.getHeight() * factorToUse), true);
-    }
+//    private Bitmap scaleToFill(Bitmap b, int width, int height) {
+//        float factorH = height / (float) b.getWidth();
+//        float factorW = width / (float) b.getWidth();
+//        float factorToUse = (factorH > factorW) ? factorW : factorH;
+//        return Bitmap.createScaledBitmap(b, (int) (b.getWidth() * factorToUse), (int) (b.getHeight() * factorToUse), true);
+//    }
 }
