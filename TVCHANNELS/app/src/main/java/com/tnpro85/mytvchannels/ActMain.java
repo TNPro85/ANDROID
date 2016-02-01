@@ -42,7 +42,11 @@ public class ActMain extends ActBase {
         fabAddDevice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sbError = Snackbar.make(vContainer, "Clicked", Snackbar.LENGTH_SHORT);
+//                sbError = Snackbar.make(vContainer, "Clicked", Snackbar.LENGTH_SHORT);
+//                sbError.show();
+
+                DBHelper.getInstance().addDevice(new Device("Test", "Test"));
+                sbError = Snackbar.make(vContainer, "Added", Snackbar.LENGTH_SHORT);
                 sbError.show();
             }
         });

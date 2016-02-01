@@ -21,7 +21,7 @@ public class CP extends ContentProvider {
     private static final String PATH_DEVICE = "devices";
     private static final String PATH_DEVICE_ID = "devices/#";
 
-    private static final Uri CONTENT_URI_DEVICES = Uri.parse("content://" + AUTHORITY + "/" + PATH_DEVICE);
+    public static final Uri CONTENT_URI_DEVICES = Uri.parse("content://" + AUTHORITY + "/" + PATH_DEVICE);
 
     private static final UriMatcher mURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 

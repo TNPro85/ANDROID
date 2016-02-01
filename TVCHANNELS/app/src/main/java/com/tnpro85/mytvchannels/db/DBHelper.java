@@ -1,12 +1,13 @@
 package com.tnpro85.mytvchannels.db;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.tnpro.core.db.DBUtils;
 import com.tnpro85.mytvchannels.application.MainApp;
-import com.tnpro85.mytvchannels.models.Device.DeviceEntry;
+import com.tnpro85.mytvchannels.models.Device;
 
 public class DBHelper extends SQLiteOpenHelper {
     // Database instance
@@ -47,14 +48,23 @@ public class DBHelper extends SQLiteOpenHelper {
 
     // [CREATE TABLES]
     private void createTableDevices() {
-        if(!DBUtils.isTableExist(db, DeviceEntry.TABLE_NAME)) {
+        if(!DBUtils.isTableExist(db, DBConst.TABLE.TBL_DEVICE_NAME)) {
             db.execSQL(String.format(
-                    "CREATE TABLE %s (%s, %s, %s)",
+                    "CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT, %s TEXT)",
                     DBConst.TABLE.TBL_DEVICE_NAME,
                     DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_ID,
                     DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_NAME,
                     DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_DESC
             ));
+        }
+    }
+
+    public void addDevice(Device device) {
+        if(device != null) {
+            ContentValues values = new ContentValues();
+            values.put(DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_NAME, device.dName);
+            values.put(DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_DESC, device.dDesc);
+            MainApp.getContext().getContentResolver().insert(CP.CONTENT_URI_DEVICES, values);
         }
     }
 
