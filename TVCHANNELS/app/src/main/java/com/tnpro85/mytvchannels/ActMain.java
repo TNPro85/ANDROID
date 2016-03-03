@@ -45,7 +45,7 @@ public class ActMain extends ActBase {
 //                sbError = Snackbar.make(vContainer, "Clicked", Snackbar.LENGTH_SHORT);
 //                sbError.show();
 
-                DBHelper.getInstance().addDevice(new Device("Test", "Test"));
+                DBHelper.getInstance().addDevice(new Device(0, "Test", "Test"));
                 sbError = Snackbar.make(vContainer, "Added", Snackbar.LENGTH_SHORT);
                 sbError.show();
             }

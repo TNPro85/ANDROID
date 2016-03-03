@@ -11,10 +11,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.tnpro85.mytvchannels.BuildConfig;
 import com.tnpro85.mytvchannels.models.Device;
 
 public class CP extends ContentProvider {
-    private static final String AUTHORITY = "com.tnpro.tvchannels";
+    private static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".provider";
 
     private static final int CODE_DEVICE = 1;
     private static final int CODE_DEVICE_ID = 2;

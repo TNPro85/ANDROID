@@ -20,6 +20,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 dbHelper = new DBHelper(MainApp.getContext());
         }
 
+        dbHelper.createTableDevices();
+
         return dbHelper;
     }
 
@@ -29,15 +31,8 @@ public class DBHelper extends SQLiteOpenHelper {
         // 20150918: Create or open app database
         // For this simple app, I don't have intention to handle data corruption, so I just use default openOrCreateDatabase method
         // to do the DB things.
-        if(context != null) {
+        if(context != null)
             db = context.openOrCreateDatabase(DBConst.DB_NAME, Context.MODE_PRIVATE, null);
-        }
-
-        if(db != null && dbHelper != null) {
-            dbHelper.createTableDevices();
-
-            // TODO: Create table channels
-        }
     }
 
     @Override
@@ -50,7 +45,8 @@ public class DBHelper extends SQLiteOpenHelper {
     private void createTableDevices() {
         if(!DBUtils.isTableExist(db, DBConst.TABLE.TBL_DEVICE_NAME)) {
             db.execSQL(String.format(
-                    "CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT, %s TEXT)",
+//                    "CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT, %s TEXT)",
+                    "CREATE TABLE %s (%s INTEGER PRIMARY KEY, %s TEXT, %s TEXT)",
                     DBConst.TABLE.TBL_DEVICE_NAME,
                     DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_ID,
                     DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_NAME,
@@ -62,6 +58,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void addDevice(Device device) {
         if(device != null) {
             ContentValues values = new ContentValues();
+            values.put(DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_ID, device.dId);
             values.put(DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_NAME, device.dName);
             values.put(DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_DESC, device.dDesc);
             MainApp.getContext().getContentResolver().insert(CP.CONTENT_URI_DEVICES, values);
