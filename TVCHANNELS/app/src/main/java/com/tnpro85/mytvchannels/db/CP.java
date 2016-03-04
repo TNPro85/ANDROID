@@ -70,7 +70,7 @@ public class CP extends ContentProvider {
         int uriType = mURIMatcher.match(uri);
         switch (uriType) {
             case CODE_DEVICE:
-                id = db.insertWithOnConflict(DBConst.TABLE.TBL_DEVICE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+                id = db.insertWithOnConflict(DBConst.TABLE.TBL_DEVICE_NAME, null, values, SQLiteDatabase.CONFLICT_ROLLBACK);
                 break;
         }
 

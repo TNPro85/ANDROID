@@ -22,6 +22,11 @@
             android:name=".ActMain"
             android:configChanges="orientation|keyboard|screenSize|screenLayout"
             android:label="@string/title_activity_act_main" />
+        <activity
+            android:name=".ActDevice"
+            android:configChanges="orientation|keyboard|screenSize|screenLayout"
+            android:label="@string/title_activity_act_device"
+            android:windowSoftInputMode="stateVisible" />
 
         <provider
             android:name=".db.CP"
