@@ -11,8 +11,10 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.tnpro.core.utils.KeyboardUtils;
 import com.tnpro85.mytvchannels.adapter.DeviceAdapter;
@@ -55,6 +57,15 @@ public class ActMain extends ActBase {
         layoutMultiStateView.setVisibility(View.GONE);
 
         lvDevices = (ListView) findViewById(R.id.lvDevices);
+        lvDevices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(position < lsDevices.size()) {
+                    Device selectedDevice = lsDevices.get(position);
+                    Toast.makeText(ActMain.this, selectedDevice.dName, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         fabAddDevice = (FloatingActionButton) findViewById(R.id.myFAB);
         fabAddDevice.setOnClickListener(new View.OnClickListener() {

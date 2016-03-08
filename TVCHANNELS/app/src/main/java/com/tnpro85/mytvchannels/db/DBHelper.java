@@ -25,6 +25,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         // Check exist and create tables here
         dbHelper.createTableDevices();
+        dbHelper.createTableChannels();
 
         return dbHelper;
     }
@@ -49,14 +50,29 @@ public class DBHelper extends SQLiteOpenHelper {
     private void createTableDevices() {
         if(!DBUtils.isTableExist(db, DBConst.TABLE.TBL_DEVICE_NAME)) {
             db.execSQL(String.format(
-                    "CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT, %s TEXT)",
+                    "CREATE TABLE %s (%s TEXT PRIMARY KEY, %s TEXT)",
                     DBConst.TABLE.TBL_DEVICE_NAME,
-                    DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_ID,
                     DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_NAME,
                     DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_DESC
             ));
         }
     }
+
+    private void createTableChannels() {
+        if(!DBUtils.isTableExist(db, DBConst.TABLE.TBL_CHANNEL_NAME)) {
+            db.execSQL(String.format(
+                    "CREATE TABLE %s (%s TEXT, %s INTEGER, %s TEXT, %s TEXT, PRIMARY KEY (%s, %s))",
+                    DBConst.TABLE.TBL_CHANNEL_NAME,
+                    DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDEVICE,
+                    DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNUM,
+                    DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNAME,
+                    DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDESC,
+                    DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDEVICE,
+                    DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNUM
+            ));
+        }
+    }
+
 
     public void addDevice(Device device) {
         if(device != null) {
@@ -64,6 +80,12 @@ public class DBHelper extends SQLiteOpenHelper {
             values.put(DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_NAME, device.dName);
             values.put(DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_DESC, device.dDesc);
             MainApp.getContext().getContentResolver().insert(CP.CONTENT_URI_DEVICES, values);
+        }
+    }
+
+    public void deleteDevice(Device device) {
+        if(device != null) {
+            MainApp.getContext().getContentResolver().delete(CP.CONTENT_URI_DEVICES, "", new String[] {device.dName});
         }
     }
 
@@ -91,36 +113,4 @@ public class DBHelper extends SQLiteOpenHelper {
         return result;
     }
 
-//    public ArrayList<Device> getDeviceList() {
-//        ArrayList<Device> result = null;
-//        Cursor cs = null;
-//
-//        try {
-//            cs = db.rawQuery(DeviceEntry.SQL_QUERY_ALL, null);
-//            if(cs != null && cs.getCount() > 0) {
-//                result = new ArrayList<>();
-//
-//                int colId_deviceId = cs.getColumnIndex(DeviceEntry.COLUMN_NAME_ID);
-//                int colId_deviceName = cs.getColumnIndex(DeviceEntry.COLUMN_NAME_NAME);
-//                int colId_deviceDesc = cs.getColumnIndex(DeviceEntry.COLUMN_NAME_DESC);
-//
-//                cs.moveToFirst();
-//                do {
-//                    Device item = new Device();
-//                    item.dId = cs.getString(colId_deviceId);
-//                    item.dName = cs.getString(colId_deviceName);
-//                    item.dDesc = cs.getString(colId_deviceDesc);
-//                    result.add(item);
-//                }
-//                while(cs.moveToNext());
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            if(cs != null)
-//                cs.close();
-//        }
-//
-//        return result;
-//    }
 }

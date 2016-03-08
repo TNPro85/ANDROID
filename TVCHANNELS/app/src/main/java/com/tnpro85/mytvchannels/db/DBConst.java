@@ -9,9 +9,16 @@ public class DBConst {
     public static final class TABLE {
         public static final String TBL_DEVICE_NAME = "tb_devices";
         public static class TBL_DEVICE_COL implements BaseColumns {
-            public static final String COLUMN_NAME_ID = "device_id";
             public static final String COLUMN_NAME_NAME = "device_name";
             public static final String COLUMN_NAME_DESC = "device_description";
+        }
+
+        public static final String TBL_CHANNEL_NAME = "tb_channels";
+        public static class TBL_CHANNEL_COL implements  BaseColumns {
+            public static final String COLUMN_NAME_CDEVICE = "channel_device";
+            public static final String COLUMN_NAME_CNUM = "channel_num";
+            public static final String COLUMN_NAME_CNAME = "channel_name";
+            public static final String COLUMN_NAME_CDESC = "channel_description";
         }
     }
 }

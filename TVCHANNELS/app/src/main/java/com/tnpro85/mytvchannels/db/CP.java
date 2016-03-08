@@ -19,16 +19,23 @@ public class CP extends ContentProvider {
 
     private static final int CODE_DEVICE = 1;
     private static final int CODE_DEVICE_ID = 2;
+    private static final int CODE_CHANNEL = 3;
+    private static final int CODE_CHANNEL_ID = 4;
     private static final String PATH_DEVICE = "devices";
     private static final String PATH_DEVICE_ID = "devices/#";
+    private static final String PATH_CHANNEL = "channels";
+    private static final String PATH_CHANNEL_ID = "channels/#";
 
     public static final Uri CONTENT_URI_DEVICES = Uri.parse("content://" + AUTHORITY + "/" + PATH_DEVICE);
+    public static final Uri CONTENT_URI_CHANNELS = Uri.parse("content://" + AUTHORITY + "/" + PATH_CHANNEL);
 
     private static final UriMatcher mURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
         mURIMatcher.addURI(AUTHORITY, PATH_DEVICE, CODE_DEVICE);
         mURIMatcher.addURI(AUTHORITY, PATH_DEVICE_ID, CODE_DEVICE_ID);
+        mURIMatcher.addURI(AUTHORITY, PATH_CHANNEL, CODE_CHANNEL);
+        mURIMatcher.addURI(AUTHORITY, PATH_CHANNEL_ID, CODE_CHANNEL_ID);
     }
 
     @Override
@@ -47,7 +54,13 @@ public class CP extends ContentProvider {
                 queryBuilder.setTables(DBConst.TABLE.TBL_DEVICE_NAME);
                 break;
             case CODE_DEVICE_ID:
-                queryBuilder.appendWhere(DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_ID + "=" + uri.getLastPathSegment());
+                queryBuilder.appendWhere(DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_NAME + "=" + uri.getLastPathSegment());
+                break;
+            case CODE_CHANNEL:
+                queryBuilder.setTables(DBConst.TABLE.TBL_CHANNEL_NAME);
+                break;
+            case CODE_CHANNEL_ID:
+                queryBuilder.appendWhere(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNUM + "=" + uri.getLastPathSegment());
                 break;
         }
 
@@ -92,9 +105,9 @@ public class CP extends ContentProvider {
             case CODE_DEVICE_ID:
                 String deviceId = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection)) {
-                    rowsDeleted = db.delete(DBConst.TABLE.TBL_DEVICE_NAME, DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_ID + "=" + deviceId, null);
+                    rowsDeleted = db.delete(DBConst.TABLE.TBL_DEVICE_NAME, DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_NAME + "=" + deviceId, null);
                 } else {
-                    rowsDeleted = db.delete(DBConst.TABLE.TBL_DEVICE_NAME, DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_ID + "=" + deviceId + " and "
+                    rowsDeleted = db.delete(DBConst.TABLE.TBL_DEVICE_NAME, DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_NAME + "=" + deviceId + " and "
                             + selection, selectionArgs);
                 }
                 break;
@@ -119,10 +132,10 @@ public class CP extends ContentProvider {
                 String deviceId = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection)) {
                     rowsUpdated = db.update(DBConst.TABLE.TBL_DEVICE_NAME,
-                            values, DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_ID + "=" + deviceId, null);
+                            values, DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_NAME + "=" + deviceId, null);
                 } else {
                     rowsUpdated = db.update(DBConst.TABLE.TBL_DEVICE_NAME,
-                            values, DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_ID + "=" + deviceId + " and "
+                            values, DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_NAME + "=" + deviceId + " and "
                             + selection, selectionArgs);
                 }
                 break;
