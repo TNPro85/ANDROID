@@ -85,6 +85,9 @@ public class CP extends ContentProvider {
             case CODE_DEVICE:
                 id = db.insertWithOnConflict(DBConst.TABLE.TBL_DEVICE_NAME, null, values, SQLiteDatabase.CONFLICT_ROLLBACK);
                 break;
+            case CODE_CHANNEL:
+                id = db.insertWithOnConflict(DBConst.TABLE.TBL_CHANNEL_NAME, null, values, SQLiteDatabase.CONFLICT_ROLLBACK);
+                break;
         }
 
         if(getContext() != null && getContext().getContentResolver() != null)
@@ -110,6 +113,10 @@ public class CP extends ContentProvider {
                     rowsDeleted = db.delete(DBConst.TABLE.TBL_DEVICE_NAME, DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_NAME + "=" + deviceId + " and "
                             + selection, selectionArgs);
                 }
+                break;
+            case CODE_CHANNEL:
+                break;
+            case CODE_CHANNEL_ID:
                 break;
         }
 

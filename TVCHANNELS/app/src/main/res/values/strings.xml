@@ -9,5 +9,7 @@
     <string name="title_activity_act_device">Add Device</string>
 
     <string name="str_empty_devices">No devices</string>
+    <string name="str_device_name_hint">Samsung, LG… should be unique!</string>
+    <string name="str_device_desc_hint">Description that help you determine the device</string>
 
 </resources>

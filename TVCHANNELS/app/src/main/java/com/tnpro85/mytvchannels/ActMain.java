@@ -1,6 +1,8 @@
 package com.tnpro85.mytvchannels;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -8,14 +10,18 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ActionMode;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.tnpro.core.uicontrols.MultiStateView;
 import com.tnpro.core.utils.KeyboardUtils;
 import com.tnpro85.mytvchannels.adapter.DeviceAdapter;
 import com.tnpro85.mytvchannels.data.Const;
@@ -39,7 +45,7 @@ public class ActMain extends ActBase {
     private ListView lvDevices;
     private FloatingActionButton fabAddDevice;
     private Snackbar sbError;
-    private View layoutMultiStateView;
+    private MultiStateView layoutMultiStateView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,21 +59,53 @@ public class ActMain extends ActBase {
         setContentView(R.layout.act_main);
 
         vContainer = findViewById(R.id.container);
-        layoutMultiStateView = findViewById(R.id.layoutMultiStateView);
-        layoutMultiStateView.setVisibility(View.GONE);
+        layoutMultiStateView = (MultiStateView) findViewById(R.id.layoutMultiStateView);
+        layoutMultiStateView.show(MultiStateView.STATE_LOADING);
 
         lvDevices = (ListView) findViewById(R.id.lvDevices);
+        lvDevices.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
         lvDevices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(position < lsDevices.size()) {
-                    Device selectedDevice = lsDevices.get(position);
+                if (position < adapterDevices.getCount()) {
+                    Device selectedDevice = adapterDevices.getItem(position);
                     Toast.makeText(ActMain.this, selectedDevice.dName, Toast.LENGTH_SHORT).show();
                 }
             }
         });
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            lvDevices.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+                @Override
+                public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+
+                }
+
+                @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+                @Override
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    mode.getMenuInflater().inflate(R.menu.menu_act_main, menu);
+                    return true;
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                @Override
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    return false;
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode mode) {
+
+                }
+            });
+        }
 
         fabAddDevice = (FloatingActionButton) findViewById(R.id.myFAB);
+        fabAddDevice.setVisibility(View.GONE);
         fabAddDevice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,6 +127,8 @@ public class ActMain extends ActBase {
         lsDevices = DBHelper.getInstance().getAllDevices();
         adapterDevices.setData(lsDevices);
         adapterDevices.notifyDataSetChanged();
+
+        updateLayout();
     }
 
     @Override
@@ -122,6 +162,8 @@ public class ActMain extends ActBase {
                             }, 1000);
                         }
                     }
+
+                    updateLayout();
                 }
                 break;
         }
@@ -151,6 +193,20 @@ public class ActMain extends ActBase {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK: {
+                if(mSearchOpened) {
+                    closeSearchBar();
+                    return true;
+                }
+            }
+        }
+
+        return super.onKeyUp(keyCode, event);
     }
 
     private void openSearchBar() {
@@ -189,12 +245,6 @@ public class ActMain extends ActBase {
     private void closeSearchBar() {
         fabAddDevice.setVisibility(View.VISIBLE);
 
-        // Remove custom view.
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
-            actionBar.setDisplayShowCustomEnabled(false);
-        }
-
         // Hide keyboard
         KeyboardUtils.hideKeyboard(mSearchEt.getContext(), mSearchEt);
 
@@ -204,5 +254,25 @@ public class ActMain extends ActBase {
         // Change search icon accordingly.
         mSearchAction.setIcon(R.drawable.abc_ic_search_api_mtrl_alpha);
         mSearchOpened = false;
+
+        // Remove custom view.
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayShowCustomEnabled(false);
+        }
+    }
+
+    private void updateLayout() {
+        if(lsDevices.size() > 0) {
+            layoutMultiStateView.hide();
+            lvDevices.setVisibility(View.VISIBLE);
+        }
+        else {
+            layoutMultiStateView.show(MultiStateView.STATE_EMPTY);
+            layoutMultiStateView.setEmptyText(getResources().getString(R.string.str_empty_devices));
+            lvDevices.setVisibility(View.GONE);
+        }
+
+        fabAddDevice.setVisibility(View.VISIBLE);
     }
 }

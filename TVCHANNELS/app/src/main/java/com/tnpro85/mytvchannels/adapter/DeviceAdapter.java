@@ -118,12 +118,8 @@ public class DeviceAdapter extends BaseAdapter implements Filterable {
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            if(results.count == 0)
-                notifyDataSetInvalidated();
-            else {
-                filteredData = (ArrayList<Device>) results.values;
-                notifyDataSetChanged();
-            }
+            filteredData = (ArrayList<Device>) results.values;
+            notifyDataSetChanged();
         }
     }
 }

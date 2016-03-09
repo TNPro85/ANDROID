@@ -25,8 +25,9 @@ public class ActSplash extends Activity {
             public void run() {
                 Intent intent = new Intent(ActSplash.this, ActMain.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.transition_right_to_left, R.anim.transition_right_to_left_out);
                 finish();
             }
-        }, 1500);
+        }, 1200);
     }
 }

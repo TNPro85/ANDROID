@@ -30,7 +30,8 @@ public abstract class ActBase extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.transition_left_to_right, R.anim.transition_left_to_right_out);
+        if(getClass() != ActMain.class)
+            overridePendingTransition(R.anim.transition_left_to_right, R.anim.transition_left_to_right_out);
     }
 
     @Override
