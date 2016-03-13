@@ -1,28 +1,62 @@
 package com.tnpro85.mytvchannels.models;
 
-/**
- * Created by TUAN on 20/05/2015.
- */
-public abstract class Channel implements Comparable<Channel> {
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
+public class Channel implements Comparable<Channel>, Parcelable {
+
+    public String cDevice;
     public int cNum;
     public String cName;
     public String cDesc;
-    public int cLogo;
 
     public Channel() {
         cName = "";
         cDesc = "";
     }
-    public Channel(int num, String name) {
+    public Channel(String device, int num, String name, String desc) {
         super();
+        this.cDevice = device;
         this.cNum = num;
         this.cName = name;
-        cDesc = "";
+        this.cDesc = desc;
+    }
+
+    protected Channel(Parcel in) {
+        cDevice = in.readString();
+        cNum = in.readInt();
+        cName = in.readString();
+        cDesc = in.readString();
+    }
+
+    public static final Creator<Channel> CREATOR = new Creator<Channel>() {
+        @Override
+        public Channel createFromParcel(Parcel in) {
+            return new Channel(in);
+        }
+
+        @Override
+        public Channel[] newArray(int size) {
+            return new Channel[size];
+        }
+    };
+
+    @Override
+    public int compareTo(@NonNull Channel another) {
+        return ((Integer)this.cNum).compareTo(another.cNum);
     }
 
     @Override
-    public int compareTo(Channel another) {
-        return ((Integer)this.cNum).compareTo(another.cNum);
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(cDevice);
+        dest.writeInt(cNum);
+        dest.writeString(cName);
+        dest.writeString(cDesc);
     }
 }

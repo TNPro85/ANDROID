@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.tnpro.core.db.DBUtils;
 import com.tnpro85.mytvchannels.application.MainApp;
+import com.tnpro85.mytvchannels.models.Channel;
 import com.tnpro85.mytvchannels.models.Device;
 
 import java.util.ArrayList;
@@ -85,7 +86,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void deleteDevice(Device device) {
         if(device != null) {
-            MainApp.getContext().getContentResolver().delete(CP.CONTENT_URI_DEVICES, "", new String[] {device.dName});
+            MainApp.getContext().getContentResolver().delete(CP.CONTENT_URI_DEVICES, "", new String[]{device.dName});
         }
     }
 
@@ -113,4 +114,47 @@ public class DBHelper extends SQLiteOpenHelper {
         return result;
     }
 
+    public ArrayList<Channel> getAllChannel(Device device) {
+        ArrayList<Channel> result = new ArrayList<>();
+        Cursor cursor = null;
+
+        if(device != null) {
+            try {
+                cursor = MainApp.getContext().getContentResolver().query(
+                        CP.CONTENT_URI_CHANNELS,
+                        null,
+                        DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDEVICE + "=?",
+                        new String[] {device.dName},
+                        DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNUM + " DESC");
+                if(cursor != null) {
+                    while(cursor.moveToNext()) {
+                        Channel channel = new Channel();
+                        channel.cDevice = cursor.getString(cursor.getColumnIndex(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDEVICE));
+                        channel.cNum = cursor.getInt(cursor.getColumnIndex(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNUM));
+                        channel.cName = cursor.getString(cursor.getColumnIndex(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNAME));
+                        channel.cDesc = cursor.getString(cursor.getColumnIndex(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDESC));
+                        result.add(channel);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if(cursor != null)
+                    cursor.close();
+            }
+        }
+
+        return result;
+    }
+
+    public void addChannel(Channel channel) {
+        if(channel != null) {
+            ContentValues values = new ContentValues();
+            values.put(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDEVICE, channel.cDevice);
+            values.put(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNUM, channel.cNum);
+            values.put(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNAME, channel.cName);
+            values.put(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDESC, channel.cDesc);
+            MainApp.getContext().getContentResolver().insert(CP.CONTENT_URI_CHANNELS, values);
+        }
+    }
 }

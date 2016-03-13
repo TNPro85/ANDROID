@@ -21,9 +21,20 @@
         <activity
             android:name=".ActMain"
             android:configChanges="orientation|keyboard|screenSize|screenLayout"
-            android:label="@string/title_activity_act_main" />
+            android:label="@string/title_activity_act_main"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ActDevice"
+            android:configChanges="orientation|keyboard|screenSize|screenLayout"
+            android:label="@string/title_activity_act_device"
+            android:windowSoftInputMode="stateVisible" />
+        <activity
+            android:name=".ActChannelList"
+            android:configChanges="orientation|keyboard|screenSize|screenLayout"
+            android:label="@string/title_activity_act_channel"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ActChannelAdd"
             android:configChanges="orientation|keyboard|screenSize|screenLayout"
             android:label="@string/title_activity_act_device"
             android:windowSoftInputMode="stateVisible" />

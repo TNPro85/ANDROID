@@ -1,0 +1,33 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActMain"
+    tools:ignore="MergeRootFrame">
+
+    <ListView
+        android:id="@+id/lvChannel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@drawable/list_divider"
+        android:dividerHeight="0.5dip" />
+
+    <com.tnpro.core.uicontrols.MultiStateView
+        android:id="@+id/layoutMultiStateView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/myFAB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="20dp"
+        android:src="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
+        app:backgroundTint="@color/main_color"
+        app:elevation="4dp"
+        app:fabSize="normal" />
+
+</android.support.design.widget.CoordinatorLayout>

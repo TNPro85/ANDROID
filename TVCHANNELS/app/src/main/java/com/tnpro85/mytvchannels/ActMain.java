@@ -19,7 +19,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.tnpro.core.uicontrols.MultiStateView;
 import com.tnpro.core.utils.KeyboardUtils;
@@ -69,7 +68,9 @@ public class ActMain extends ActBase {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position < adapterDevices.getCount()) {
                     Device selectedDevice = adapterDevices.getItem(position);
-                    Toast.makeText(ActMain.this, selectedDevice.dName, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ActMain.this, ActChannelList.class);
+                    intent.putExtra("device", selectedDevice);
+                    ActMain.this.startActivity(intent);
                 }
             }
         });

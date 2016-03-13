@@ -7,8 +7,11 @@
     <string name="action_search">Search</string>
     <string name="title_activity_act_main">TV Channels</string>
     <string name="title_activity_act_device">Add Device</string>
+    <string name="title_activity_act_channel">Channels</string>
+    <string name="title_activity_act_channel_add">Add channel</string>
 
     <string name="str_empty_devices">No devices</string>
+    <string name="str_empty_channels">This device has no channel</string>
     <string name="str_device_name_hint">Samsung, LG… should be unique!</string>
     <string name="str_device_desc_hint">Description that help you determine the device</string>
 
