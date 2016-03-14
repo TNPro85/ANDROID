@@ -5,6 +5,45 @@
         <!-- Customize your theme here. -->
         <item name="android:statusBarColor" tools:targetApi="lollipop">@color/main_color</item>
         <item name="android:windowContentOverlay">@null</item>
+        <!-- Support library compatibility -->
+        <item name="actionModeBackground">@color/main_color</item>
+        <item name="actionBarStyle">@style/themeActionBar</item>
+        <!--<item name="actionBarTabTextStyle">@style/styleActionBarTabText</item>-->
+        <!--<item name="actionMenuTextColor">@color/actionbar_text</item>-->
+        <!--<item name="actionBarTabStyle">@style/styleActionBarTabs</item>-->
+    </style>
+
+    <!-- ActionBar styles -->
+    <style name="themeActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <!-- Support library compatibility -->
+        <item name="titleTextStyle">@style/styleActionBarTitleText</item>
+        <item name="subtitleTextStyle">@style/styleActionBarSubTitleText</item>
+    </style>
+
+    <!-- ActionBar title text -->
+    <style name="styleActionBarTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <!-- ActionBar title text -->
+    <style name="styleActionBarSubTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- ActionBar tabs text -->
+    <style name="styleActionBarTabText"
+        parent="@style/Widget.AppCompat.ActionBar.TabText">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <!-- ActionBar tabs styles -->
+    <style name="styleActionBarTabs"
+        parent="@style/Widget.AppCompat.ActionBar.TabView">
+        <!-- tab indicator -->
+        <item name="android:background">@color/main_color</item>
+        <!-- Support library compatibility -->
+        <item name="background">@color/main_color</item>
     </style>
 
 </resources>

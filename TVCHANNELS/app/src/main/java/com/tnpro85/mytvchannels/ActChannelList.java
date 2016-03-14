@@ -1,13 +1,16 @@
 package com.tnpro85.mytvchannels;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ActionMode;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,8 +50,6 @@ public class ActChannelList extends ActBase {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.act_channel);
-
         initUI(savedInstanceState);
         initData(savedInstanceState);
     }
@@ -124,18 +125,48 @@ public class ActChannelList extends ActBase {
     @Override
     protected void initUI(Bundle savedInstanceState) {
         super.initUI(savedInstanceState);
+        setContentView(R.layout.act_channel);
+
         vContainer = findViewById(R.id.container);
         layoutMultiStateView = (MultiStateView) findViewById(R.id.layoutMultiStateView);
         layoutMultiStateView.show(MultiStateView.STATE_LOADING);
 
         lvChannel = (ListView) findViewById(R.id.lvChannel);
-        lvChannel.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
         lvChannel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position < adapterChannel.getCount()) {
                     Channel selectedChannel = adapterChannel.getItem(position);
                 }
+            }
+        });
+        lvChannel.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
+        lvChannel.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+
+            }
+
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                mode.getMenuInflater().inflate(R.menu.menu_act_main, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+
             }
         });
 
@@ -149,6 +180,20 @@ public class ActChannelList extends ActBase {
                 ActChannelList.this.startActivityForResult(intent, Const.REQCODE.ADD_CHANNEL);
             }
         });
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK: {
+                if(mSearchOpened) {
+                    closeSearchBar();
+                    return true;
+                }
+            }
+        }
+
+        return super.onKeyUp(keyCode, event);
     }
 
     @Override

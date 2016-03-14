@@ -61,7 +61,6 @@ public class ActMain extends ActBase {
         layoutMultiStateView.show(MultiStateView.STATE_LOADING);
 
         lvDevices = (ListView) findViewById(R.id.lvDevices);
-        lvDevices.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
         lvDevices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -73,7 +72,10 @@ public class ActMain extends ActBase {
                 }
             }
         });
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+
+        // Only enable multi-select mode for Android version >= 3.0
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            lvDevices.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
             lvDevices.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
                 @Override
                 public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
@@ -98,9 +100,7 @@ public class ActMain extends ActBase {
                 }
 
                 @Override
-                public void onDestroyActionMode(ActionMode mode) {
-
-                }
+                public void onDestroyActionMode(ActionMode mode) {}
             });
         }
 

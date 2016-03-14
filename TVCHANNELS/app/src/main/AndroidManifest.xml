@@ -22,7 +22,7 @@
             android:name=".ActMain"
             android:configChanges="orientation|keyboard|screenSize|screenLayout"
             android:label="@string/title_activity_act_main"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".ActDevice"
             android:configChanges="orientation|keyboard|screenSize|screenLayout"
@@ -32,7 +32,7 @@
             android:name=".ActChannelList"
             android:configChanges="orientation|keyboard|screenSize|screenLayout"
             android:label="@string/title_activity_act_channel"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".ActChannelAdd"
             android:configChanges="orientation|keyboard|screenSize|screenLayout"
