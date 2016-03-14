@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ActionMode;
@@ -214,14 +213,13 @@ public class ActMain extends ActBase {
         fabAddDevice.setVisibility(View.GONE);
 
         // Set custom view on action bar.
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
-            actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setCustomView(R.layout.actionbar_search_view);
+        if(mActionBar != null) {
+            mActionBar.setDisplayShowCustomEnabled(true);
+            mActionBar.setCustomView(R.layout.actionbar_search_view);
         }
 
         // Search edit text field setup.
-        mSearchEt = (EditText) actionBar.getCustomView().findViewById(R.id.etSearch);
+        mSearchEt = (EditText) mActionBar.getCustomView().findViewById(R.id.etSearch);
         mSearchEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -257,9 +255,8 @@ public class ActMain extends ActBase {
         mSearchOpened = false;
 
         // Remove custom view.
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
-            actionBar.setDisplayShowCustomEnabled(false);
+        if(mActionBar != null) {
+            mActionBar.setDisplayShowCustomEnabled(false);
         }
     }
 

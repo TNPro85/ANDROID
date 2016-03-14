@@ -39,7 +39,6 @@ public class ActChannelList extends ActBase {
     private MenuItem mSearchAction;
 
     // Main layouts
-    private ActionBar mActionBar;
     private ListView lvChannel;
     private FloatingActionButton fabAddChannel;
     private Snackbar sbError;
@@ -124,8 +123,7 @@ public class ActChannelList extends ActBase {
 
     @Override
     protected void initUI(Bundle savedInstanceState) {
-        mActionBar = getSupportActionBar();
-
+        super.initUI(savedInstanceState);
         vContainer = findViewById(R.id.container);
         layoutMultiStateView = (MultiStateView) findViewById(R.id.layoutMultiStateView);
         layoutMultiStateView.show(MultiStateView.STATE_LOADING);
@@ -151,8 +149,6 @@ public class ActChannelList extends ActBase {
                 ActChannelList.this.startActivityForResult(intent, Const.REQCODE.ADD_CHANNEL);
             }
         });
-
-        super.initUI(savedInstanceState);
     }
 
     @Override

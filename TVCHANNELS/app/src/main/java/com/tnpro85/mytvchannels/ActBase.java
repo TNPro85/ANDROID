@@ -11,6 +11,7 @@ import android.view.View;
 public abstract class ActBase extends AppCompatActivity {
 
     protected View vContainer;
+    protected ActionBar mActionBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,7 +25,9 @@ public abstract class ActBase extends AppCompatActivity {
         }
     }
 
-    protected void initUI(Bundle savedInstanceState) {}
+    protected void initUI(Bundle savedInstanceState) {
+        mActionBar = getSupportActionBar();
+    }
     protected void initData(Bundle savedInstanceState) {}
 
     @Override
