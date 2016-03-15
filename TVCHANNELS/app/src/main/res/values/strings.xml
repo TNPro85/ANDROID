@@ -5,6 +5,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_done">Done</string>
     <string name="action_search">Search</string>
+    <string name="action_delete">Delete</string>
     <string name="title_activity_act_main">TV Channels</string>
     <string name="title_activity_act_device">Add Device</string>
     <string name="title_activity_act_channel">Channels</string>

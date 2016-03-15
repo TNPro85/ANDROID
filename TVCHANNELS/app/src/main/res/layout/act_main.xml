@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="20dp"
-        android:src="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
+        android:src="@drawable/ic_add_to_queue_white_36dp"
         app:backgroundTint="@color/main_color"
         app:elevation="4dp"
         app:fabSize="normal" />
