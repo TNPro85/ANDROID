@@ -37,7 +37,7 @@ public class ActChannelAdd extends ActBase {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_act_device, menu);
+        getMenuInflater().inflate(R.menu.menu_act_done, menu);
         return true;
     }
 

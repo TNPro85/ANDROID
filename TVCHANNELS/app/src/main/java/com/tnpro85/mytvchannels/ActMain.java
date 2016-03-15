@@ -54,6 +54,7 @@ public class ActMain extends ActBase {
 
     @Override
     protected void initUI(Bundle savedInstanceState) {
+        super.initUI(savedInstanceState);
         setContentView(R.layout.act_main);
 
         vContainer = findViewById(R.id.container);
@@ -85,7 +86,7 @@ public class ActMain extends ActBase {
                 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
                 @Override
                 public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                    mode.getMenuInflater().inflate(R.menu.menu_act_main, menu);
+                    mode.getMenuInflater().inflate(R.menu.menu_act_delete, menu);
                     return true;
                 }
 
@@ -113,8 +114,6 @@ public class ActMain extends ActBase {
                 ActMain.this.startActivityForResult(intent, Const.REQCODE.ADD_DEVICE);
             }
         });
-
-        super.initUI(savedInstanceState);
     }
 
     @Override
@@ -216,25 +215,27 @@ public class ActMain extends ActBase {
         if(mActionBar != null) {
             mActionBar.setDisplayShowCustomEnabled(true);
             mActionBar.setCustomView(R.layout.actionbar_search_view);
+
+            // Search edit text field setup.
+            if(mActionBar.getCustomView() != null) {
+                mSearchEt = (EditText) mActionBar.getCustomView().findViewById(R.id.etSearch);
+                mSearchEt.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        adapterDevices.getFilter().filter(s);
+                    }
+                });
+            }
         }
 
-        // Search edit text field setup.
-        mSearchEt = (EditText) mActionBar.getCustomView().findViewById(R.id.etSearch);
-        mSearchEt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                adapterDevices.getFilter().filter(s);
-            }
-        });
-
         // Show keyboard right away
-        KeyboardUtils.showKeyboard(mSearchEt.getContext(), mSearchEt);
+        KeyboardUtils.showKeyboard(mSearchEt);
 
         // Change search icon accordingly.
         mSearchOpened = true;
@@ -245,7 +246,7 @@ public class ActMain extends ActBase {
         fabAddDevice.setVisibility(View.VISIBLE);
 
         // Hide keyboard
-        KeyboardUtils.hideKeyboard(mSearchEt.getContext(), mSearchEt);
+        KeyboardUtils.hideKeyboard(mSearchEt);
 
         // Reset adapter filter to display full datalist
         adapterDevices.getFilter().filter("");

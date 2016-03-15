@@ -140,35 +140,37 @@ public class ActChannelList extends ActBase {
                 }
             }
         });
-        lvChannel.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
-        lvChannel.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-            @Override
-            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            lvChannel.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
+            lvChannel.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+                @Override
+                public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
 
-            }
+                }
 
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-            @Override
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                mode.getMenuInflater().inflate(R.menu.menu_act_main, menu);
-                return true;
-            }
+                @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+                @Override
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    mode.getMenuInflater().inflate(R.menu.menu_act_delete, menu);
+                    return true;
+                }
 
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return false;
-            }
+                @Override
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
 
-            @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                return false;
-            }
+                @Override
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    return false;
+                }
 
-            @Override
-            public void onDestroyActionMode(ActionMode mode) {
+                @Override
+                public void onDestroyActionMode(ActionMode mode) {
 
-            }
-        });
+                }
+            });
+        }
 
         fabAddChannel = (FloatingActionButton) findViewById(R.id.myFAB);
         fabAddChannel.setVisibility(View.GONE);
@@ -246,25 +248,27 @@ public class ActChannelList extends ActBase {
         if(mActionBar != null) {
             mActionBar.setDisplayShowCustomEnabled(true);
             mActionBar.setCustomView(R.layout.actionbar_search_view);
+
+            if(mActionBar.getCustomView() != null) {
+                // Search edit text field setup.
+                mSearchEt = (EditText) mActionBar.getCustomView().findViewById(R.id.etSearch);
+                mSearchEt.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        adapterChannel.getFilter().filter(s);
+                    }
+                });
+            }
         }
 
-        // Search edit text field setup.
-        mSearchEt = (EditText) mActionBar.getCustomView().findViewById(R.id.etSearch);
-        mSearchEt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                adapterChannel.getFilter().filter(s);
-            }
-        });
-
         // Show keyboard right away
-        KeyboardUtils.showKeyboard(mSearchEt.getContext(), mSearchEt);
+        KeyboardUtils.showKeyboard(mSearchEt);
 
         // Change search icon accordingly.
         mSearchOpened = true;
@@ -275,7 +279,7 @@ public class ActChannelList extends ActBase {
         AnimationUtils.showViewWithAnim(fabAddChannel, R.anim.abc_fade_in);
 
         // Hide keyboard
-        KeyboardUtils.hideKeyboard(mSearchEt.getContext(), mSearchEt);
+        KeyboardUtils.hideKeyboard(mSearchEt);
 
         // Reset adapter filter to display full datalist
         adapterChannel.getFilter().filter("");
