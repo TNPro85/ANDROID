@@ -86,7 +86,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void deleteDevice(Device device) {
         if(device != null) {
-            MainApp.getContext().getContentResolver().delete(CP.CONTENT_URI_DEVICES, "", new String[]{device.dName});
+            MainApp.getContext().getContentResolver().delete(CP.CONTENT_URI_DEVICES,
+                    DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_NAME + "=?",
+                    new String[]{device.dName});
         }
     }
 
@@ -125,7 +127,7 @@ public class DBHelper extends SQLiteOpenHelper {
                         null,
                         DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDEVICE + "=?",
                         new String[] {device.dName},
-                        DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNUM + " DESC");
+                        DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNUM + " ASC");
                 if(cursor != null) {
                     while(cursor.moveToNext()) {
                         Channel channel = new Channel();
@@ -155,6 +157,18 @@ public class DBHelper extends SQLiteOpenHelper {
             values.put(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNAME, channel.cName);
             values.put(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDESC, channel.cDesc);
             MainApp.getContext().getContentResolver().insert(CP.CONTENT_URI_CHANNELS, values);
+        }
+    }
+
+    public void deleteAllChannels() {
+        MainApp.getContext().getContentResolver().delete(CP.CONTENT_URI_CHANNELS, null, null);
+    }
+
+    public void deleteChannel(Channel channel) {
+        if(channel != null) {
+            MainApp.getContext().getContentResolver().delete(CP.CONTENT_URI_CHANNELS,
+                    DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDEVICE + "=? AND " + DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNUM + "=?",
+                    new String[]{channel.cDevice, channel.cNum + ""});
         }
     }
 }

@@ -15,5 +15,8 @@
     <string name="str_empty_channels">This device has no channel</string>
     <string name="str_device_name_hint">Samsung, LG… should be unique!</string>
     <string name="str_device_desc_hint">Description that help you determine the device</string>
+    <string name="str_selected">selected</string>
+    <string name="str_device_singular">device</string>
+    <string name="str_device_plural">devices</string>
 
 </resources>

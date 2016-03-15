@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -135,9 +136,9 @@ public class ActChannelList extends ActBase {
         lvChannel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position < adapterChannel.getCount()) {
-                    Channel selectedChannel = adapterChannel.getItem(position);
-                }
+//                if (position < adapterChannel.getCount()) {
+//                    Channel selectedChannel = adapterChannel.getItem(position);
+//                }
             }
         });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -145,7 +146,10 @@ public class ActChannelList extends ActBase {
             lvChannel.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
                 @Override
                 public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-
+                    // Prints the count of selected Items in title
+                    mode.setTitle(lvChannel.getCheckedItemCount() + " " + getString(R.string.str_selected));
+                    // Toggle the state of item after every click on it
+                    adapterChannel.toggleSelection(position);
                 }
 
                 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -162,12 +166,33 @@ public class ActChannelList extends ActBase {
 
                 @Override
                 public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    if (item.getItemId() == R.id.action_delete) {
+                        SparseBooleanArray selected = adapterChannel.getSelectedIds();
+                        int size = selected.size();
+                        for (int i = size - 1; i >= 0; i--) {
+                            if (selected.valueAt(i)) {
+                                Channel selectedItem = adapterChannel.getItem(selected.keyAt(i));
+                                DBHelper.getInstance().deleteChannel(selectedItem);
+                                adapterChannel.remove(selectedItem);
+                            }
+                        }
+
+                        // Reset selected list and update ListView
+                        selected.clear();
+                        adapterChannel.notifyDataSetChanged();
+                        lsChannels = new ArrayList<>(adapterChannel.getData());
+                        updateLayout();
+
+                        // Close CAB (Contextual Action Bar)
+                        mode.finish();
+                        return true;
+                    }
                     return false;
                 }
 
                 @Override
                 public void onDestroyActionMode(ActionMode mode) {
-
+                    adapterChannel.getSelectedIds().clear();
                 }
             });
         }
@@ -234,10 +259,11 @@ public class ActChannelList extends ActBase {
             lvChannel.setVisibility(View.GONE);
         }
 
-        fabAddChannel.setVisibility(View.VISIBLE);
+        if(!mSearchOpened)
+            fabAddChannel.setVisibility(View.VISIBLE);
 
         if(mActionBar != null) {
-            mActionBar.setSubtitle(lsChannels.size() + (lsChannels.size() > 1 ? " channels" : " channel"));
+            mActionBar.setSubtitle(lsChannels.size() + " " + (lsChannels.size() > 1 ? getString(R.string.str_device_plural) : getString(R.string.str_device_singular)));
         }
     }
 

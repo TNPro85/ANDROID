@@ -1,6 +1,7 @@
 package com.tnpro85.mytvchannels.adapter;
 
 import android.content.Context;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +21,43 @@ public class ChannelAdapter extends BaseAdapter implements Filterable {
     private ArrayList<Channel> originalData;
     private ArrayList<Channel> filteredData;
     private DeviceFilter deviceFilter;
+    private SparseBooleanArray mSelectedItemsIds;
+    private int mSelectedBgColor;
 
     public ChannelAdapter(Context context) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mSelectedBgColor = context.getResources().getColor(R.color.list_selected_bg);
+        mSelectedItemsIds = new SparseBooleanArray();
     }
 
     public void setData(ArrayList<Channel> data) {
         this.originalData = new ArrayList<>(data);
         this.filteredData = new ArrayList<>(data);
+    }
+
+    public ArrayList<Channel> getData() {
+        return originalData;
+    }
+
+    public void toggleSelection(int position) {
+        selectView(position, !mSelectedItemsIds.get(position));
+    }
+
+    public void selectView(int position, boolean value) {
+        if (value)
+            mSelectedItemsIds.put(position, value);
+        else
+            mSelectedItemsIds.delete(position);
+        notifyDataSetChanged();
+    }
+
+    public void remove(Channel channel) {
+        this.originalData.remove(channel);
+        this.filteredData.remove(channel);
+    }
+
+    public SparseBooleanArray getSelectedIds() {
+        return mSelectedItemsIds;
     }
 
     @Override
@@ -55,6 +85,7 @@ public class ChannelAdapter extends BaseAdapter implements Filterable {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.row_device, null);
+            holder.containter = convertView.findViewById(R.id.container);
             holder.tvDeviceName = (TextView) convertView.findViewById(R.id.tvName);
             holder.tvDeviceDesc = (TextView) convertView.findViewById(R.id.tvDesc);
             holder.tvDeviceIndex = (TextView) convertView.findViewById(R.id.tvIndex);
@@ -70,10 +101,13 @@ public class ChannelAdapter extends BaseAdapter implements Filterable {
             holder.tvDeviceDesc.setText(item.cDesc);
         }
 
+        holder.containter.setBackgroundColor(mSelectedItemsIds.get(position) ? mSelectedBgColor : 0);
+
         return convertView;
     }
 
     public class ViewHolder {
+        public View containter;
         public TextView tvDeviceName, tvDeviceDesc, tvDeviceIndex;
     }
 
