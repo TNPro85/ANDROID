@@ -13,12 +13,19 @@
 
     <string name="str_loading">Loading…</string>
     <string name="str_doing">Processing. Please wait…</string>
+    <string name="str_selected">selected</string>
+
+    <!-- Device -->
+    <string name="str_name">Name</string>
+    <string name="str_desc">Description</string>
     <string name="str_empty_devices">No devices</string>
     <string name="str_empty_channels">This device has no channel</string>
+    <string name="str_device_add_hint">Input information about your device (TV, Radio…). All fields must not be blank.</string>
     <string name="str_device_name_hint">Samsung, LG… should be unique!</string>
     <string name="str_device_desc_hint">Description that help you determine the device</string>
-    <string name="str_selected">selected</string>
     <string name="str_device_singular">device</string>
     <string name="str_device_plural">devices</string>
 
+    <!-- Channel -->
+    <string name="str_channel_add_hint">Input information of a channel. All fields must not be blank.</string>
 </resources>

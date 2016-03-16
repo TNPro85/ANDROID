@@ -1,67 +1,83 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10.0dip"
     tools:context=".ActChannelAdd"
     tools:ignore="MergeRootFrame">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Number"
-        android:textColor="#000000"
-        android:textSize="18sp" />
-
-    <EditText
-        android:id="@+id/etChannelNum"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3.0dip"
-        android:digits="0123456789"
-        android:hint="Channel number/position..."
-        android:inputType="numberDecimal"
-        android:singleLine="true"
-        android:textColorHint="#888888"
-        android:textSize="15sp" />
+        android:orientation="vertical"
+        android:padding="10.0dip">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10.0dip"
-        android:text="Name:"
-        android:textColor="#000000"
-        android:textSize="18sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5.0dip"
+            android:text="@string/str_channel_add_hint"
+            android:textColorHint="#888888"
+            android:textSize="15sp" />
 
-    <EditText
-        android:id="@+id/etChannelName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3.0dip"
-        android:hint="Name of channel"
-        android:inputType="textAutoComplete"
-        android:maxLines="5"
-        android:textColorHint="#888888"
-        android:textSize="15sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Number"
+            android:textColor="#000000"
+            android:textSize="18sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10.0dip"
-        android:text="Description:"
-        android:textColor="#000000"
-        android:textSize="18sp" />
+        <EditText
+            android:id="@+id/etChannelNum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3.0dip"
+            android:digits="0123456789"
+            android:hint="Channel number/position..."
+            android:inputType="numberDecimal"
+            android:singleLine="true"
+            android:textColorHint="#888888"
+            android:textSize="15sp" />
 
-    <EditText
-        android:id="@+id/etChannelDesc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3.0dip"
-        android:hint="Channel description"
-        android:inputType="textAutoComplete"
-        android:maxLines="5"
-        android:textColorHint="#888888"
-        android:textSize="15sp" />
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10.0dip"
+            android:text="Name:"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/etChannelName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3.0dip"
+            android:hint="Name of channel"
+            android:inputType="textAutoComplete"
+            android:maxLines="5"
+            android:textColorHint="#888888"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10.0dip"
+            android:text="Description:"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/etChannelDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3.0dip"
+            android:hint="Channel description"
+            android:inputType="textAutoComplete"
+            android:maxLines="5"
+            android:textColorHint="#888888"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+
+</ScrollView>

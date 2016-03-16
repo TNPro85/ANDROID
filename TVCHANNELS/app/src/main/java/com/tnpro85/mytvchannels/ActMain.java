@@ -30,7 +30,6 @@ import com.tnpro85.mytvchannels.models.Device;
 
 import java.util.ArrayList;
 
-
 public class ActMain extends ActBase {
 
     private boolean confirmExit = true;
