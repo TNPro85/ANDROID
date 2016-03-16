@@ -1,6 +1,7 @@
 package com.tnpro85.mytvchannels.adapter;
 
 import android.content.Context;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,28 +11,56 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.tnpro85.mytvchannels.R;
+import com.tnpro85.mytvchannels.models.Channel;
 import com.tnpro85.mytvchannels.models.Device;
 
 import java.util.ArrayList;
 
-/**
- * Created by TUAN on 14/06/2015.
- */
 public class DeviceAdapter extends BaseAdapter implements Filterable {
 
     private LayoutInflater mInflater;
     private ArrayList<Device> originalData;
     private ArrayList<Device> filteredData;
     private DeviceFilter deviceFilter;
+    private SparseBooleanArray mSelectedItemsIds;
+    private int mSelectedBgColor;
 
     public DeviceAdapter(Context context) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mSelectedBgColor = context.getResources().getColor(R.color.list_selected_bg);
+        mSelectedItemsIds = new SparseBooleanArray();
     }
 
     public void setData(ArrayList<Device> data) {
         this.originalData = new ArrayList<>(data);
         this.filteredData = new ArrayList<>(data);
     }
+
+    public ArrayList<Device> getData() {
+        return this.originalData;
+    }
+
+    public void toggleSelection(int position) {
+        selectView(position, !mSelectedItemsIds.get(position));
+    }
+
+    public void selectView(int position, boolean value) {
+        if (value)
+            mSelectedItemsIds.put(position, value);
+        else
+            mSelectedItemsIds.delete(position);
+        notifyDataSetChanged();
+    }
+
+    public void remove(Device device) {
+        this.originalData.remove(device);
+        this.filteredData.remove(device);
+    }
+
+    public SparseBooleanArray getSelectedIds() {
+        return mSelectedItemsIds;
+    }
+
 
     @Override
     public int getCount() {
@@ -58,6 +87,7 @@ public class DeviceAdapter extends BaseAdapter implements Filterable {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.row_device, null);
+            holder.vContainer = convertView.findViewById(R.id.container);
             holder.tvDeviceName = (TextView) convertView.findViewById(R.id.tvName);
             holder.tvDeviceDesc = (TextView) convertView.findViewById(R.id.tvDesc);
             holder.tvDeviceIndex = (TextView) convertView.findViewById(R.id.tvIndex);
@@ -75,10 +105,13 @@ public class DeviceAdapter extends BaseAdapter implements Filterable {
             holder.tvDeviceDesc.setText(item.dDesc);
         }
 
+        holder.vContainer.setBackgroundColor(mSelectedItemsIds.get(position) ? mSelectedBgColor : 0);
+
         return convertView;
     }
 
     public class ViewHolder {
+        public View vContainer;
         public TextView tvDeviceName, tvDeviceDesc, tvDeviceIndex;
     }
 

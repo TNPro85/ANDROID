@@ -23,6 +23,7 @@ public class ActChannelAdd extends ActBase {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_channel_add);
+        showHomeAsUpEnable(true);
 
         Bundle data = getIntent().getExtras();
         if(data != null) {

@@ -49,13 +49,6 @@ public class ActChannelList extends ActBase {
     private MultiStateView layoutMultiStateView;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initUI(savedInstanceState);
-        initData(savedInstanceState);
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
@@ -108,9 +101,6 @@ public class ActChannelList extends ActBase {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
             case R.id.action_search: {
                 if (mSearchOpened) {
                     closeSearchBar();
@@ -124,9 +114,24 @@ public class ActChannelList extends ActBase {
     }
 
     @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK: {
+                if(mSearchOpened) {
+                    closeSearchBar();
+                    return true;
+                }
+            }
+        }
+
+        return super.onKeyUp(keyCode, event);
+    }
+
+    @Override
     protected void initUI(Bundle savedInstanceState) {
         super.initUI(savedInstanceState);
         setContentView(R.layout.act_channel);
+        showHomeAsUpEnable(true);
 
         vContainer = findViewById(R.id.container);
         layoutMultiStateView = (MultiStateView) findViewById(R.id.layoutMultiStateView);
@@ -210,32 +215,14 @@ public class ActChannelList extends ActBase {
     }
 
     @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_BACK: {
-                if(mSearchOpened) {
-                    closeSearchBar();
-                    return true;
-                }
-            }
-        }
-
-        return super.onKeyUp(keyCode, event);
-    }
-
-    @Override
     protected void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
 
         Bundle data = getIntent().getExtras();
         if(data != null) {
             curDevice = data.getParcelable("device");
-            if(curDevice != null) {
-                if(mActionBar != null) {
-                    mActionBar.setTitle(curDevice.dName);
-                    mActionBar.setDisplayHomeAsUpEnabled(true);
-                }
-            }
+            if(curDevice != null)
+                setTitle(curDevice.dName);
         }
 
         adapterChannel = new ChannelAdapter(this);

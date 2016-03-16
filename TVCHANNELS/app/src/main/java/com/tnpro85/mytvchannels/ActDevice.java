@@ -21,6 +21,7 @@ public class ActDevice extends ActBase {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_device);
+        showHomeAsUpEnable(true);
 
         etDeviceName = (EditText) findViewById(R.id.etDeviceName);
         etDeviceName.requestFocus();
@@ -36,7 +37,6 @@ public class ActDevice extends ActBase {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.action_done) {
             try {
                 Device device = checkAndAddDevice();

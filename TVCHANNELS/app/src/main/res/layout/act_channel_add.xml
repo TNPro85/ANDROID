@@ -20,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="3.0dip"
+        android:digits="0123456789"
         android:hint="Channel number/position..."
         android:inputType="numberDecimal"
         android:singleLine="true"

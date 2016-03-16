@@ -11,6 +11,8 @@
     <string name="title_activity_act_channel">Channels</string>
     <string name="title_activity_act_channel_add">Add channel</string>
 
+    <string name="str_loading">Loading…</string>
+    <string name="str_doing">Processing. Please wait…</string>
     <string name="str_empty_devices">No devices</string>
     <string name="str_empty_channels">This device has no channel</string>
     <string name="str_device_name_hint">Samsung, LG… should be unique!</string>

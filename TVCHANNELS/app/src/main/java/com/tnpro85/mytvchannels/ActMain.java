@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -18,6 +19,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.tnpro.core.uicontrols.MultiStateView;
 import com.tnpro.core.utils.KeyboardUtils;
@@ -31,6 +33,7 @@ import java.util.ArrayList;
 
 public class ActMain extends ActBase {
 
+    private boolean confirmExit = true;
     private ArrayList<Device> lsDevices;
     private DeviceAdapter adapterDevices;
 
@@ -44,13 +47,6 @@ public class ActMain extends ActBase {
     private FloatingActionButton fabAddDevice;
     private Snackbar sbError;
     private MultiStateView layoutMultiStateView;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initUI(savedInstanceState);
-        initData(savedInstanceState);
-    }
 
     @Override
     protected void initUI(Bundle savedInstanceState) {
@@ -80,7 +76,10 @@ public class ActMain extends ActBase {
             lvDevices.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
                 @Override
                 public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-
+                    // Prints the count of selected Items in title
+                    mode.setTitle(lvDevices.getCheckedItemCount() + " " + getString(R.string.str_selected));
+                    // Toggle the state of item after every click on it
+                    adapterDevices.toggleSelection(position);
                 }
 
                 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -97,11 +96,43 @@ public class ActMain extends ActBase {
 
                 @Override
                 public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    if (item.getItemId() == R.id.action_delete) {
+                        boolean result = false;
+                        showLoadingDlg(R.string.str_doing);
+                        try {
+                            SparseBooleanArray selected = adapterDevices.getSelectedIds();
+                            int size = selected.size();
+                            for (int i = size - 1; i >= 0; i--) {
+                                if (selected.valueAt(i)) {
+                                    Device selectedItem = adapterDevices.getItem(selected.keyAt(i));
+                                    result = DBHelper.getInstance().deleteDevice(selectedItem);
+                                    adapterDevices.remove(selectedItem);
+                                }
+                            }
+
+                            // Reset selected list and update ListView
+                            selected.clear();
+                            adapterDevices.notifyDataSetChanged();
+                            lsDevices = new ArrayList<>(adapterDevices.getData());
+                            updateLayout();
+
+                            // Close CAB (Contextual Action Bar)
+                            mode.finish();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            hideLoadingDlg();
+                            Toast.makeText(ActMain.this, result ? "Deleted" : "Error", Toast.LENGTH_LONG).show();
+                            return result;
+                        }
+                    }
                     return false;
                 }
 
                 @Override
-                public void onDestroyActionMode(ActionMode mode) {}
+                public void onDestroyActionMode(ActionMode mode) {
+                    adapterDevices.getSelectedIds().clear();
+                }
             });
         }
 
@@ -200,6 +231,18 @@ public class ActMain extends ActBase {
             case KeyEvent.KEYCODE_BACK: {
                 if(mSearchOpened) {
                     closeSearchBar();
+                    return true;
+                }
+
+                if(confirmExit) {
+                    confirmExit = false;
+                    Toast.makeText(ActMain.this, "Back again to exit", Toast.LENGTH_SHORT).show();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            confirmExit = true;
+                        }
+                    }, 1500);
                     return true;
                 }
             }

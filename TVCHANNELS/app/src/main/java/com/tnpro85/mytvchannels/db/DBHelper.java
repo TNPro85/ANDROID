@@ -1,10 +1,13 @@
 package com.tnpro85.mytvchannels.db;
 
+import android.content.ContentProviderOperation;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.RemoteException;
 
 import com.tnpro.core.db.DBUtils;
 import com.tnpro85.mytvchannels.application.MainApp;
@@ -41,6 +44,10 @@ public class DBHelper extends SQLiteOpenHelper {
             db = context.openOrCreateDatabase(DBConst.DB_NAME, Context.MODE_PRIVATE, null);
     }
 
+    public SQLiteDatabase getDB() {
+        return db;
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {}
 
@@ -74,7 +81,6 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-
     public void addDevice(Device device) {
         if(device != null) {
             ContentValues values = new ContentValues();
@@ -84,12 +90,28 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void deleteDevice(Device device) {
+    public boolean deleteDevice(Device device) {
+        boolean result = false;
         if(device != null) {
-            MainApp.getContext().getContentResolver().delete(CP.CONTENT_URI_DEVICES,
-                    DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_NAME + "=?",
-                    new String[]{device.dName});
+            try {
+                ArrayList<ContentProviderOperation> ops = new ArrayList<>();
+                ContentProviderOperation deleteDeviceChannelOp = ContentProviderOperation.newDelete(CP.CONTENT_URI_CHANNELS)
+                        .withSelection(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDEVICE + "=?",
+                                new String[]{device.dName}).build();
+                ContentProviderOperation deleteDeviceOp = ContentProviderOperation.newDelete(CP.CONTENT_URI_DEVICES)
+                        .withSelection(DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_NAME + "=?",
+                                new String[]{device.dName}).build();
+
+                ops.add(deleteDeviceChannelOp);
+                ops.add(deleteDeviceOp);
+                MainApp.getContext().getContentResolver().applyBatch(CP.AUTHORITY, ops);
+                result = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
+        return result;
     }
 
     public ArrayList<Device> getAllDevices() {
@@ -162,6 +184,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void deleteAllChannels() {
         MainApp.getContext().getContentResolver().delete(CP.CONTENT_URI_CHANNELS, null, null);
+    }
+
+    public void deleteAllChannelsFromDevice(Device device) {
+        if(device != null) {
+            MainApp.getContext().getContentResolver().delete(CP.CONTENT_URI_CHANNELS,
+                    DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDEVICE + "=?",
+                    new String[]{device.dName});
+        }
     }
 
     public void deleteChannel(Channel channel) {

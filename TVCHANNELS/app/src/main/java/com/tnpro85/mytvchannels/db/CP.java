@@ -1,7 +1,10 @@
 package com.tnpro85.mytvchannels.db;
 
 import android.content.ContentProvider;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.ContentValues;
+import android.content.OperationApplicationException;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,8 +15,10 @@ import android.support.annotation.Nullable;
 
 import com.tnpro85.mytvchannels.BuildConfig;
 
+import java.util.ArrayList;
+
 public class CP extends ContentProvider {
-    private static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".provider";
+    public static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".provider";
 
     private static final int CODE_DEVICE = 1;
     private static final int CODE_CHANNEL = 2;
@@ -31,9 +36,7 @@ public class CP extends ContentProvider {
     }
 
     @Override
-    public boolean onCreate() {
-        return false;
-    }
+    public boolean onCreate() { return false; }
 
     @Nullable
     @Override
@@ -50,8 +53,7 @@ public class CP extends ContentProvider {
                 break;
         }
 
-        Cursor cursor = queryBuilder.query(DBHelper.getInstance().getWritableDatabase(),
-                projection, selection, selectionArgs, null, null, sortOrder);
+        Cursor cursor = queryBuilder.query(DBHelper.getInstance().getDB(), projection, selection, selectionArgs, null, null, sortOrder);
         return cursor;
     }
 
@@ -64,7 +66,7 @@ public class CP extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
-        SQLiteDatabase db = DBHelper.getInstance().getWritableDatabase();
+        SQLiteDatabase db = DBHelper.getInstance().getDB();
         long id = 0;
         int uriType = mURIMatcher.match(uri);
         switch (uriType) {
@@ -84,7 +86,7 @@ public class CP extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
-        SQLiteDatabase db = DBHelper.getInstance().getWritableDatabase();
+        SQLiteDatabase db = DBHelper.getInstance().getDB();
         int uriType = mURIMatcher.match(uri);
         int rowsDeleted = 0;
         switch (uriType) {
@@ -104,7 +106,7 @@ public class CP extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        SQLiteDatabase db = DBHelper.getInstance().getWritableDatabase();
+        SQLiteDatabase db = DBHelper.getInstance().getDB();
         int uriType = mURIMatcher.match(uri);
         int rowsUpdated = 0;
         switch (uriType) {
@@ -117,5 +119,25 @@ public class CP extends ContentProvider {
             getContext().getContentResolver().notifyChange(uri, null);
 
         return rowsUpdated;
+    }
+
+    @NonNull
+    @Override
+    public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
+        SQLiteDatabase db = DBHelper.getInstance().getDB();
+        ContentProviderResult[] result = new ContentProviderResult[operations.size()];
+        int i = 0;
+        db.beginTransaction();
+        try {
+            for (ContentProviderOperation operation : operations)
+                result[i++] = operation.apply(this, result, i);
+            db.setTransactionSuccessful();
+        } catch (OperationApplicationException e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+        }
+
+        return result;
     }
 }
