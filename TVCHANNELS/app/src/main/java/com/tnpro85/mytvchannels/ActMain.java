@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.tnpro.core.listeners.OnMenuClickListener;
 import com.tnpro.core.uicontrols.MultiStateView;
 import com.tnpro.core.utils.KeyboardUtils;
 import com.tnpro85.mytvchannels.adapter.DeviceAdapter;
@@ -151,13 +152,33 @@ public class ActMain extends ActBase {
         super.initData(savedInstanceState);
 
         adapterDevices = new DeviceAdapter(this);
+        adapterDevices.setOnMenuClickListener(new OnMenuClickListener() {
+            @Override
+            public void onMenuClick(int menuId, Object obj) {
+                switch (menuId) {
+                    case R.id.action_edit:
+                        if (obj instanceof Device) {
+                            Device selected = (Device) obj;
+                            Intent intent = new Intent(ActMain.this, ActDevice.class);
+                            intent.putExtra("device", selected);
+                            ActMain.this.startActivityForResult(intent, Const.REQCODE.EDIT_DEVICE);
+                        }
+                        break;
+                    case R.id.action_delete:
+                        if (obj instanceof Device) {
+                            Device selected = (Device) obj;
+                            DBHelper.getInstance().deleteDevice(selected);
+                            adapterDevices.remove(selected);
+                            adapterDevices.notifyDataSetChanged();
+                            lsDevices = new ArrayList<>(adapterDevices.getData());
+                            updateLayout();
+                        }
+                        break;
+                }
+            }
+        });
         lvDevices.setAdapter(adapterDevices);
-
-        lsDevices = DBHelper.getInstance().getAllDevices();
-        adapterDevices.setData(lsDevices);
-        adapterDevices.notifyDataSetChanged();
-
-        updateLayout();
+        refreshData();
     }
 
     @Override
@@ -195,6 +216,51 @@ public class ActMain extends ActBase {
                     updateLayout();
                 }
                 break;
+            case Const.REQCODE.EDIT_DEVICE: {
+                if(resultCode == RESULT_OK) {
+                    closeSearchBar();
+                    if(data != null) {
+                        Device device = data.getParcelableExtra("device");
+                        String resultType = data.getStringExtra("resultType");
+                        if (device != null) {
+                            if(resultType.equals(ActDevice.RESULT_ADD)) {
+                                lsDevices.add(device);
+                                adapterDevices.setData(lsDevices);
+                                adapterDevices.notifyDataSetChanged();
+                                lvDevices.smoothScrollToPosition(lsDevices.size() - 1);
+
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        sbError = Snackbar.make(vContainer, "Added", Snackbar.LENGTH_SHORT);
+                                        sbError.show();
+                                    }
+                                }, 1000);
+                            }
+                            else if(resultType.equals(ActDevice.RESULT_UPDATE)) {
+                                for(int i = 0; i < lsDevices.size(); i++) {
+                                    if(lsDevices.get(i).dName.equals(device.dName)) {
+                                        lsDevices.get(i).dDesc = device.dDesc;
+                                        break;
+                                    }
+                                }
+
+                                adapterDevices.setData(lsDevices);
+                                adapterDevices.notifyDataSetChanged();
+                            }
+
+                        } else {
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    sbError = Snackbar.make(vContainer, "Error! Please try again.", Snackbar.LENGTH_SHORT);
+                                    sbError.show();
+                                }
+                            }, 1000);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -212,14 +278,26 @@ public class ActMain extends ActBase {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_search) {
-            if (mSearchOpened) {
-                closeSearchBar();
-            } else {
-                openSearchBar();
+        switch (item.getItemId()) {
+            case R.id.action_search: {
+                if (mSearchOpened) {
+                    closeSearchBar();
+                } else {
+                    openSearchBar();
+                }
+                return true;
             }
-            return true;
+
+            case R.id.action_refresh: {
+                refreshData();
+                Toast.makeText(ActMain.this, "Refreshed", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
+            case R.id.action_settings: {
+                Toast.makeText(ActMain.this, "Settings", Toast.LENGTH_SHORT).show();
+                return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -248,6 +326,15 @@ public class ActMain extends ActBase {
         }
 
         return super.onKeyUp(keyCode, event);
+    }
+
+    private void refreshData() {
+        adapterDevices.getSelectedIds().clear();
+        lsDevices = DBHelper.getInstance().getAllDevices();
+        adapterDevices.setData(lsDevices);
+        adapterDevices.notifyDataSetChanged();
+
+        updateLayout();
     }
 
     private void openSearchBar() {

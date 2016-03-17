@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="main_color">#5fc1ec</color>
+    <color name="transparent">#00000000</color>
     <color name="white">#ffffff</color>
     <color name="list_selected_bg">#eeeeee</color>
 </resources>

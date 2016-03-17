@@ -250,7 +250,9 @@ public class ActChannelList extends ActBase {
             fabAddChannel.setVisibility(View.VISIBLE);
 
         if(mActionBar != null) {
-            mActionBar.setSubtitle(lsChannels.size() + " " + (lsChannels.size() > 1 ? getString(R.string.str_device_plural) : getString(R.string.str_device_singular)));
+            mActionBar.setSubtitle(lsChannels.size()
+                    + " " + (lsChannels.size() > 1 ?
+                    getString(R.string.str_channel_plural).toLowerCase() : getString(R.string.str_channel_singular).toLowerCase()));
         }
     }
 

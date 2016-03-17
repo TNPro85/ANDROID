@@ -1,8 +1,10 @@
 package com.tnpro85.mytvchannels;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteConstraintException;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -15,17 +17,35 @@ import com.tnpro85.mytvchannels.models.Device;
 
 public class ActDevice extends ActBase {
 
+    public static final String RESULT_ADD = "added", RESULT_UPDATE = "updated";
+
+    private Device mDeviceToEdit;
     EditText etDeviceName, etDeviceDesc;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void initUI(Bundle savedInstanceState) {
+        super.initUI(savedInstanceState);
         setContentView(R.layout.act_device);
         showHomeAsUpEnable(true);
 
         etDeviceName = (EditText) findViewById(R.id.etDeviceName);
         etDeviceName.requestFocus();
         etDeviceDesc = (EditText) findViewById(R.id.etDeviceDesc);
+    }
+
+    @Override
+    protected void initData(Bundle savedInstanceState) {
+        super.initData(savedInstanceState);
+
+        Bundle data = getIntent().getExtras();
+        if(data != null) {
+            mDeviceToEdit = data.getParcelable("device");
+            if(mDeviceToEdit != null) {
+                etDeviceName.setText(mDeviceToEdit.dName);
+                etDeviceName.setSelection(mDeviceToEdit.dName.length());
+                etDeviceDesc.setText(mDeviceToEdit.dDesc);
+            }
+        }
     }
 
     @Override
@@ -39,18 +59,64 @@ public class ActDevice extends ActBase {
         int id = item.getItemId();
         if (id == R.id.action_done) {
             try {
-                Device device = checkAndAddDevice();
-                if (device != null) {
-                    Intent result = new Intent();
-                    result.putExtra("device", device);
-                    setResult(RESULT_OK, result);
-                    finish();
+                etDeviceName.setError(null);
+                etDeviceDesc.setError(null);
+
+                final String name = etDeviceName.getText().toString();
+                final String desc = etDeviceDesc.getText().toString();
+
+                if (TextUtils.isEmpty(name)) {
+                    etDeviceName.setError("Must not empty");
+                    etDeviceName.requestFocus();
+                    return true;
+                } else if (TextUtils.isEmpty(desc)) {
+                    etDeviceDesc.setError("Must not empty");
+                    etDeviceDesc.requestFocus();
+                    return true;
+                }
+
+                if(DBHelper.getInstance().getDevice(name) != null) {
+                    new AlertDialog.Builder(ActDevice.this)
+                            .setTitle("Confirm")
+                            .setMessage("Device exists. Do you want to update it?")
+                            .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    addDevice(new Device(name, desc), RESULT_UPDATE);
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
+                }
+                else if(mDeviceToEdit != null) {
+                        new AlertDialog.Builder(ActDevice.this)
+                                .setTitle("Confirm")
+                                .setMessage("This device does not exist. Do you want to add it?")
+                                .setPositiveButton("Add new", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        addDevice(new Device(name, desc), RESULT_ADD);
+                                    }
+                                })
+                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }).show();
                 }
                 else
-                    Toast.makeText(ActDevice.this, "Data exists or invalid. Try again!", Toast.LENGTH_SHORT).show();
-            } catch (SQLiteConstraintException e) {
+                    addDevice(new Device(name, desc), null);
+            }
+            catch (SQLiteConstraintException e) {
                 e.printStackTrace();
-                Toast.makeText(ActDevice.this, "Data exists or invalid. Try again!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActDevice.this, "Invalid data. Try again!", Toast.LENGTH_SHORT).show();
             }
             return true;
         }
@@ -69,26 +135,13 @@ public class ActDevice extends ActBase {
         return super.onKeyUp(keyCode, event);
     }
 
-    private Device checkAndAddDevice() {
-        etDeviceName.setError(null);
-        etDeviceDesc.setError(null);
-
-        String name = etDeviceName.getText().toString();
-        String desc = etDeviceDesc.getText().toString();
-
-        if (TextUtils.isEmpty(name)) {
-            etDeviceName.setError("Must not empty");
-            etDeviceName.requestFocus();
-            return null;
-        } else if (TextUtils.isEmpty(desc)) {
-            etDeviceDesc.setError("Must not empty");
-            etDeviceDesc.requestFocus();
-            return null;
-        }
-
-        Device device = new Device(name, desc);
+    private void addDevice(Device device, String resultType) {
         DBHelper.getInstance().addDevice(device);
-
-        return device;
+        Intent result = new Intent();
+        if(!TextUtils.isEmpty(resultType))
+            result.putExtra("resultType", resultType);
+        result.putExtra("device", device);
+        setResult(RESULT_OK, result);
+        finish();
     }
 }

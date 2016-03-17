@@ -1,8 +1,11 @@
 package com.tnpro85.mytvchannels.adapter;
 
 import android.content.Context;
+import android.os.Handler;
+import android.support.v7.widget.PopupMenu;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -10,8 +13,9 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import com.tnpro.core.listeners.OnMenuClickListener;
+import com.tnpro.core.uicontrols.PopupManager;
 import com.tnpro85.mytvchannels.R;
-import com.tnpro85.mytvchannels.models.Channel;
 import com.tnpro85.mytvchannels.models.Device;
 
 import java.util.ArrayList;
@@ -24,6 +28,7 @@ public class DeviceAdapter extends BaseAdapter implements Filterable {
     private DeviceFilter deviceFilter;
     private SparseBooleanArray mSelectedItemsIds;
     private int mSelectedBgColor;
+    private OnMenuClickListener onMenuClickListener;
 
     public DeviceAdapter(Context context) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -34,6 +39,10 @@ public class DeviceAdapter extends BaseAdapter implements Filterable {
     public void setData(ArrayList<Device> data) {
         this.originalData = new ArrayList<>(data);
         this.filteredData = new ArrayList<>(data);
+    }
+
+    public void setOnMenuClickListener(OnMenuClickListener onMenuClickListener) {
+        this.onMenuClickListener = onMenuClickListener;
     }
 
     public ArrayList<Device> getData() {
@@ -88,6 +97,7 @@ public class DeviceAdapter extends BaseAdapter implements Filterable {
             holder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.row_device, null);
             holder.vContainer = convertView.findViewById(R.id.container);
+            holder.vPopupMenu = convertView.findViewById(R.id.vPopupMenu);
             holder.tvDeviceName = (TextView) convertView.findViewById(R.id.tvName);
             holder.tvDeviceDesc = (TextView) convertView.findViewById(R.id.tvDesc);
             holder.tvDeviceIndex = (TextView) convertView.findViewById(R.id.tvIndex);
@@ -96,22 +106,43 @@ public class DeviceAdapter extends BaseAdapter implements Filterable {
         } else
             holder = (ViewHolder) convertView.getTag();
 
-        Device item = getItem(position);
+        final Device selectedDevice = getItem(position);
         String pos = position + 1 + "";
         holder.tvDeviceIndex.setText(pos);
 
-        if(item != null) {
-            holder.tvDeviceName.setText(item.dName);
-            holder.tvDeviceDesc.setText(item.dDesc);
+        if(selectedDevice != null) {
+            holder.tvDeviceName.setText(selectedDevice.dName);
+            holder.tvDeviceDesc.setText(selectedDevice.dDesc);
+            holder.vPopupMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    PopupManager.getInstance().buildMenu(v.getContext(),
+                            v, R.menu.menu_device_action, new PopupMenu.OnMenuItemClickListener() {
+                                @Override
+                                public boolean onMenuItemClick(MenuItem item) {
+                                    if (onMenuClickListener != null)
+                                        onMenuClickListener.onMenuClick(item.getItemId(), selectedDevice);
+                                    return true;
+                                }
+                            });
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            PopupManager.getInstance().show();
+                        }
+                    });
+                }
+            });
         }
 
+        holder.vPopupMenu.setVisibility(mSelectedItemsIds.size() > 0 ? View.GONE : View.VISIBLE);
         holder.vContainer.setBackgroundColor(mSelectedItemsIds.get(position) ? mSelectedBgColor : 0);
 
         return convertView;
     }
 
     public class ViewHolder {
-        public View vContainer;
+        public View vContainer, vPopupMenu;
         public TextView tvDeviceName, tvDeviceDesc, tvDeviceIndex;
     }
 

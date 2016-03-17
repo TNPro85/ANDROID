@@ -11,6 +11,9 @@
         <!--<item name="actionBarTabTextStyle">@style/styleActionBarTabText</item>-->
         <!--<item name="actionMenuTextColor">@color/actionbar_text</item>-->
         <!--<item name="actionBarTabStyle">@style/styleActionBarTabs</item>-->
+
+        <item name="ic_down_right_arrow">@drawable/ic_down_right_arrow</item>
+        <item name="selector">@drawable/selector</item>
     </style>
 
     <!-- ActionBar styles -->

@@ -138,6 +138,34 @@ public class DBHelper extends SQLiteOpenHelper {
         return result;
     }
 
+    public Device getDevice(String deviceName) {
+        Device result = null;
+        Cursor cursor = null;
+
+        try {
+            cursor = MainApp.getContext().getContentResolver().query(
+                    CP.CONTENT_URI_DEVICES,
+                    null,
+                    DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_NAME + "=?",
+                    new String[] {deviceName},
+                    null);
+            if(cursor != null) {
+                while(cursor.moveToNext()) {
+                    result = new Device();
+                    result.dName = cursor.getString(cursor.getColumnIndex(DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_NAME));
+                    result.dDesc = cursor.getString(cursor.getColumnIndex(DBConst.TABLE.TBL_DEVICE_COL.COLUMN_NAME_DESC));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(cursor != null)
+                cursor.close();
+        }
+
+        return result;
+    }
+
     public ArrayList<Channel> getAllChannel(Device device) {
         ArrayList<Channel> result = new ArrayList<>();
         Cursor cursor = null;

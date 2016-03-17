@@ -6,6 +6,6 @@
         android:id="@+id/action_done"
         android:icon="@drawable/ic_done_white_36dp"
         android:orderInCategory="100"
-        android:title="@string/action_done"
+        android:title="@string/menu_done"
         app:showAsAction="always" />
 </menu>
