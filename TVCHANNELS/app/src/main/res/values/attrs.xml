@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="selector" format="reference" />
+    <attr name="ic_down_right_arrow" format="reference" />
+</resources>
