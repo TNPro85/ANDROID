@@ -191,6 +191,7 @@ public class ActMain extends ActBase {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
+                                        boolean result = false;
                                         try {
                                             if (obj instanceof Device) {
                                                 showLoadingDlg(R.string.str_doing, false);
@@ -200,11 +201,13 @@ public class ActMain extends ActBase {
                                                 adapterDevices.notifyDataSetChanged();
                                                 lsDevices = new ArrayList<>(adapterDevices.getData());
                                                 updateLayout();
+                                                result = true;
                                             }
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         } finally {
                                             hideLoadingDlg();
+                                            Toast.makeText(ActMain.this, result ? "Deleted" : "Error", Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 })
@@ -260,13 +263,13 @@ public class ActMain extends ActBase {
                 }
                 break;
             case Const.REQCODE.EDIT_DEVICE: {
-                if(resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK) {
                     closeSearchBar();
-                    if(data != null) {
+                    if (data != null) {
                         Device device = data.getParcelableExtra("device");
                         String resultType = data.getStringExtra("resultType");
                         if (device != null) {
-                            if(resultType.equals(ActDevice.RESULT_ADD)) {
+                            if (resultType.equals(ActDevice.RESULT_ADD)) {
                                 lsDevices.add(device);
                                 adapterDevices.setData(lsDevices);
                                 adapterDevices.notifyDataSetChanged();
@@ -279,10 +282,9 @@ public class ActMain extends ActBase {
                                         sbError.show();
                                     }
                                 }, 1000);
-                            }
-                            else if(resultType.equals(ActDevice.RESULT_UPDATE)) {
-                                for(int i = 0; i < lsDevices.size(); i++) {
-                                    if(lsDevices.get(i).dName.equals(device.dName)) {
+                            } else if (resultType.equals(ActDevice.RESULT_UPDATE)) {
+                                for (int i = 0; i < lsDevices.size(); i++) {
+                                    if (lsDevices.get(i).dName.equals(device.dName)) {
                                         lsDevices.get(i).dDesc = device.dDesc;
                                         break;
                                     }
@@ -356,12 +358,12 @@ public class ActMain extends ActBase {
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK: {
-                if(mSearchOpened) {
+                if (mSearchOpened) {
                     closeSearchBar();
                     return true;
                 }
 
-                if(confirmExit) {
+                if (confirmExit) {
                     confirmExit = false;
                     Toast.makeText(ActMain.this, "Back again to exit", Toast.LENGTH_SHORT).show();
                     new Handler().postDelayed(new Runnable() {
@@ -391,19 +393,21 @@ public class ActMain extends ActBase {
         fabAddDevice.setVisibility(View.GONE);
 
         // Set custom view on action bar.
-        if(mActionBar != null) {
+        if (mActionBar != null) {
             mActionBar.setDisplayShowCustomEnabled(true);
             mActionBar.setCustomView(R.layout.actionbar_search_view);
 
             // Search edit text field setup.
-            if(mActionBar.getCustomView() != null) {
+            if (mActionBar.getCustomView() != null) {
                 mSearchEt = (EditText) mActionBar.getCustomView().findViewById(R.id.etSearch);
                 mSearchEt.addTextChangedListener(new TextWatcher() {
                     @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
 
                     @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
 
                     @Override
                     public void afterTextChanged(Editable s) {
@@ -435,22 +439,22 @@ public class ActMain extends ActBase {
         mSearchOpened = false;
 
         // Remove custom view.
-        if(mActionBar != null) {
+        if (mActionBar != null) {
             mActionBar.setDisplayShowCustomEnabled(false);
         }
     }
 
     private void updateLayout() {
-        if(lsDevices.size() > 0) {
+        if (lsDevices.size() > 0) {
             layoutMultiStateView.hide();
             lvDevices.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             layoutMultiStateView.show(MultiStateView.STATE_EMPTY);
             layoutMultiStateView.setEmptyText(getResources().getString(R.string.str_empty_devices));
             lvDevices.setVisibility(View.GONE);
         }
 
-        fabAddDevice.setVisibility(View.VISIBLE);
+        if (!mSearchOpened)
+            fabAddDevice.setVisibility(View.VISIBLE);
     }
 }

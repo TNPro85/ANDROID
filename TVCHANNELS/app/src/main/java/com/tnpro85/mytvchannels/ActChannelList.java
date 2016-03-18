@@ -1,6 +1,8 @@
 package com.tnpro85.mytvchannels;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,7 +21,9 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.tnpro.core.listeners.OnMenuClickListener;
 import com.tnpro.core.uicontrols.MultiStateView;
 import com.tnpro.core.utils.AnimationUtils;
 import com.tnpro.core.utils.KeyboardUtils;
@@ -170,26 +174,53 @@ public class ActChannelList extends ActBase {
                 }
 
                 @Override
-                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
                     if (item.getItemId() == R.id.action_delete) {
-                        SparseBooleanArray selected = adapterChannel.getSelectedIds();
-                        int size = selected.size();
-                        for (int i = size - 1; i >= 0; i--) {
-                            if (selected.valueAt(i)) {
-                                Channel selectedItem = adapterChannel.getItem(selected.keyAt(i));
-                                DBHelper.getInstance().deleteChannel(selectedItem);
-                                adapterChannel.remove(selectedItem);
-                            }
-                        }
+                        new AlertDialog.Builder(ActChannelList.this)
+                                .setTitle("Confirm")
+                                .setMessage("Are you sure you want to delete these channels?")
+                                .setPositiveButton("Delete it", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
 
-                        // Reset selected list and update ListView
-                        selected.clear();
-                        adapterChannel.notifyDataSetChanged();
-                        lsChannels = new ArrayList<>(adapterChannel.getData());
-                        updateLayout();
+                                        boolean result = false;
+                                        showLoadingDlg(R.string.str_doing, true);
+                                        try {
+                                            SparseBooleanArray selected = adapterChannel.getSelectedIds();
+                                            int size = selected.size();
+                                            for (int i = size - 1; i >= 0; i--) {
+                                                if (selected.valueAt(i)) {
+                                                    Channel selectedItem = adapterChannel.getItem(selected.keyAt(i));
+                                                    DBHelper.getInstance().deleteChannel(selectedItem);
+                                                    adapterChannel.remove(selectedItem);
+                                                }
+                                            }
 
-                        // Close CAB (Contextual Action Bar)
-                        mode.finish();
+                                            // Reset selected list and update ListView
+                                            selected.clear();
+                                            adapterChannel.notifyDataSetChanged();
+                                            lsChannels = new ArrayList<>(adapterChannel.getData());
+                                            updateLayout();
+
+                                            // Close CAB (Contextual Action Bar)
+                                            mode.finish();
+                                            result = true;
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        } finally {
+                                            hideLoadingDlg();
+                                            Toast.makeText(ActChannelList.this, result ? "Deleted" : "Error", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                })
+                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
                         return true;
                     }
                     return false;
@@ -226,6 +257,55 @@ public class ActChannelList extends ActBase {
         }
 
         adapterChannel = new ChannelAdapter(this);
+        adapterChannel.setOnMenuClickListener(new OnMenuClickListener() {
+            @Override
+            public void onMenuClick(int menuId, final Object obj) {
+                switch (menuId) {
+                    case R.id.action_edit:
+                        if (obj instanceof Channel) {
+                            Channel selected = (Channel) obj;
+                            Intent intent = new Intent(ActChannelList.this, ActChannelAdd.class);
+                            intent.putExtra("channel", selected);
+                            ActChannelList.this.startActivityForResult(intent, Const.REQCODE.EDIT_DEVICE);
+                        }
+                        break;
+                    case R.id.action_delete:
+                        new AlertDialog.Builder(ActChannelList.this)
+                                .setTitle("Confirm")
+                                .setMessage("Are you sure you want to delete this channel?")
+                                .setPositiveButton("Delete it", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        try {
+                                            if (obj instanceof Channel) {
+                                                showLoadingDlg(R.string.str_doing, false);
+                                                Channel selected = (Channel) obj;
+                                                DBHelper.getInstance().deleteChannel(selected);
+                                                adapterChannel.remove(selected);
+                                                adapterChannel.notifyDataSetChanged();
+                                                lsChannels = new ArrayList<>(adapterChannel.getData());
+                                                updateLayout();
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        } finally {
+                                            hideLoadingDlg();
+                                        }
+                                    }
+                                })
+                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
+                        break;
+                }
+            }
+        });
+
         lvChannel.setAdapter(adapterChannel);
 
         lsChannels = DBHelper.getInstance().getAllChannel(curDevice);

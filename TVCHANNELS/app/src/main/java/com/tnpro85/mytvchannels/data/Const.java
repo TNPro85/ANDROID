@@ -10,5 +10,6 @@ public class Const {
         public static final int ADD_DEVICE = 10000;
         public static final int EDIT_DEVICE = 10001;
         public static final int ADD_CHANNEL = 10002;
+        public static final int EDIT_CHANNEL = 10003;
     }
 }
