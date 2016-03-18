@@ -84,11 +84,11 @@ public class ChannelAdapter extends BaseAdapter implements Filterable {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = mInflater.inflate(R.layout.row_device, null);
+            convertView = mInflater.inflate(R.layout.row_channel, null);
             holder.vContainer = convertView.findViewById(R.id.container);
-            holder.tvDeviceName = (TextView) convertView.findViewById(R.id.tvName);
-            holder.tvDeviceDesc = (TextView) convertView.findViewById(R.id.tvDesc);
-            holder.tvDeviceIndex = (TextView) convertView.findViewById(R.id.tvIndex);
+            holder.tvChannelName = (TextView) convertView.findViewById(R.id.tvName);
+            holder.tvChannelDesc = (TextView) convertView.findViewById(R.id.tvDesc);
+            holder.tvChannelNum = (TextView) convertView.findViewById(R.id.tvIndex);
 
             convertView.setTag(holder);
         } else
@@ -96,9 +96,9 @@ public class ChannelAdapter extends BaseAdapter implements Filterable {
 
         Channel item = getItem(position);
         if(item != null) {
-            holder.tvDeviceIndex.setText(item.cNum + "");
-            holder.tvDeviceName.setText(item.cName);
-            holder.tvDeviceDesc.setText(item.cDesc);
+            holder.tvChannelNum.setText(item.cNum + "");
+            holder.tvChannelName.setText(item.cName);
+            holder.tvChannelDesc.setText(item.cDesc);
         }
 
         holder.vContainer.setBackgroundColor(mSelectedItemsIds.get(position) ? mSelectedBgColor : 0);
@@ -108,7 +108,7 @@ public class ChannelAdapter extends BaseAdapter implements Filterable {
 
     public class ViewHolder {
         public View vContainer;
-        public TextView tvDeviceName, tvDeviceDesc, tvDeviceIndex;
+        public TextView tvChannelName, tvChannelDesc, tvChannelNum;
     }
 
     @Override

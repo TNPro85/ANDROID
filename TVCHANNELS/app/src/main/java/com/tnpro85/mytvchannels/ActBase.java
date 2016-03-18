@@ -1,6 +1,5 @@
 package com.tnpro85.mytvchannels;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -10,20 +9,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.tnpro85.mytvchannels.uicontrols.LoadingDialog;
+
 public abstract class ActBase extends AppCompatActivity {
 
     protected View vContainer;
     protected ActionBar mActionBar;
 
-    protected ProgressDialog mLoadingDialog;
+    protected LoadingDialog mLoadingDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mLoadingDialog = new ProgressDialog(this);
-        mLoadingDialog.setTitle(R.string.str_loading);
-
         mActionBar = getSupportActionBar();
         if(mActionBar != null) {
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
@@ -77,15 +74,20 @@ public abstract class ActBase extends AppCompatActivity {
             mActionBar.setTitle(value);
     }
 
-    protected void showLoadingDlg(int textId) {
+    protected void showLoadingDlg(int textId, boolean cancelable) {
+        if(mLoadingDialog == null) {
+            mLoadingDialog = new LoadingDialog(ActBase.this);
+        }
+
         if(!mLoadingDialog.isShowing()) {
-            mLoadingDialog.setTitle(textId);
+            mLoadingDialog.setMessage(getString(textId));
+            mLoadingDialog.setCancelable(cancelable);
             mLoadingDialog.show();
         }
     }
 
     protected void hideLoadingDlg() {
         if(mLoadingDialog.isShowing())
-            mLoadingDialog.hide();
+            mLoadingDialog.dismiss();
     }
 }
