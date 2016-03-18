@@ -1,6 +1,8 @@
 package com.tnpro85.mytvchannels;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -95,36 +97,53 @@ public class ActMain extends ActBase {
                 }
 
                 @Override
-                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
                     if (item.getItemId() == R.id.action_delete) {
-                        boolean result = false;
-                        showLoadingDlg(R.string.str_doing);
-                        try {
-                            SparseBooleanArray selected = adapterDevices.getSelectedIds();
-                            int size = selected.size();
-                            for (int i = size - 1; i >= 0; i--) {
-                                if (selected.valueAt(i)) {
-                                    Device selectedItem = adapterDevices.getItem(selected.keyAt(i));
-                                    result = DBHelper.getInstance().deleteDevice(selectedItem);
-                                    adapterDevices.remove(selectedItem);
-                                }
-                            }
+                        new AlertDialog.Builder(ActMain.this)
+                                .setTitle("Confirm")
+                                .setMessage("Delete a device will also erase all the channels inside.\nAre you sure you want to delete it?")
+                                .setPositiveButton("Delete it", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
 
-                            // Reset selected list and update ListView
-                            selected.clear();
-                            adapterDevices.notifyDataSetChanged();
-                            lsDevices = new ArrayList<>(adapterDevices.getData());
-                            updateLayout();
+                                        boolean result = false;
+                                        showLoadingDlg(R.string.str_doing, true);
+                                        try {
+                                            SparseBooleanArray selected = adapterDevices.getSelectedIds();
+                                            int size = selected.size();
+                                            for (int i = size - 1; i >= 0; i--) {
+                                                if (selected.valueAt(i)) {
+                                                    Device selectedItem = adapterDevices.getItem(selected.keyAt(i));
+                                                    result = DBHelper.getInstance().deleteDevice(selectedItem);
+                                                    adapterDevices.remove(selectedItem);
+                                                }
+                                            }
 
-                            // Close CAB (Contextual Action Bar)
-                            mode.finish();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        } finally {
-                            hideLoadingDlg();
-                            Toast.makeText(ActMain.this, result ? "Deleted" : "Error", Toast.LENGTH_LONG).show();
-                            return result;
-                        }
+                                            // Reset selected list and update ListView
+                                            selected.clear();
+                                            adapterDevices.notifyDataSetChanged();
+                                            lsDevices = new ArrayList<>(adapterDevices.getData());
+                                            updateLayout();
+
+                                            // Close CAB (Contextual Action Bar)
+                                            mode.finish();
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        } finally {
+                                            hideLoadingDlg();
+                                            Toast.makeText(ActMain.this, result ? "Deleted" : "Error", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                })
+                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
+                        return true;
                     }
                     return false;
                 }
@@ -154,7 +173,7 @@ public class ActMain extends ActBase {
         adapterDevices = new DeviceAdapter(this);
         adapterDevices.setOnMenuClickListener(new OnMenuClickListener() {
             @Override
-            public void onMenuClick(int menuId, Object obj) {
+            public void onMenuClick(int menuId, final Object obj) {
                 switch (menuId) {
                     case R.id.action_edit:
                         if (obj instanceof Device) {
@@ -165,18 +184,42 @@ public class ActMain extends ActBase {
                         }
                         break;
                     case R.id.action_delete:
-                        if (obj instanceof Device) {
-                            Device selected = (Device) obj;
-                            DBHelper.getInstance().deleteDevice(selected);
-                            adapterDevices.remove(selected);
-                            adapterDevices.notifyDataSetChanged();
-                            lsDevices = new ArrayList<>(adapterDevices.getData());
-                            updateLayout();
-                        }
+                        new AlertDialog.Builder(ActMain.this)
+                                .setTitle("Confirm")
+                                .setMessage("Delete a device will also erase all the channels inside.\nAre you sure you want to delete it?")
+                                .setPositiveButton("Delete it", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        try {
+                                            if (obj instanceof Device) {
+                                                showLoadingDlg(R.string.str_doing, false);
+                                                Device selected = (Device) obj;
+                                                DBHelper.getInstance().deleteDevice(selected);
+                                                adapterDevices.remove(selected);
+                                                adapterDevices.notifyDataSetChanged();
+                                                lsDevices = new ArrayList<>(adapterDevices.getData());
+                                                updateLayout();
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        } finally {
+                                            hideLoadingDlg();
+                                        }
+                                    }
+                                })
+                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
                         break;
                 }
             }
         });
+
         lvDevices.setAdapter(adapterDevices);
         refreshData();
     }
@@ -289,8 +332,15 @@ public class ActMain extends ActBase {
             }
 
             case R.id.action_refresh: {
-                refreshData();
-                Toast.makeText(ActMain.this, "Refreshed", Toast.LENGTH_SHORT).show();
+                showLoadingDlg(R.string.str_doing, false);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshData();
+                        hideLoadingDlg();
+                        Toast.makeText(ActMain.this, "Refreshed", Toast.LENGTH_SHORT).show();
+                    }
+                }, 1000);
                 return true;
             }
 
