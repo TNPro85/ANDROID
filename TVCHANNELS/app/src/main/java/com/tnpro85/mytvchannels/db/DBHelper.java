@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.RemoteException;
+import android.text.TextUtils;
 
 import com.tnpro.core.db.DBUtils;
 import com.tnpro85.mytvchannels.application.MainApp;
@@ -199,6 +200,38 @@ public class DBHelper extends SQLiteOpenHelper {
         return result;
     }
 
+    public Channel getChannel(String deviceName, int channelNum) {
+        Channel result = null;
+        Cursor cursor = null;
+
+        try {
+            cursor = MainApp.getContext().getContentResolver().query(
+                    CP.CONTENT_URI_CHANNELS,
+                    null,
+                    DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDEVICE
+                            + "=? AND "
+                            + DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNUM + "=?",
+                    new String[] {deviceName, channelNum + ""},
+                    null);
+            if(cursor != null) {
+                while(cursor.moveToNext()) {
+                    result = new Channel();
+                    result.cDevice = cursor.getString(cursor.getColumnIndex(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDEVICE));
+                    result.cNum = cursor.getInt(cursor.getColumnIndex(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNUM));
+                    result.cName = cursor.getString(cursor.getColumnIndex(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNAME));
+                    result.cDesc = cursor.getString(cursor.getColumnIndex(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDESC));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(cursor != null)
+                cursor.close();
+        }
+
+        return result;
+    }
+
     public void addChannel(Channel channel) {
         if(channel != null) {
             ContentValues values = new ContentValues();
@@ -210,16 +243,22 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void deleteAllChannels() {
-        MainApp.getContext().getContentResolver().delete(CP.CONTENT_URI_CHANNELS, null, null);
+    public void updateChannel(Channel channel) {
+        if(channel != null) {
+            ContentValues values = new ContentValues();
+            values.put(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNAME, channel.cName);
+            values.put(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDESC, channel.cDesc);
+            MainApp.getContext().getContentResolver().update(CP.CONTENT_URI_CHANNELS,
+                    values,
+                    DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDEVICE
+                            + "=? AND "
+                            + DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNUM + "=?",
+                    new String[] {channel.cDevice, channel.cNum + ""});
+        }
     }
 
-    public void deleteAllChannelsFromDevice(Device device) {
-        if(device != null) {
-            MainApp.getContext().getContentResolver().delete(CP.CONTENT_URI_CHANNELS,
-                    DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDEVICE + "=?",
-                    new String[]{device.dName});
-        }
+    public void deleteAllChannels() {
+        MainApp.getContext().getContentResolver().delete(CP.CONTENT_URI_CHANNELS, null, null);
     }
 
     public void deleteChannel(Channel channel) {

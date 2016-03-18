@@ -132,7 +132,7 @@ public class ActMain extends ActBase {
                                             e.printStackTrace();
                                         } finally {
                                             hideLoadingDlg();
-                                            Toast.makeText(ActMain.this, result ? "Deleted" : "Error", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(ActMain.this, result ? "Deleted" : "Error", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 })
@@ -207,7 +207,7 @@ public class ActMain extends ActBase {
                                             e.printStackTrace();
                                         } finally {
                                             hideLoadingDlg();
-                                            Toast.makeText(ActMain.this, result ? "Deleted" : "Error", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(ActMain.this, result ? "Deleted" : "Error", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 })

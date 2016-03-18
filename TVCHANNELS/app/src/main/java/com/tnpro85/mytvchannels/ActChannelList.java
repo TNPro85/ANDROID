@@ -87,6 +87,25 @@ public class ActChannelList extends ActBase {
                     updateLayout();
                 }
                 break;
+
+            case Const.REQCODE.EDIT_CHANNEL:
+                if(resultCode == RESULT_OK) {
+                    if (data != null) {
+                        Channel channel = data.getParcelableExtra("channel");
+                        for (int i = 0; i < lsChannels.size(); i++) {
+                            Channel c = lsChannels.get(i);
+                            if (c.cDevice.equals(channel.cDevice) && c.cNum == channel.cNum) {
+                                c.cName = channel.cName;
+                                c.cDesc = channel.cDesc;
+                                break;
+                            }
+                        }
+
+                        adapterChannel.setData(lsChannels);
+                        adapterChannel.notifyDataSetChanged();
+                    }
+                }
+                break;
         }
     }
 
@@ -121,7 +140,7 @@ public class ActChannelList extends ActBase {
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK: {
-                if(mSearchOpened) {
+                if (mSearchOpened) {
                     closeSearchBar();
                     return true;
                 }
@@ -210,7 +229,7 @@ public class ActChannelList extends ActBase {
                                             e.printStackTrace();
                                         } finally {
                                             hideLoadingDlg();
-                                            Toast.makeText(ActChannelList.this, result ? "Deleted" : "Error", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(ActChannelList.this, result ? "Deleted" : "Error", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 })
@@ -250,9 +269,9 @@ public class ActChannelList extends ActBase {
         super.initData(savedInstanceState);
 
         Bundle data = getIntent().getExtras();
-        if(data != null) {
+        if (data != null) {
             curDevice = data.getParcelable("device");
-            if(curDevice != null)
+            if (curDevice != null)
                 setTitle(curDevice.dName);
         }
 
@@ -265,8 +284,9 @@ public class ActChannelList extends ActBase {
                         if (obj instanceof Channel) {
                             Channel selected = (Channel) obj;
                             Intent intent = new Intent(ActChannelList.this, ActChannelAdd.class);
+                            intent.putExtra("device", curDevice);
                             intent.putExtra("channel", selected);
-                            ActChannelList.this.startActivityForResult(intent, Const.REQCODE.EDIT_DEVICE);
+                            ActChannelList.this.startActivityForResult(intent, Const.REQCODE.EDIT_CHANNEL);
                         }
                         break;
                     case R.id.action_delete:
@@ -277,6 +297,7 @@ public class ActChannelList extends ActBase {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
+                                        boolean result = false;
                                         try {
                                             if (obj instanceof Channel) {
                                                 showLoadingDlg(R.string.str_doing, false);
@@ -286,11 +307,13 @@ public class ActChannelList extends ActBase {
                                                 adapterChannel.notifyDataSetChanged();
                                                 lsChannels = new ArrayList<>(adapterChannel.getData());
                                                 updateLayout();
+                                                result = true;
                                             }
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         } finally {
                                             hideLoadingDlg();
+                                            Toast.makeText(ActChannelList.this, result ? "Deleted" : "Error", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 })
@@ -316,20 +339,19 @@ public class ActChannelList extends ActBase {
     }
 
     private void updateLayout() {
-        if(lsChannels.size() > 0) {
+        if (lsChannels.size() > 0) {
             layoutMultiStateView.hide();
             lvChannel.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             layoutMultiStateView.show(MultiStateView.STATE_EMPTY);
             layoutMultiStateView.setEmptyText(getResources().getString(R.string.str_empty_channels));
             lvChannel.setVisibility(View.GONE);
         }
 
-        if(!mSearchOpened)
+        if (!mSearchOpened)
             fabAddChannel.setVisibility(View.VISIBLE);
 
-        if(mActionBar != null) {
+        if (mActionBar != null) {
             mActionBar.setSubtitle(lsChannels.size()
                     + " " + (lsChannels.size() > 1 ?
                     getString(R.string.str_channel_plural).toLowerCase() : getString(R.string.str_channel_singular).toLowerCase()));
@@ -340,19 +362,21 @@ public class ActChannelList extends ActBase {
         fabAddChannel.setVisibility(View.GONE);
 
         // Set custom view on action bar.
-        if(mActionBar != null) {
+        if (mActionBar != null) {
             mActionBar.setDisplayShowCustomEnabled(true);
             mActionBar.setCustomView(R.layout.actionbar_search_view);
 
-            if(mActionBar.getCustomView() != null) {
+            if (mActionBar.getCustomView() != null) {
                 // Search edit text field setup.
                 mSearchEt = (EditText) mActionBar.getCustomView().findViewById(R.id.etSearch);
                 mSearchEt.addTextChangedListener(new TextWatcher() {
                     @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
 
                     @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
 
                     @Override
                     public void afterTextChanged(Editable s) {
@@ -384,7 +408,7 @@ public class ActChannelList extends ActBase {
         mSearchOpened = false;
 
         // Remove custom view.
-        if(mActionBar != null) {
+        if (mActionBar != null) {
             mActionBar.setDisplayShowCustomEnabled(false);
         }
     }
