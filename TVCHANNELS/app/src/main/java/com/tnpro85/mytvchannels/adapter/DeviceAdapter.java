@@ -17,6 +17,7 @@ import com.tnpro.core.listeners.OnMenuClickListener;
 import com.tnpro.core.uicontrols.PopupManager;
 import com.tnpro85.mytvchannels.R;
 import com.tnpro85.mytvchannels.models.Device;
+import com.tnpro85.mytvchannels.uicontrols.DeviceIcon;
 
 import java.util.ArrayList;
 
@@ -100,7 +101,7 @@ public class DeviceAdapter extends BaseAdapter implements Filterable {
             holder.vPopupMenu = convertView.findViewById(R.id.vPopupMenu);
             holder.tvDeviceName = (TextView) convertView.findViewById(R.id.tvName);
             holder.tvDeviceDesc = (TextView) convertView.findViewById(R.id.tvDesc);
-            holder.tvDeviceIndex = (TextView) convertView.findViewById(R.id.tvIndex);
+            holder.vIndex = (DeviceIcon) convertView.findViewById(R.id.vIndex);
 
             convertView.setTag(holder);
         } else
@@ -108,7 +109,7 @@ public class DeviceAdapter extends BaseAdapter implements Filterable {
 
         final Device selectedDevice = getItem(position);
         String pos = position + 1 + "";
-        holder.tvDeviceIndex.setText(pos);
+        holder.vIndex.setText(pos);
 
         if(selectedDevice != null) {
             holder.tvDeviceName.setText(selectedDevice.dName);
@@ -143,7 +144,8 @@ public class DeviceAdapter extends BaseAdapter implements Filterable {
 
     public class ViewHolder {
         public View vContainer, vPopupMenu;
-        public TextView tvDeviceName, tvDeviceDesc, tvDeviceIndex;
+        public DeviceIcon vIndex;
+        public TextView tvDeviceName, tvDeviceDesc;
     }
 
     @Override
