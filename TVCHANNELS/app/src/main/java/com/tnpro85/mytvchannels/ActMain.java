@@ -30,6 +30,7 @@ import com.tnpro85.mytvchannels.adapter.DeviceAdapter;
 import com.tnpro85.mytvchannels.data.Const;
 import com.tnpro85.mytvchannels.db.DBHelper;
 import com.tnpro85.mytvchannels.models.Device;
+import com.tnpro85.mytvchannels.utils.LocaleUtil;
 
 import java.util.ArrayList;
 
@@ -100,9 +101,9 @@ public class ActMain extends ActBase {
                 public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
                     if (item.getItemId() == R.id.action_delete) {
                         new AlertDialog.Builder(ActMain.this)
-                                .setTitle("Confirm")
-                                .setMessage("Delete a device will also erase all the channels inside.\nAre you sure you want to delete it?")
-                                .setPositiveButton("Delete it", new DialogInterface.OnClickListener() {
+                                .setTitle(getString(R.string.str_confirm))
+                                .setMessage(getString(R.string.str_device_delete_confirm))
+                                .setPositiveButton(getString(R.string.str_delete), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
@@ -136,7 +137,7 @@ public class ActMain extends ActBase {
                                         }
                                     }
                                 })
-                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
@@ -185,9 +186,9 @@ public class ActMain extends ActBase {
                         break;
                     case R.id.action_delete:
                         new AlertDialog.Builder(ActMain.this)
-                                .setTitle("Confirm")
-                                .setMessage("Delete a device will also erase all the channels inside.\nAre you sure you want to delete it?")
-                                .setPositiveButton("Delete it", new DialogInterface.OnClickListener() {
+                                .setTitle(getString(R.string.str_confirm))
+                                .setMessage(getString(R.string.str_device_delete_confirm))
+                                .setPositiveButton(getString(R.string.str_delete), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
@@ -211,7 +212,7 @@ public class ActMain extends ActBase {
                                         }
                                     }
                                 })
-                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
@@ -306,6 +307,11 @@ public class ActMain extends ActBase {
                     }
                 }
             }
+
+            case Const.REQCODE.GO_SETTINGS:
+                LocaleUtil.loadLocale(getBaseContext());
+                invalidateOptionsMenu();
+                break;
         }
     }
 
@@ -340,14 +346,15 @@ public class ActMain extends ActBase {
                     public void run() {
                         refreshData();
                         hideLoadingDlg();
-                        Toast.makeText(ActMain.this, "Refreshed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ActMain.this, getString(R.string.str_refreshed), Toast.LENGTH_SHORT).show();
                     }
                 }, 1000);
                 return true;
             }
 
             case R.id.action_settings: {
-                Toast.makeText(ActMain.this, "Settings", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ActMain.this, ActSetting.class);
+                ActMain.this.startActivityForResult(intent, Const.REQCODE.GO_SETTINGS);
                 return true;
             }
         }
@@ -365,7 +372,7 @@ public class ActMain extends ActBase {
 
                 if (confirmExit) {
                     confirmExit = false;
-                    Toast.makeText(ActMain.this, "Back again to exit", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActMain.this, getString(R.string.str_back_confirm), Toast.LENGTH_SHORT).show();
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {

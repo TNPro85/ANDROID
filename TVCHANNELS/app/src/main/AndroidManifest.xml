@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tnpro85.mytvchannels">
 
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true" />
+
     <application
         android:name=".application.MainApp"
         android:allowBackup="true"
@@ -19,24 +25,25 @@
         </activity>
         <activity
             android:name=".ActMain"
-            android:configChanges="orientation|keyboard|screenSize|screenLayout"
+            android:configChanges="locale|orientation|keyboard|screenSize|screenLayout"
             android:label="@string/title_activity_act_main"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".ActDevice"
-            android:configChanges="orientation|keyboard|screenSize|screenLayout"
-            android:label="@string/title_activity_act_device"
+            android:configChanges="locale|orientation|keyboard|screenSize|screenLayout"
             android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".ActChannelList"
-            android:configChanges="orientation|keyboard|screenSize|screenLayout"
-            android:label="@string/title_activity_act_channel"
+            android:configChanges="locale|orientation|keyboard|screenSize|screenLayout"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".ActChannelAdd"
-            android:configChanges="orientation|keyboard|screenSize|screenLayout"
-            android:label="@string/title_activity_act_channel_add"
+            android:configChanges="locale|orientation|keyboard|screenSize|screenLayout"
             android:windowSoftInputMode="stateVisible" />
+        <activity
+            android:name=".ActSetting"
+            android:configChanges="locale|orientation|keyboard|screenSize|screenLayout"
+            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <provider
             android:name=".db.CP"

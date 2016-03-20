@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">TV Channels</string>
+    <string name="app_copyright">© TNPro85 2015</string>
+    <string name="app_version">Phiên bản %s</string>
+    <string name="title_activity_act_main">TV Channels</string>
+    <string name="title_activity_act_device">Thêm thiết bị</string>
+    <string name="title_activity_act_channel">Danh sách kênh</string>
+    <string name="title_activity_act_channel_add">Thêm kênh</string>
+    <string name="title_activity_act_setting">Thiết lập</string>
+
+    <string name="str_loading">Đang tải…</string>
+    <string name="str_doing">Đang xử lý. Vui lòng chờ…</string>
+    <string name="str_selected">đã chọn</string>
+    <string name="str_language">Ngôn ngữ</string>
+    <string name="str_about">Thông tin</string>
+    <string name="str_backup">Sao lưu / Phục hồi</string>
+    <string name="str_num">Số</string>
+    <string name="str_delete">Xóa</string>
+    <string name="str_confirm">Xác nhận</string>
+    <string name="str_cancel">Hủy</string>
+    <string name="str_refreshed">Đã cập nhật</string>
+
+    <!-- Main -->
+    <string name="str_back_confirm">Bấm back lần nữa để thoát</string>
+
+    <!-- Menu -->
+    <string name="menu_settings">Cài đặt</string>
+    <string name="menu_done">Xong</string>
+    <string name="menu_search">Tìm kiếm</string>
+    <string name="menu_delete">Xóa</string>
+    <string name="menu_refresh">Cập nhật</string>
+    <string name="menu_edit">Sửa</string>
+
+    <!-- Device -->
+    <string name="str_name">Tên</string>
+    <string name="str_desc">Chú thích</string>
+    <string name="str_empty_devices">Không có thiết bị</string>
+    <string name="str_empty_channels">Thiết bị này chưa có kênh nào</string>
+    <string name="str_device_add_hint">Điền thông tin về thiết bị (TV, Radio…). Tất cả các mục không được bỏ trống.</string>
+    <string name="str_device_name_hint">Samsung, LG… không nên trùng!</string>
+    <string name="str_device_desc_hint">Chú thích giúp bạn xác định thiết bị cần thiết</string>
+    <string name="str_device_singular">Thiết bị</string>
+    <string name="str_device_plural">Thiết bị</string>
+    <string name="str_device_delete_confirm">Xóa một thiết bị sẽ xóa tất cả các kênh trong thiết bị đó.\nBạn có chắc muốn xóa không?</string>
+
+    <!-- Channel -->
+    <string name="str_channel_add_hint">Điền thông tin của kênh này. Tất cả các mục không được bỏ trống.</string>
+    <string name="str_channel_singular">Kênh</string>
+    <string name="str_channel_plural">Kênh</string>
+    <string name="str_channel_num_hint">Số thứ tự, vị trí của kênh…</string>
+    <string name="str_channel_name_hint">Tên của kênh</string>
+    <string name="str_channel_desc_hint">Chú thích giúp bạn xác định nội dung kênh</string>
+</resources>

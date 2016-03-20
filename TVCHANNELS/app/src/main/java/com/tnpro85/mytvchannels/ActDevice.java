@@ -27,6 +27,7 @@ public class ActDevice extends ActBase {
         super.initUI(savedInstanceState);
         setContentView(R.layout.act_device);
         showHomeAsUpEnable(true);
+        setTitle(getString(R.string.title_activity_act_device));
 
         etDeviceName = (EditText) findViewById(R.id.etDeviceName);
         etDeviceName.requestFocus();

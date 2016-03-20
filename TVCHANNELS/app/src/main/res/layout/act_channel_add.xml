@@ -25,7 +25,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Number"
+            android:text="@string/str_num"
             android:textColor="#000000"
             android:textSize="18sp" />
 
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3.0dip"
             android:digits="0123456789"
-            android:hint="Channel number/position..."
+            android:hint="@string/str_channel_num_hint"
             android:inputType="numberDecimal"
             android:singleLine="true"
             android:textColorHint="#888888"
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10.0dip"
-            android:text="Name:"
+            android:text="@string/str_name"
             android:textColor="#000000"
             android:textSize="18sp" />
 
@@ -54,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3.0dip"
-            android:hint="Name of channel"
+            android:hint="@string/str_channel_name_hint"
             android:inputType="textAutoComplete|textCapWords"
             android:maxLines="5"
             android:textColorHint="#888888"
@@ -64,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10.0dip"
-            android:text="Description:"
+            android:text="@string/str_desc"
             android:textColor="#000000"
             android:textSize="18sp" />
 
@@ -73,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3.0dip"
-            android:hint="Channel description"
+            android:hint="@string/str_channel_desc_hint"
             android:inputType="textAutoComplete|textCapSentences"
             android:maxLines="5"
             android:textColorHint="#888888"

@@ -26,6 +26,7 @@ public class ActChannelAdd extends ActBase {
         super.initUI(savedInstanceState);
         setContentView(R.layout.act_channel_add);
         showHomeAsUpEnable(true);
+        setTitle(getString(R.string.title_activity_act_channel_add));
 
         etChannelNum = (EditText) findViewById(R.id.etChannelNum);
         etChannelNum.requestFocus();

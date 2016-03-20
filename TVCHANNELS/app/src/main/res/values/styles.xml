@@ -49,4 +49,8 @@
         <item name="background">@color/main_color</item>
     </style>
 
+    <style name="styleTextViewTitle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#000000</item>
+    </style>
 </resources>
