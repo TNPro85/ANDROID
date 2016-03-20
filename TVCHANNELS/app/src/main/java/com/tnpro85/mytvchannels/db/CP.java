@@ -113,6 +113,9 @@ public class CP extends ContentProvider {
             case CODE_DEVICE:
                 rowsUpdated = db.update(DBConst.TABLE.TBL_DEVICE_NAME, values, selection, selectionArgs);
                 break;
+            case CODE_CHANNEL:
+                rowsUpdated = db.update(DBConst.TABLE.TBL_CHANNEL_NAME, values, selection, selectionArgs);
+                break;
         }
 
         if(getContext() != null && getContext().getContentResolver() != null)
