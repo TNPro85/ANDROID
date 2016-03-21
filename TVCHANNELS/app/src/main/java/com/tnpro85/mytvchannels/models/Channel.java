@@ -4,6 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Channel implements Comparable<Channel>, Parcelable {
 
     public String cDevice;
@@ -58,5 +61,18 @@ public class Channel implements Comparable<Channel>, Parcelable {
         dest.writeInt(cNum);
         dest.writeString(cName);
         dest.writeString(cDesc);
+    }
+
+    public JSONObject toJSONObj() {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("device", cDevice);
+            json.put("num", cNum);
+            json.put("name", cName);
+            json.put("desc", cDesc);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
     }
 }

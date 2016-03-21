@@ -3,6 +3,9 @@ package com.tnpro85.mytvchannels.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Device implements Parcelable {
     public String dName, dDesc;
 
@@ -43,5 +46,16 @@ public class Device implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(dName);
         dest.writeString(dDesc);
+    }
+
+    public JSONObject toJSONObj() {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("name", dName);
+            json.put("desc", dDesc);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
     }
 }

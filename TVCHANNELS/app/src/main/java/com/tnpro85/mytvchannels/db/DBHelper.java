@@ -171,30 +171,28 @@ public class DBHelper extends SQLiteOpenHelper {
         ArrayList<Channel> result = new ArrayList<>();
         Cursor cursor = null;
 
-        if(device != null) {
-            try {
-                cursor = MainApp.getContext().getContentResolver().query(
-                        CP.CONTENT_URI_CHANNELS,
-                        null,
-                        DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDEVICE + "=?",
-                        new String[] {device.dName},
-                        DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNUM + " ASC");
-                if(cursor != null) {
-                    while(cursor.moveToNext()) {
-                        Channel channel = new Channel();
-                        channel.cDevice = cursor.getString(cursor.getColumnIndex(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDEVICE));
-                        channel.cNum = cursor.getInt(cursor.getColumnIndex(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNUM));
-                        channel.cName = cursor.getString(cursor.getColumnIndex(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNAME));
-                        channel.cDesc = cursor.getString(cursor.getColumnIndex(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDESC));
-                        result.add(channel);
-                    }
+        try {
+            cursor = MainApp.getContext().getContentResolver().query(
+                    CP.CONTENT_URI_CHANNELS,
+                    null,
+                    device != null ? DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDEVICE + "=?" : null,
+                    device != null ? new String[] {device.dName} : null,
+                    DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNUM + " ASC");
+            if(cursor != null) {
+                while(cursor.moveToNext()) {
+                    Channel channel = new Channel();
+                    channel.cDevice = cursor.getString(cursor.getColumnIndex(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDEVICE));
+                    channel.cNum = cursor.getInt(cursor.getColumnIndex(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNUM));
+                    channel.cName = cursor.getString(cursor.getColumnIndex(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CNAME));
+                    channel.cDesc = cursor.getString(cursor.getColumnIndex(DBConst.TABLE.TBL_CHANNEL_COL.COLUMN_NAME_CDESC));
+                    result.add(channel);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if(cursor != null)
-                    cursor.close();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(cursor != null)
+                cursor.close();
         }
 
         return result;

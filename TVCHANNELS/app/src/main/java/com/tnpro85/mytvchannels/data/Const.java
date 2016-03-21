@@ -18,4 +18,9 @@ public class Const {
         public static final String DEVICE = "device";
         public static final String RESULT_TYPE = "resultType";
     }
+
+    public static class PERMISSION {
+        public static final short READ_EXTERNAL_STORAGE = 100;
+        public static final short WRITE_EXTERNAL_STORAGE = 101;
+    }
 }
