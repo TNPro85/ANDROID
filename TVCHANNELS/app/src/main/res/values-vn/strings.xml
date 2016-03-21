@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">TV Channels</string>
-    <string name="app_copyright">© TNPro85 2015</string>
+    <string name="app_copyright">© TnPro 2015</string>
     <string name="app_version">Phiên bản %s</string>
     <string name="title_activity_act_main">TV Channels</string>
     <string name="title_activity_act_device">Thêm thiết bị</string>

@@ -13,4 +13,9 @@ public class Const {
         public static final int EDIT_CHANNEL = 10003;
         public static final int GO_SETTINGS = 10004;
     }
+
+    public static class EXTRA {
+        public static final String DEVICE = "device";
+        public static final String RESULT_TYPE = "resultType";
+    }
 }

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.tnpro85.mytvchannels.data.Const;
 import com.tnpro85.mytvchannels.db.DBHelper;
 import com.tnpro85.mytvchannels.models.Device;
 
@@ -40,7 +41,7 @@ public class ActDevice extends ActBase {
 
         Bundle data = getIntent().getExtras();
         if(data != null) {
-            mDeviceToEdit = data.getParcelable("device");
+            mDeviceToEdit = data.getParcelable(Const.EXTRA.DEVICE);
             if(mDeviceToEdit != null) {
                 etDeviceName.setText(mDeviceToEdit.dName);
                 etDeviceName.setSelection(mDeviceToEdit.dName.length());
@@ -78,7 +79,7 @@ public class ActDevice extends ActBase {
 
                 if(DBHelper.getInstance().getDevice(name) != null) {
                     new AlertDialog.Builder(ActDevice.this)
-                            .setTitle("Confirm")
+                            .setTitle(getString(R.string.str_confirm))
                             .setMessage("Device exists. Do you want to update it?")
                             .setPositiveButton("Update", new DialogInterface.OnClickListener() {
                                 @Override
@@ -87,7 +88,7 @@ public class ActDevice extends ActBase {
                                     addDevice(new Device(name, desc), RESULT_UPDATE);
                                 }
                             })
-                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
@@ -96,7 +97,7 @@ public class ActDevice extends ActBase {
                 }
                 else if(mDeviceToEdit != null) {
                         new AlertDialog.Builder(ActDevice.this)
-                                .setTitle("Confirm")
+                                .setTitle(getString(R.string.str_confirm))
                                 .setMessage("This device does not exist. Do you want to add it?")
                                 .setPositiveButton("Add new", new DialogInterface.OnClickListener() {
                                     @Override
@@ -105,7 +106,7 @@ public class ActDevice extends ActBase {
                                         addDevice(new Device(name, desc), RESULT_ADD);
                                     }
                                 })
-                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
@@ -140,8 +141,8 @@ public class ActDevice extends ActBase {
         DBHelper.getInstance().addDevice(device);
         Intent result = new Intent();
         if(!TextUtils.isEmpty(resultType))
-            result.putExtra("resultType", resultType);
-        result.putExtra("device", device);
+            result.putExtra(Const.EXTRA.RESULT_TYPE, resultType);
+        result.putExtra(Const.EXTRA.DEVICE, device);
         setResult(RESULT_OK, result);
         finish();
     }

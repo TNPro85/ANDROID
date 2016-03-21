@@ -67,7 +67,7 @@ public class ActMain extends ActBase {
                 if (position < adapterDevices.getCount()) {
                     Device selectedDevice = adapterDevices.getItem(position);
                     Intent intent = new Intent(ActMain.this, ActChannelList.class);
-                    intent.putExtra("device", selectedDevice);
+                    intent.putExtra(Const.EXTRA.DEVICE, selectedDevice);
                     ActMain.this.startActivity(intent);
                 }
             }
@@ -180,7 +180,7 @@ public class ActMain extends ActBase {
                         if (obj instanceof Device) {
                             Device selected = (Device) obj;
                             Intent intent = new Intent(ActMain.this, ActDevice.class);
-                            intent.putExtra("device", selected);
+                            intent.putExtra(Const.EXTRA.DEVICE, selected);
                             ActMain.this.startActivityForResult(intent, Const.REQCODE.EDIT_DEVICE);
                         }
                         break;
@@ -235,7 +235,7 @@ public class ActMain extends ActBase {
             case Const.REQCODE.ADD_DEVICE:
                 if (resultCode == RESULT_OK) {
                     if (data != null) {
-                        Device device = data.getParcelableExtra("device");
+                        Device device = data.getParcelableExtra(Const.EXTRA.DEVICE);
                         if (device != null) {
                             lsDevices.add(device);
                             adapterDevices.setData(lsDevices);
@@ -267,8 +267,8 @@ public class ActMain extends ActBase {
                 if (resultCode == RESULT_OK) {
                     closeSearchBar();
                     if (data != null) {
-                        Device device = data.getParcelableExtra("device");
-                        String resultType = data.getStringExtra("resultType");
+                        Device device = data.getParcelableExtra(Const.EXTRA.DEVICE);
+                        String resultType = data.getStringExtra(Const.EXTRA.RESULT_TYPE);
                         if (device != null) {
                             if (resultType.equals(ActDevice.RESULT_ADD)) {
                                 lsDevices.add(device);
