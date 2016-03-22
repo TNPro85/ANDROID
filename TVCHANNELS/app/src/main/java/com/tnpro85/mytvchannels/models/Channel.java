@@ -18,6 +18,7 @@ public class Channel implements Comparable<Channel>, Parcelable {
         cName = "";
         cDesc = "";
     }
+
     public Channel(String device, int num, String name, String desc) {
         super();
         this.cDevice = device;
@@ -31,6 +32,14 @@ public class Channel implements Comparable<Channel>, Parcelable {
         cNum = in.readInt();
         cName = in.readString();
         cDesc = in.readString();
+    }
+
+    public Channel(JSONObject json) {
+        this();
+        this.cDevice = json.optString("device");
+        this.cNum = json.optInt("num");
+        this.cName = json.optString("name");
+        this.cDesc = json.optString("desc");
     }
 
     public static final Creator<Channel> CREATOR = new Creator<Channel>() {

@@ -11,14 +11,12 @@
     <string name="str_loading">Đang tải…</string>
     <string name="str_doing">Đang xử lý. Vui lòng chờ…</string>
     <string name="str_selected">đã chọn</string>
-    <string name="str_language">Ngôn ngữ</string>
-    <string name="str_about">Thông tin</string>
-    <string name="str_backup">Sao lưu / Phục hồi</string>
     <string name="str_num">Số</string>
     <string name="str_delete">Xóa</string>
     <string name="str_confirm">Xác nhận</string>
     <string name="str_cancel">Hủy</string>
     <string name="str_refreshed">Đã cập nhật</string>
+    <string name="str_ok">OK</string>
 
     <!-- Main -->
     <string name="str_back_confirm">Bấm back lần nữa để thoát</string>
@@ -50,4 +48,16 @@
     <string name="str_channel_num_hint">Số thứ tự, vị trí của kênh…</string>
     <string name="str_channel_name_hint">Tên của kênh</string>
     <string name="str_channel_desc_hint">Chú thích giúp bạn xác định nội dung kênh</string>
+
+    <!-- Setting -->
+    <string name="str_language">Ngôn ngữ</string>
+    <string name="str_language_hint">Ngôn ngữ hiển thị trong ứng dụng</string>
+    <string name="str_backup">Sao lưu</string>
+    <string name="str_backup_hint">Lưu toàn bộ dữ liệu vào thẻ nhớ</string>
+    <string name="str_backup_latest">Lần sao lưu gần nhất:</string>
+    <string name="str_restore">Phục hồi</string>
+    <string name="str_restore_hint">Phục hồi dữ liệu từ file sao lưu của bạn</string>
+    <string name="str_restore_confirm">Phục hồi sẽ thay thế toàn bộ dữ liệu hiện tại của bạn bằng dữ liệu từ file đã sao lưu.\nBạn có chắc muốn phục hồi?</string>
+    <string name="str_about">Thông tin</string>
+    <string name="str_about_hint">Thông tin về nhà phát triển</string>
 </resources>

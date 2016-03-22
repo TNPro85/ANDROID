@@ -5,20 +5,30 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:gravity="center_vertical"
+        style="@style/styleAboutItem"
         android:paddingBottom="5dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="5dp">
 
-        <TextView
-            style="@style/styleTextViewTitle"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/str_language" />
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/styleTextViewTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_language" />
+
+            <TextView
+                style="@style/styleTextViewDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_language_hint" />
+        </LinearLayout>
 
         <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/spLanguage"
@@ -33,22 +43,25 @@
         android:layout_height="0.5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="#E8E8E8" />
+        android:background="@color/list_divider_color" />
 
     <LinearLayout
         android:id="@+id/vBackup"
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:background="@drawable/selector"
-        android:gravity="center_vertical"
+        style="@style/styleAboutItem"
+        android:orientation="vertical"
         android:padding="10dp">
 
         <TextView
             style="@style/styleTextViewTitle"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/str_backup" />
+
+        <TextView
+            style="@style/styleTextViewDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_backup_hint" />
     </LinearLayout>
 
     <View
@@ -56,26 +69,51 @@
         android:layout_height="0.5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="#E8E8E8" />
+        android:background="@color/list_divider_color" />
+
+    <LinearLayout
+        android:id="@+id/vRestore"
+        style="@style/styleAboutItem"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            style="@style/styleTextViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_restore" />
+
+        <TextView
+            style="@style/styleTextViewDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_restore_hint" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/list_divider_color" />
 
     <LinearLayout
         android:id="@+id/vAbout"
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:background="@drawable/selector"
-        android:gravity="center_vertical"
+        style="@style/styleAboutItem"
+        android:orientation="vertical"
         android:padding="10dp">
 
         <TextView
             style="@style/styleTextViewTitle"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/str_about" />
 
-        <ImageView
+        <TextView
+            style="@style/styleTextViewDesc"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/str_about_hint" />
 
     </LinearLayout>
 
@@ -84,5 +122,5 @@
         android:layout_height="0.5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="#E8E8E8" />
+        android:background="@color/list_divider_color" />
 </LinearLayout>

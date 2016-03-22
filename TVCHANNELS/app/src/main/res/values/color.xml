@@ -3,5 +3,10 @@
     <color name="main_color">#5fc1ec</color>
     <color name="transparent">#00000000</color>
     <color name="white">#ffffff</color>
+
     <color name="list_selected_bg">#eeeeee</color>
+    <color name="list_divider_color">#E8E8E8</color>
+
+    <color name="text_main">#000000</color>
+    <color name="text_desc">#888888</color>
 </resources>

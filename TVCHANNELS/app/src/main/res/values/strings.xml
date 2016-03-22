@@ -17,10 +17,8 @@
     <string name="str_confirm">Confirm</string>
     <string name="str_cancel">Cancel</string>
     <string name="str_delete">Delete</string>
-    <string name="str_language">Language</string>
-    <string name="str_about">About</string>
-    <string name="str_backup">Backup / Restore</string>
     <string name="str_refreshed">Refreshed</string>
+    <string name="str_ok">OK</string>
 
     <!-- Main -->
     <string name="str_back_confirm">Touch back again to exit</string>
@@ -50,4 +48,16 @@
     <string name="str_channel_num_hint">Channel number/position…</string>
     <string name="str_channel_name_hint">Name of this channel…</string>
     <string name="str_channel_desc_hint">Description that help you determine the channel</string>
+
+    <!-- Setting -->
+    <string name="str_language">Language</string>
+    <string name="str_language_hint">Language to display in app</string>
+    <string name="str_backup">Backup</string>
+    <string name="str_backup_hint">Save all your data to SD card</string>
+    <string name="str_backup_latest">Last backup:</string>
+    <string name="str_restore">Restore</string>
+    <string name="str_restore_hint">Restore data from the backup you saved</string>
+    <string name="str_restore_confirm">Restoration will replace all of your current data with data from the backup file.\nAre you sure you want to do that?</string>
+    <string name="str_about">About</string>
+    <string name="str_about_hint">Information about developer</string>
 </resources>

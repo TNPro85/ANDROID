@@ -25,6 +25,12 @@ public class Device implements Parcelable {
         dDesc = in.readString();
     }
 
+    public Device(JSONObject json) {
+        this();
+        dName = json.optString("name");
+        dDesc = json.optString("desc");
+    }
+
     public static final Creator<Device> CREATOR = new Creator<Device>() {
         @Override
         public Device createFromParcel(Parcel in) {
