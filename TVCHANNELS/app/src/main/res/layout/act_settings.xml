@@ -62,6 +62,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/str_backup_hint" />
+
+        <View
+            android:layout_width="100dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/list_divider_color" />
+
+        <TextView
+            android:id="@+id/tvLastBackup"
+            style="@style/styleTextViewDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/str_backup_latest" />
     </LinearLayout>
 
     <View

@@ -23,4 +23,16 @@ public class Const {
         public static final short READ_EXTERNAL_STORAGE = 100;
         public static final short WRITE_EXTERNAL_STORAGE = 101;
     }
+
+    public static class JSON {
+        public static final String DEVICE = "devices";
+        public static final String DEVICE_NAME = "name";
+        public static final String DEVICE_DESC = "desc";
+
+        public static final String CHANNEL = "channels";
+        public static final String CHANNEL_DEVICE = "device";
+        public static final String CHANNEL_NUM = "num";
+        public static final String CHANNEL_NAME = "name";
+        public static final String CHANNEL_DESC = "desc";
+    }
 }

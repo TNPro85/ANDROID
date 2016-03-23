@@ -6,8 +6,6 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +14,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tnpro.core.utils.VersionUtils;
@@ -28,6 +27,7 @@ import com.tnpro85.mytvchannels.db.SharedPrefData;
 import com.tnpro85.mytvchannels.models.Channel;
 import com.tnpro85.mytvchannels.models.Device;
 import com.tnpro85.mytvchannels.utils.IOUtils;
+import com.tnpro85.mytvchannels.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -35,13 +35,18 @@ import org.json.JSONObject;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class ActSetting extends ActBase {
 
     private AppCompatSpinner spLanguage;
     private ArrayAdapter<String> arrayAdapter;
     private String arrLangKey[], arrLang[], curLang;
+    private TextView tvLastBackup;
 
     @Override
     protected void initUI(Bundle savedInstanceState) {
@@ -59,8 +64,8 @@ public class ActSetting extends ActBase {
                     // Check if needed to show users the reason why we need this permission
                     if (ActivityCompat.shouldShowRequestPermissionRationale(ActSetting.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         new AlertDialog.Builder(ActSetting.this)
-                                .setTitle("Permission Request")
-                                .setMessage("Permission is required to save backup files to your storage")
+                                .setTitle(getString(R.string.permission_request))
+                                .setMessage(getString(R.string.permission_write_storage))
                                 .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -97,8 +102,8 @@ public class ActSetting extends ActBase {
                     if (ActivityCompat.shouldShowRequestPermissionRationale(ActSetting.this,
                             Manifest.permission.READ_EXTERNAL_STORAGE)) {
                         new AlertDialog.Builder(ActSetting.this)
-                                .setTitle("Permission Request")
-                                .setMessage("Permission is required to read backup files from your storage")
+                                .setTitle(getString(R.string.permission_request))
+                                .setMessage(getString(R.string.permission_read_storage))
                                 .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -133,6 +138,9 @@ public class ActSetting extends ActBase {
                 Toast.makeText(ActSetting.this, "TNpro85", Toast.LENGTH_SHORT).show();
             }
         });
+
+        tvLastBackup = (TextView) findViewById(R.id.tvLastBackup);
+        updateBackupTime();
     }
 
     @Override
@@ -146,9 +154,7 @@ public class ActSetting extends ActBase {
         switch (requestCode) {
             case Const.PERMISSION.READ_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted!
-                } else {
-                    // permission denied!
+                    doRestoreData();
                 }
 
                 break;
@@ -181,12 +187,13 @@ public class ActSetting extends ActBase {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
     }
 
     private void doBackupToSdcard() {
-        showLoadingDlg(R.string.str_doing, true);
+        showLoadingDlg(R.string.str_doing, false);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -200,16 +207,16 @@ public class ActSetting extends ActBase {
                         Device item = arrDevice.get(i);
                         devices.put(item.toJSONObj());
                     }
-                    json.put("devices", devices);
+                    json.put(Const.JSON.DEVICE, devices);
 
                     ArrayList<Channel> arrChannel = DBHelper.getInstance().getAllChannel(null);
                     for(int i = 0; i < arrChannel.size(); i++) {
                         Channel item = arrChannel.get(i);
                         channels.put(item.toJSONObj());
                     }
-                    json.put("channels", channels);
+                    json.put(Const.JSON.CHANNEL, channels);
 
-                    String path = IOUtils.getBackupFolder() + "backup.dat";
+                    String path = Utils.getBackupPath();
                     BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(path));
                     bos.write(json.toString().getBytes());
                     bos.flush();
@@ -220,11 +227,12 @@ public class ActSetting extends ActBase {
                     e.printStackTrace();
                 } finally {
                     hideLoadingDlg();
-                    final String msg = result ? "Backup successful!" : "Unexpected error. Try again later!";
+                    final String msg = result ? getString(R.string.str_backup_success) : getString(R.string.str_error_general);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             Toast.makeText(ActSetting.this, msg, Toast.LENGTH_SHORT).show();
+                            updateBackupTime();
                         }
                     });
                 }
@@ -233,10 +241,10 @@ public class ActSetting extends ActBase {
     }
 
     private void doRestoreData() {
-        final String path = IOUtils.getBackupFolder() + "backup.dat";
+        final String path = Utils.getBackupPath();
         final File backupFile = new File(path);
         if(!backupFile.exists()) {
-            Toast.makeText(ActSetting.this, "No backup found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ActSetting.this, getString(R.string.str_backup_notfound), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -252,26 +260,29 @@ public class ActSetting extends ActBase {
                 .setPositiveButton(R.string.str_ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        showLoadingDlg(R.string.str_doing, true);
+                        showLoadingDlg(R.string.str_doing, false);
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
+                                boolean result = false;
                                 try {
                                     String value = IOUtils.readStringFromFile(path);
-                                    if(!TextUtils.isEmpty(value)) {
+                                    if (!TextUtils.isEmpty(value)) {
                                         JSONObject json = new JSONObject(value);
-
+                                        result = restoreToDB(json);
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
+                                } finally {
+                                    hideLoadingDlg();
+                                    final String msg = result ? getString(R.string.str_restore_success) : getString(R.string.str_error_general);
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Utils.showToast(ActSetting.this, msg);
+                                        }
+                                    });
                                 }
-
-                                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        hideLoadingDlg();
-                                    }
-                                }, 1500);
                             }
                         }).start();
                     }
@@ -286,7 +297,7 @@ public class ActSetting extends ActBase {
             ContentProviderOperation deleteAllChannelOp = ContentProviderOperation.newDelete(CP.CONTENT_URI_CHANNELS).build();
             ops.add(deleteAllChannelOp);
 
-            JSONArray arrDevices = json.getJSONArray("devices");
+            JSONArray arrDevices = json.getJSONArray(Const.JSON.DEVICE);
             if(arrDevices != null && arrDevices.length() > 0) {
                 for(int i = 0; i < arrDevices.length(); i++) {
                     JSONObject obj = arrDevices.getJSONObject(i);
@@ -300,7 +311,7 @@ public class ActSetting extends ActBase {
                 }
             }
 
-            JSONArray arrChannels = json.getJSONArray("channels");
+            JSONArray arrChannels = json.getJSONArray(Const.JSON.CHANNEL);
             if(arrChannels != null && arrChannels.length() > 0) {
                 for(int i = 0; i < arrChannels.length(); i++) {
                     JSONObject obj = arrChannels.getJSONObject(i);
@@ -323,5 +334,20 @@ public class ActSetting extends ActBase {
         }
 
         return false;
+    }
+
+    private void updateBackupTime() {
+        String path = Utils.getBackupPath();
+        File backupFile = new File(path);
+
+        Locale locale = new Locale(SharedPrefData.getAppLanguage());
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm", locale);
+
+        if(tvLastBackup != null) {
+            String time = getString(R.string.str_backup_latest)
+                    + " "
+                    + (backupFile.exists()? df.format(new Date(backupFile.lastModified())) : getString(R.string.str_backup_notfound)) ;
+            tvLastBackup.setText(time);
+        }
     }
 }

@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import com.tnpro85.mytvchannels.data.Const;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,10 +38,10 @@ public class Channel implements Comparable<Channel>, Parcelable {
 
     public Channel(JSONObject json) {
         this();
-        this.cDevice = json.optString("device");
-        this.cNum = json.optInt("num");
-        this.cName = json.optString("name");
-        this.cDesc = json.optString("desc");
+        this.cDevice = json.optString(Const.JSON.CHANNEL_DEVICE);
+        this.cNum = json.optInt(Const.JSON.CHANNEL_NUM);
+        this.cName = json.optString(Const.JSON.CHANNEL_NAME);
+        this.cDesc = json.optString(Const.JSON.CHANNEL_DESC);
     }
 
     public static final Creator<Channel> CREATOR = new Creator<Channel>() {
@@ -75,10 +77,10 @@ public class Channel implements Comparable<Channel>, Parcelable {
     public JSONObject toJSONObj() {
         JSONObject json = new JSONObject();
         try {
-            json.put("device", cDevice);
-            json.put("num", cNum);
-            json.put("name", cName);
-            json.put("desc", cDesc);
+            json.put(Const.JSON.CHANNEL_DEVICE, cDevice);
+            json.put(Const.JSON.CHANNEL_NUM, cNum);
+            json.put(Const.JSON.CHANNEL_NAME, cName);
+            json.put(Const.JSON.CHANNEL_DESC, cDesc);
         } catch (JSONException e) {
             e.printStackTrace();
         }

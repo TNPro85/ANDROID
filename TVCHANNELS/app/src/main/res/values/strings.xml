@@ -54,10 +54,21 @@
     <string name="str_language_hint">Language to display in app</string>
     <string name="str_backup">Backup</string>
     <string name="str_backup_hint">Save all your data to SD card</string>
+    <string name="str_backup_notfound">No backup found</string>
     <string name="str_backup_latest">Last backup:</string>
+    <string name="str_backup_success">Backup successful</string>
     <string name="str_restore">Restore</string>
     <string name="str_restore_hint">Restore data from the backup you saved</string>
     <string name="str_restore_confirm">Restoration will replace all of your current data with data from the backup file.\nAre you sure you want to do that?</string>
+    <string name="str_restore_success">Restore successful</string>
     <string name="str_about">About</string>
     <string name="str_about_hint">Information about developer</string>
+
+    <!-- Permission -->
+    <string name="permission_request">Permission Request</string>
+    <string name="permission_write_storage">Permission is required to save files to your storage</string>
+    <string name="permission_read_storage">Permission is required to read files from your storage</string>
+
+    <!-- Error -->
+    <string name="str_error_general">Unexpected error. Try again later.</string>
 </resources>

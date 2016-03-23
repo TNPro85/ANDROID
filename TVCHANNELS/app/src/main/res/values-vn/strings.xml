@@ -55,9 +55,20 @@
     <string name="str_backup">Sao lưu</string>
     <string name="str_backup_hint">Lưu toàn bộ dữ liệu vào thẻ nhớ</string>
     <string name="str_backup_latest">Lần sao lưu gần nhất:</string>
+    <string name="str_backup_notfound">Bạn chưa sao lưu hoặc file đã bị xóa</string>
+    <string name="str_backup_success">Sao lưu thành công</string>
     <string name="str_restore">Phục hồi</string>
     <string name="str_restore_hint">Phục hồi dữ liệu từ file sao lưu của bạn</string>
     <string name="str_restore_confirm">Phục hồi sẽ thay thế toàn bộ dữ liệu hiện tại của bạn bằng dữ liệu từ file đã sao lưu.\nBạn có chắc muốn phục hồi?</string>
+    <string name="str_restore_success">Phục hồi dữ liệu thành công</string>
     <string name="str_about">Thông tin</string>
     <string name="str_about_hint">Thông tin về nhà phát triển</string>
+
+    <!-- Permission -->
+    <string name="permission_request">Yêu cầu cấp quyền</string>
+    <string name="permission_write_storage">Quyền ghi phải được cho phép để ứng dụng có thể lưu file xuống thẻ nhớ của bạn.</string>
+    <string name="permission_read_storage">Quyền đọc phải được cho phép để ứng dụng có thể đọc file từ thẻ nhớ của bạn.</string>
+
+    <!-- Error -->
+    <string name="str_error_general">Có lỗi xảy ra. Vui lòng thử lại sau.</string>
 </resources>
