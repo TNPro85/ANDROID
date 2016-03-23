@@ -29,6 +29,7 @@ import com.tnpro.core.utils.KeyboardUtils;
 import com.tnpro85.mytvchannels.adapter.DeviceAdapter;
 import com.tnpro85.mytvchannels.data.Const;
 import com.tnpro85.mytvchannels.db.DBHelper;
+import com.tnpro85.mytvchannels.db.Global;
 import com.tnpro85.mytvchannels.models.Device;
 import com.tnpro85.mytvchannels.utils.LocaleUtil;
 
@@ -226,6 +227,23 @@ public class ActMain extends ActBase {
 
         lvDevices.setAdapter(adapterDevices);
         refreshData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(Global.isNeedToRefreshMain) {
+            Global.isNeedToRefreshMain = false;
+            showLoadingDlg(R.string.str_doing, false);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    refreshData();
+                    hideLoadingDlg();
+                    Toast.makeText(ActMain.this, getString(R.string.str_refreshed), Toast.LENGTH_SHORT).show();
+                }
+            }, 1000);
+        }
     }
 
     @Override
@@ -458,6 +476,7 @@ public class ActMain extends ActBase {
         } else {
             layoutMultiStateView.show(MultiStateView.STATE_EMPTY);
             layoutMultiStateView.setEmptyText(getResources().getString(R.string.str_empty_devices));
+            layoutMultiStateView.setEmptyDrawable(R.drawable.ic_empty_tv);
             lvDevices.setVisibility(View.GONE);
         }
 

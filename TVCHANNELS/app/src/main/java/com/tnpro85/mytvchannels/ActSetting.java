@@ -23,6 +23,7 @@ import com.tnpro85.mytvchannels.data.Const;
 import com.tnpro85.mytvchannels.db.CP;
 import com.tnpro85.mytvchannels.db.DBConst;
 import com.tnpro85.mytvchannels.db.DBHelper;
+import com.tnpro85.mytvchannels.db.Global;
 import com.tnpro85.mytvchannels.db.SharedPrefData;
 import com.tnpro85.mytvchannels.models.Channel;
 import com.tnpro85.mytvchannels.models.Device;
@@ -244,7 +245,7 @@ public class ActSetting extends ActBase {
         final String path = Utils.getBackupPath();
         final File backupFile = new File(path);
         if(!backupFile.exists()) {
-            Toast.makeText(ActSetting.this, getString(R.string.str_backup_notfound), Toast.LENGTH_SHORT).show();
+            Toast.makeText(ActSetting.this, getString(R.string.str_error_backup_not_found), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -269,7 +270,7 @@ public class ActSetting extends ActBase {
                                     String value = IOUtils.readStringFromFile(path);
                                     if (!TextUtils.isEmpty(value)) {
                                         JSONObject json = new JSONObject(value);
-                                        result = restoreToDB(json);
+                                        Global.isNeedToRefreshMain = result = restoreToDB(json);
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
