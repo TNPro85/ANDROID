@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="arr_lang_key">
+        <item>en</item>
+        <item>vn</item>
+    </string-array>
     <string-array name="arr_lang">
         <item>Tiếng Anh</item>
         <item>Tiếng Việt</item>

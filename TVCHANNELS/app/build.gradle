@@ -6,6 +6,27 @@ android {
             storeFile file('androidebug.keystore')
         }
     }
+
+    File signFile = file('ks/keystore.properties')
+    if (signFile.exists()) {
+        Properties properties = new Properties()
+        properties.load(new FileInputStream(signFile))
+        signingConfigs {
+            release {
+                storeFile file(properties['keystore'])
+                storePassword properties['storePassword']
+                keyAlias properties['keyAlias']
+                keyPassword properties['keyPassword']
+            }
+        }
+    } else {
+        signingConfigs {
+            release {
+                storeFile file("androidebug.keystore")
+            }
+        }
+    }
+
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
     defaultConfig {
@@ -17,10 +38,15 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            zipAlignEnabled true
+            minifyEnabled true
+            debuggable false
+            jniDebuggable false
+            proguardFiles 'proguard-android.txt'
+            signingConfig signingConfigs.release
         }
         debug {
+            debuggable true
             signingConfig signingConfigs.debug
         }
     }
