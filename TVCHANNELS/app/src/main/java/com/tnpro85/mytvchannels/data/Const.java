@@ -17,6 +17,7 @@ public class Const {
     public static class EXTRA {
         public static final String DEVICE = "device";
         public static final String RESULT_TYPE = "resultType";
+        public static final String CHANNEL = "channel";
     }
 
     public static class PERMISSION {

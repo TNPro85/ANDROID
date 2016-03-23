@@ -11,13 +11,17 @@
     <string name="str_loading">Đang tải…</string>
     <string name="str_doing">Đang xử lý. Vui lòng chờ…</string>
     <string name="str_selected">đã chọn</string>
+    <string name="str_name">Tên</string>
+    <string name="str_desc">Chú thích</string>
     <string name="str_num">Số</string>
     <string name="str_delete">Xóa</string>
+    <string name="str_deleted">Đã xóa</string>
     <string name="str_confirm">Xác nhận</string>
     <string name="str_cancel">Hủy</string>
     <string name="str_refreshed">Đã cập nhật</string>
     <string name="str_ok">OK</string>
     <string name="str_update">Cập nhật</string>
+    <string name="str_added">Đã thêm</string>
 
     <!-- Main -->
     <string name="str_back_confirm">Bấm back lần nữa để thoát</string>
@@ -31,8 +35,6 @@
     <string name="menu_edit">Sửa</string>
 
     <!-- Device -->
-    <string name="str_name">Tên</string>
-    <string name="str_desc">Chú thích</string>
     <string name="str_empty_devices">Không có thiết bị</string>
     <string name="str_empty_channels">Thiết bị này chưa có kênh nào</string>
     <string name="str_device_add_hint">Điền thông tin về thiết bị (TV, Radio…). Tất cả các mục không được bỏ trống.</string>
@@ -51,6 +53,8 @@
     <string name="str_channel_num_hint">Số thứ tự, vị trí của kênh…</string>
     <string name="str_channel_name_hint">Tên của kênh</string>
     <string name="str_channel_desc_hint">Chú thích giúp bạn xác định nội dung kênh</string>
+    <string name="str_channel_delete_single_confirm">Bạn có chắc muốn xóa kênh này không?</string>
+    <string name="str_channel_delete_multi_confirm">Bạn có chắc muốn xóa những kênh đã chọn không?</string>
 
     <!-- Setting -->
     <string name="str_language">Ngôn ngữ</string>

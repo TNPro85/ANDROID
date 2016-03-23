@@ -59,7 +59,7 @@ public class ActChannelList extends ActBase {
             case Const.REQCODE.ADD_CHANNEL:
                 if (resultCode == RESULT_OK) {
                     if (data != null) {
-                        Channel channel = data.getParcelableExtra("channel");
+                        Channel channel = data.getParcelableExtra(Const.EXTRA.CHANNEL);
                         if (channel != null) {
                             lsChannels.add(channel);
                             adapterChannel.setData(lsChannels);
@@ -69,7 +69,7 @@ public class ActChannelList extends ActBase {
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    sbError = Snackbar.make(vContainer, "Added", Snackbar.LENGTH_SHORT);
+                                    sbError = Snackbar.make(vContainer, getString(R.string.str_added), Snackbar.LENGTH_SHORT);
                                     sbError.show();
                                 }
                             }, 1000);
@@ -77,7 +77,7 @@ public class ActChannelList extends ActBase {
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    sbError = Snackbar.make(vContainer, "Error! Please try again.", Snackbar.LENGTH_SHORT);
+                                    sbError = Snackbar.make(vContainer, getString(R.string.str_error_general), Snackbar.LENGTH_SHORT);
                                     sbError.show();
                                 }
                             }, 1000);
@@ -91,7 +91,7 @@ public class ActChannelList extends ActBase {
             case Const.REQCODE.EDIT_CHANNEL:
                 if(resultCode == RESULT_OK) {
                     if (data != null) {
-                        Channel channel = data.getParcelableExtra("channel");
+                        Channel channel = data.getParcelableExtra(Const.EXTRA.CHANNEL);
                         for (int i = 0; i < lsChannels.size(); i++) {
                             Channel c = lsChannels.get(i);
                             if (c.cDevice.equals(channel.cDevice) && c.cNum == channel.cNum) {
@@ -196,9 +196,9 @@ public class ActChannelList extends ActBase {
                 public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
                     if (item.getItemId() == R.id.action_delete) {
                         new AlertDialog.Builder(ActChannelList.this)
-                                .setTitle("Confirm")
-                                .setMessage("Are you sure you want to delete these channels?")
-                                .setPositiveButton("Delete it", new DialogInterface.OnClickListener() {
+                                .setTitle(R.string.str_confirm)
+                                .setMessage(R.string.str_channel_delete_multi_confirm)
+                                .setPositiveButton(R.string.str_delete, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
@@ -229,11 +229,11 @@ public class ActChannelList extends ActBase {
                                             e.printStackTrace();
                                         } finally {
                                             hideLoadingDlg();
-                                            Toast.makeText(ActChannelList.this, result ? "Deleted" : "Error", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(ActChannelList.this, result ? getString(R.string.str_deleted) : getString(R.string.str_error_general), Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 })
-                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                .setNegativeButton(R.string.str_cancel, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
@@ -258,7 +258,7 @@ public class ActChannelList extends ActBase {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ActChannelList.this, ActChannelAdd.class);
-                intent.putExtra("device", curDevice);
+                intent.putExtra(Const.EXTRA.DEVICE, curDevice);
                 ActChannelList.this.startActivityForResult(intent, Const.REQCODE.ADD_CHANNEL);
             }
         });
@@ -270,7 +270,7 @@ public class ActChannelList extends ActBase {
 
         Bundle data = getIntent().getExtras();
         if (data != null) {
-            curDevice = data.getParcelable("device");
+            curDevice = data.getParcelable(Const.EXTRA.DEVICE);
             if (curDevice != null)
                 setTitle(curDevice.dName);
         }
@@ -284,16 +284,16 @@ public class ActChannelList extends ActBase {
                         if (obj instanceof Channel) {
                             Channel selected = (Channel) obj;
                             Intent intent = new Intent(ActChannelList.this, ActChannelAdd.class);
-                            intent.putExtra("device", curDevice);
-                            intent.putExtra("channel", selected);
+                            intent.putExtra(Const.EXTRA.DEVICE, curDevice);
+                            intent.putExtra(Const.EXTRA.CHANNEL, selected);
                             ActChannelList.this.startActivityForResult(intent, Const.REQCODE.EDIT_CHANNEL);
                         }
                         break;
                     case R.id.action_delete:
                         new AlertDialog.Builder(ActChannelList.this)
-                                .setTitle("Confirm")
-                                .setMessage("Are you sure you want to delete this channel?")
-                                .setPositiveButton("Delete it", new DialogInterface.OnClickListener() {
+                                .setTitle(R.string.str_confirm)
+                                .setMessage(R.string.str_channel_delete_single_confirm)
+                                .setPositiveButton(R.string.str_delete, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
@@ -313,11 +313,11 @@ public class ActChannelList extends ActBase {
                                             e.printStackTrace();
                                         } finally {
                                             hideLoadingDlg();
-                                            Toast.makeText(ActChannelList.this, result ? "Deleted" : "Error", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(ActChannelList.this, result ? getString(R.string.str_deleted) : getString(R.string.str_error_general), Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 })
-                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                .setNegativeButton(R.string.str_cancel, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();

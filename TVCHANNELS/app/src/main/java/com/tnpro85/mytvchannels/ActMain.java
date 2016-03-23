@@ -133,7 +133,7 @@ public class ActMain extends ActBase {
                                             e.printStackTrace();
                                         } finally {
                                             hideLoadingDlg();
-                                            Toast.makeText(ActMain.this, result ? "Deleted" : "Error", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(ActMain.this, result ? getString(R.string.str_deleted) : getString(R.string.str_error_general), Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 })
@@ -208,7 +208,7 @@ public class ActMain extends ActBase {
                                             e.printStackTrace();
                                         } finally {
                                             hideLoadingDlg();
-                                            Toast.makeText(ActMain.this, result ? "Deleted" : "Error", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(ActMain.this, result ? getString(R.string.str_deleted) : getString(R.string.str_error_general), Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 })
@@ -245,7 +245,7 @@ public class ActMain extends ActBase {
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    sbError = Snackbar.make(vContainer, "Added", Snackbar.LENGTH_SHORT);
+                                    sbError = Snackbar.make(vContainer, getString(R.string.str_added), Snackbar.LENGTH_SHORT);
                                     sbError.show();
                                 }
                             }, 1000);
@@ -253,7 +253,7 @@ public class ActMain extends ActBase {
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    sbError = Snackbar.make(vContainer, "Error! Please try again.", Snackbar.LENGTH_SHORT);
+                                    sbError = Snackbar.make(vContainer, getString(R.string.str_error_general), Snackbar.LENGTH_SHORT);
                                     sbError.show();
                                 }
                             }, 1000);
@@ -279,7 +279,7 @@ public class ActMain extends ActBase {
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        sbError = Snackbar.make(vContainer, "Added", Snackbar.LENGTH_SHORT);
+                                        sbError = Snackbar.make(vContainer, getString(R.string.str_added), Snackbar.LENGTH_SHORT);
                                         sbError.show();
                                     }
                                 }, 1000);
@@ -299,7 +299,7 @@ public class ActMain extends ActBase {
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    sbError = Snackbar.make(vContainer, "Error! Please try again.", Snackbar.LENGTH_SHORT);
+                                    sbError = Snackbar.make(vContainer, getString(R.string.str_error_general), Snackbar.LENGTH_SHORT);
                                     sbError.show();
                                 }
                             }, 1000);

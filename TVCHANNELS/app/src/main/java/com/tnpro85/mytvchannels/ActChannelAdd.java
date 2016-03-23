@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.tnpro85.mytvchannels.data.Const;
 import com.tnpro85.mytvchannels.db.DBHelper;
 import com.tnpro85.mytvchannels.models.Channel;
 import com.tnpro85.mytvchannels.models.Device;
@@ -39,8 +40,8 @@ public class ActChannelAdd extends ActBase {
         super.initData(savedInstanceState);
         Bundle data = getIntent().getExtras();
         if (data != null) {
-            curDevice = data.getParcelable("device");
-            curChannel = data.getParcelable("channel");
+            curDevice = data.getParcelable(Const.EXTRA.DEVICE);
+            curChannel = data.getParcelable(Const.EXTRA.CHANNEL);
         }
 
         if (curChannel != null) {
@@ -73,15 +74,15 @@ public class ActChannelAdd extends ActBase {
                 String desc = etChannelDesc.getText().toString();
 
                 if (TextUtils.isEmpty(num)) {
-                    etChannelNum.setError("Must not empty");
+                    etChannelNum.setError(getString(R.string.str_error_must_not_empty));
                     etChannelNum.requestFocus();
                     return true;
                 } else if (TextUtils.isEmpty(name)) {
-                    etChannelName.setError("Must not empty");
+                    etChannelName.setError(getString(R.string.str_error_must_not_empty));
                     etChannelName.requestFocus();
                     return true;
                 } else if (TextUtils.isEmpty(desc)) {
-                    etChannelDesc.setError("Must not empty");
+                    etChannelDesc.setError(getString(R.string.str_error_must_not_empty));
                     etChannelDesc.requestFocus();
                     return true;
                 }
@@ -95,20 +96,20 @@ public class ActChannelAdd extends ActBase {
                     else {
                         DBHelper.getInstance().updateChannel(channel);
                         Intent result = new Intent();
-                        result.putExtra("channel", channel);
+                        result.putExtra(Const.EXTRA.CHANNEL, channel);
                         setResult(RESULT_OK, result);
                         finish();
                     }
                 } else {
                     DBHelper.getInstance().addChannel(channel);
                     Intent result = new Intent();
-                    result.putExtra("channel", channel);
+                    result.putExtra(Const.EXTRA.CHANNEL, channel);
                     setResult(RESULT_OK, result);
                     finish();
                 }
             } catch (SQLiteConstraintException e) {
                 e.printStackTrace();
-                Toast.makeText(ActChannelAdd.this, "Invalid data. Try again!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActChannelAdd.this, getString(R.string.str_error_invalid_data), Toast.LENGTH_SHORT).show();
             }
             return true;
         }
