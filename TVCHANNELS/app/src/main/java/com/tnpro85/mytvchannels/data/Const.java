@@ -15,9 +15,9 @@ public class Const {
     }
 
     public static class EXTRA {
-        public static final String DEVICE = "device";
-        public static final String RESULT_TYPE = "resultType";
-        public static final String CHANNEL = "channel";
+        public static final String DEVICE = "dv";
+        public static final String RESULT_TYPE = "rt";
+        public static final String CHANNEL = "cn";
     }
 
     public static class PERMISSION {
@@ -26,14 +26,14 @@ public class Const {
     }
 
     public static class JSON {
-        public static final String DEVICE = "devices";
-        public static final String DEVICE_NAME = "name";
-        public static final String DEVICE_DESC = "desc";
+        public static final String DEVICE = "dvs";
+        public static final String DEVICE_NAME = "n";
+        public static final String DEVICE_DESC = "d";
 
-        public static final String CHANNEL = "channels";
-        public static final String CHANNEL_DEVICE = "device";
-        public static final String CHANNEL_NUM = "num";
-        public static final String CHANNEL_NAME = "name";
-        public static final String CHANNEL_DESC = "desc";
+        public static final String CHANNEL = "cns";
+        public static final String CHANNEL_DEVICE = "dv";
+        public static final String CHANNEL_NUM = "no";
+        public static final String CHANNEL_NAME = "n";
+        public static final String CHANNEL_DESC = "d";
     }
 }
