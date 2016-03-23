@@ -1,2 +1,4 @@
 *.iml
 .idea
+TVCHANNELS/app/ks/keystore.properties
+TVCHANNELS/app/ks/tnpro85.jks

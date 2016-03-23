@@ -68,27 +68,27 @@ public class ActDevice extends ActBase {
                 final String desc = etDeviceDesc.getText().toString();
 
                 if (TextUtils.isEmpty(name)) {
-                    etDeviceName.setError("Must not empty");
+                    etDeviceName.setError(getString(R.string.str_error_must_not_empty));
                     etDeviceName.requestFocus();
                     return true;
                 } else if (TextUtils.isEmpty(desc)) {
-                    etDeviceDesc.setError("Must not empty");
+                    etDeviceDesc.setError(getString(R.string.str_error_must_not_empty));
                     etDeviceDesc.requestFocus();
                     return true;
                 }
 
                 if(DBHelper.getInstance().getDevice(name) != null) {
                     new AlertDialog.Builder(ActDevice.this)
-                            .setTitle(getString(R.string.str_confirm))
-                            .setMessage("Device exists. Do you want to update it?")
-                            .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                            .setTitle(R.string.str_confirm)
+                            .setMessage(R.string.str_device_update_confirm)
+                            .setPositiveButton(R.string.str_update, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
                                     addDevice(new Device(name, desc), RESULT_UPDATE);
                                 }
                             })
-                            .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
+                            .setNegativeButton(R.string.str_cancel, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
@@ -98,8 +98,8 @@ public class ActDevice extends ActBase {
                 else if(mDeviceToEdit != null) {
                         new AlertDialog.Builder(ActDevice.this)
                                 .setTitle(getString(R.string.str_confirm))
-                                .setMessage("This device does not exist. Do you want to add it?")
-                                .setPositiveButton("Add new", new DialogInterface.OnClickListener() {
+                                .setMessage(R.string.str_device_add_confirm)
+                                .setPositiveButton(R.string.str_ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
@@ -118,7 +118,7 @@ public class ActDevice extends ActBase {
             }
             catch (SQLiteConstraintException e) {
                 e.printStackTrace();
-                Toast.makeText(ActDevice.this, "Invalid data. Try again!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActDevice.this, getString(R.string.str_error_invalid_data), Toast.LENGTH_SHORT).show();
             }
             return true;
         }

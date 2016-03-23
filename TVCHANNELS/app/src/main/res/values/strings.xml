@@ -19,6 +19,7 @@
     <string name="str_delete">Delete</string>
     <string name="str_refreshed">Refreshed</string>
     <string name="str_ok">OK</string>
+    <string name="str_update">Update</string>
 
     <!-- Main -->
     <string name="str_back_confirm">Touch back again to exit</string>
@@ -40,6 +41,8 @@
     <string name="str_device_singular">Device</string>
     <string name="str_device_plural">Devices</string>
     <string name="str_device_delete_confirm">Delete a device will also erase all the channels inside.\nAre you sure you want to delete it?</string>
+    <string name="str_device_update_confirm">Device exists. Do you want to update it?</string>
+    <string name="str_device_add_confirm">This device does not exist. Do you want to add it?</string>
 
     <!-- Channel -->
     <string name="str_channel_add_hint">Input information of a channel. All fields must not be blank.</string>
@@ -71,4 +74,6 @@
 
     <!-- Error -->
     <string name="str_error_general">Unexpected error. Try again later.</string>
+    <string name="str_error_must_not_empty">Must not empty</string>
+    <string name="str_error_invalid_data">Invalid data. Please check and try again.</string>
 </resources>

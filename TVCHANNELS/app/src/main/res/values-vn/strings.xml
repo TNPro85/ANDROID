@@ -17,6 +17,7 @@
     <string name="str_cancel">Hủy</string>
     <string name="str_refreshed">Đã cập nhật</string>
     <string name="str_ok">OK</string>
+    <string name="str_update">Cập nhật</string>
 
     <!-- Main -->
     <string name="str_back_confirm">Bấm back lần nữa để thoát</string>
@@ -26,7 +27,7 @@
     <string name="menu_done">Xong</string>
     <string name="menu_search">Tìm kiếm</string>
     <string name="menu_delete">Xóa</string>
-    <string name="menu_refresh">Cập nhật</string>
+    <string name="menu_refresh">Làm mới</string>
     <string name="menu_edit">Sửa</string>
 
     <!-- Device -->
@@ -40,6 +41,8 @@
     <string name="str_device_singular">Thiết bị</string>
     <string name="str_device_plural">Thiết bị</string>
     <string name="str_device_delete_confirm">Xóa một thiết bị sẽ xóa tất cả các kênh trong thiết bị đó.\nBạn có chắc muốn xóa không?</string>
+    <string name="str_device_update_confirm">Thiết bị này đã tồn tại. Bạn có muốn cập nhật nó không?</string>
+    <string name="str_device_add_confirm">Thiết bị này chưa có. Bạn có muốn thêm mới nó không?</string>
 
     <!-- Channel -->
     <string name="str_channel_add_hint">Điền thông tin của kênh này. Tất cả các mục không được bỏ trống.</string>
@@ -71,4 +74,6 @@
 
     <!-- Error -->
     <string name="str_error_general">Có lỗi xảy ra. Vui lòng thử lại sau.</string>
+    <string name="str_error_must_not_empty">Không được trống</string>
+    <string name="str_error_invalid_data">Dữ liệu không hợp lệ. Vui lòng kiểm tra và thử lại.</string>
 </resources>
