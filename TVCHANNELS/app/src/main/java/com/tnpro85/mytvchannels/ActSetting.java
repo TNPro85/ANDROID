@@ -200,10 +200,21 @@ public class ActSetting extends ActBase {
             public void run() {
                 boolean result = false;
                 try {
+                    // If there is no devices in db, then cancel the backup
+                    ArrayList<Device> arrDevice = DBHelper.getInstance().getAllDevices();
+                    if(arrDevice.size() == 0) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(ActSetting.this, getString(R.string.str_error_backup_nodata), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        return;
+                    }
+
                     JSONObject json = new JSONObject();
                     JSONArray devices = new JSONArray();
                     JSONArray channels = new JSONArray();
-                    ArrayList<Device> arrDevice = DBHelper.getInstance().getAllDevices();
                     for(int i = 0; i < arrDevice.size(); i++) {
                         Device item = arrDevice.get(i);
                         devices.put(item.toJSONObj());
@@ -217,6 +228,8 @@ public class ActSetting extends ActBase {
                     }
                     json.put(Const.JSON.CHANNEL, channels);
 
+                    // TODO: encrypt the content here
+
                     String path = Utils.getBackupPath();
                     BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(path));
                     bos.write(json.toString().getBytes());
@@ -228,15 +241,16 @@ public class ActSetting extends ActBase {
                     e.printStackTrace();
                 } finally {
                     hideLoadingDlg();
-                    final String msg = result ? getString(R.string.str_backup_success) : getString(R.string.str_error_general);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(ActSetting.this, msg, Toast.LENGTH_SHORT).show();
-                            updateBackupTime();
-                        }
-                    });
                 }
+
+                final String msg = result ? getString(R.string.str_backup_success) : getString(R.string.str_error_general);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ActSetting.this, msg, Toast.LENGTH_SHORT).show();
+                        updateBackupTime();
+                    }
+                });
             }
         }).start();
     }
@@ -292,12 +306,14 @@ public class ActSetting extends ActBase {
 
     private boolean restoreToDB(JSONObject json) {
         try {
+            // Delete all current data in DB
             ArrayList<ContentProviderOperation> ops = new ArrayList<>();
             ContentProviderOperation deleteAllDeviceOp = ContentProviderOperation.newDelete(CP.CONTENT_URI_DEVICES).build();
             ops.add(deleteAllDeviceOp);
             ContentProviderOperation deleteAllChannelOp = ContentProviderOperation.newDelete(CP.CONTENT_URI_CHANNELS).build();
             ops.add(deleteAllChannelOp);
 
+            // Insert devices from backup file to DB
             JSONArray arrDevices = json.getJSONArray(Const.JSON.DEVICE);
             if(arrDevices != null && arrDevices.length() > 0) {
                 for(int i = 0; i < arrDevices.length(); i++) {
@@ -312,6 +328,7 @@ public class ActSetting extends ActBase {
                 }
             }
 
+            // Insert channels from backup file to DB
             JSONArray arrChannels = json.getJSONArray(Const.JSON.CHANNEL);
             if(arrChannels != null && arrChannels.length() > 0) {
                 for(int i = 0; i < arrChannels.length(); i++) {

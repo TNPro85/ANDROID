@@ -81,4 +81,5 @@
     <string name="str_error_must_not_empty">Must not empty</string>
     <string name="str_error_invalid_data">Invalid data. Please check and try again.</string>
     <string name="str_error_backup_not_found">You haven\'t created any backup or file was deleted.</string>
+    <string name="str_error_backup_nodata">You have no data to backup.\nPlease input some data and try again.</string>
 </resources>
