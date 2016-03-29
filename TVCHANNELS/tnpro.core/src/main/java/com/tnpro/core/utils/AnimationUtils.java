@@ -22,6 +22,7 @@ public class AnimationUtils {
 
 
     public static void goneViewWithAnim(final View v, final int animationResId) {
+        if(v.getVisibility() == View.GONE) return;
         v.setVisibility(View.GONE);
         v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -49,6 +50,7 @@ public class AnimationUtils {
     }
 
     public static void showViewWithAnim(final View v, final int animationResId) {
+        if(v.getVisibility() == View.VISIBLE) return;
         v.setVisibility(View.VISIBLE);
         v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
