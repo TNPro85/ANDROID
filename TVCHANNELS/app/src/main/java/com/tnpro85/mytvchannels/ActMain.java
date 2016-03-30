@@ -399,7 +399,7 @@ public class ActMain extends ActBase {
                         hideLoadingDlg();
                         Toast.makeText(ActMain.this, getString(R.string.str_refreshed), Toast.LENGTH_SHORT).show();
                     }
-                }, 1000);
+                }, 700);
                 return true;
             }
 
@@ -518,6 +518,7 @@ public class ActMain extends ActBase {
         } else {
             layoutMultiStateView.show(MultiStateView.STATE_EMPTY);
             layoutMultiStateView.setEmptyText(getResources().getString(R.string.str_empty_devices));
+            layoutMultiStateView.setEmptySubText(getResources().getString(R.string.str_empty_devices_hint));
             layoutMultiStateView.setEmptyDrawable(R.drawable.ic_empty_tv);
             rvDevices.setVisibility(View.GONE);
         }

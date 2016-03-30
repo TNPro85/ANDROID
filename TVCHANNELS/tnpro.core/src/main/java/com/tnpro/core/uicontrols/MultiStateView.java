@@ -17,7 +17,7 @@ public class MultiStateView extends FrameLayout {
 
     private LayoutInflater mLayoutInflater;
     private View container, layoutLoading, layoutEmpty;
-    private TextView tvEmptyText;
+    private TextView tvEmptyText, tvEmptySubText;
     private ImageView imvEmptyIcon;
 
     public MultiStateView(Context context) {
@@ -39,6 +39,7 @@ public class MultiStateView extends FrameLayout {
         layoutEmpty = findViewById(R.id.layoutEmpty);
 
         tvEmptyText = (TextView) findViewById(R.id.tvEmptyText);
+        tvEmptySubText = (TextView) findViewById(R.id.tvEmptySubText);
         imvEmptyIcon = (ImageView) findViewById(R.id.imvEmptyIcon);
     }
 
@@ -70,6 +71,11 @@ public class MultiStateView extends FrameLayout {
     public void setEmptyText(String emptyText) {
         if (tvEmptyText != null)
             tvEmptyText.setText(emptyText);
+    }
+
+    public void setEmptySubText(String emptyText) {
+        if (tvEmptySubText != null)
+            tvEmptySubText.setText(emptyText);
     }
 
     public void setEmptyDrawable(int id) {
