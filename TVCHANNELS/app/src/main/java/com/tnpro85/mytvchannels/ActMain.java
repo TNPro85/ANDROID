@@ -1,36 +1,36 @@
 package com.tnpro85.mytvchannels;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.view.ActionMode;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.SparseBooleanArray;
-import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.tnpro.core.listeners.OnMenuClickListener;
 import com.tnpro.core.uicontrols.MultiStateView;
+import com.tnpro.core.utils.AnimationUtils;
 import com.tnpro.core.utils.KeyboardUtils;
-import com.tnpro85.mytvchannels.adapter.DeviceAdapter;
+import com.tnpro.core.utils.ViewUtils;
+import com.tnpro85.mytvchannels.adapter.DevicesAdapter;
 import com.tnpro85.mytvchannels.data.Const;
 import com.tnpro85.mytvchannels.db.DBHelper;
 import com.tnpro85.mytvchannels.db.Global;
+import com.tnpro85.mytvchannels.listener.DeviceItemClickListener;
 import com.tnpro85.mytvchannels.models.Device;
+import com.tnpro85.mytvchannels.uicontrols.DividerItemDecoration;
 import com.tnpro85.mytvchannels.utils.LocaleUtil;
 
 import java.util.ArrayList;
@@ -39,7 +39,9 @@ public class ActMain extends ActBase {
 
     private boolean confirmExit = true;
     private ArrayList<Device> lsDevices;
-    private DeviceAdapter adapterDevices;
+    private DevicesAdapter mAdapter;
+    private ActionMode mDeviceActionMode;
+    private ActionMode.Callback mDeviceActionModeCB;
 
     // Search views
     private EditText mSearchEt;
@@ -47,7 +49,8 @@ public class ActMain extends ActBase {
     private MenuItem mSearchAction;
 
     // Main layouts
-    private ListView lvDevices;
+    private RecyclerView rvDevices;
+    private DividerItemDecoration mDivider;
     private FloatingActionButton fabAddDevice;
     private Snackbar sbError;
     private MultiStateView layoutMultiStateView;
@@ -61,101 +64,95 @@ public class ActMain extends ActBase {
         layoutMultiStateView = (MultiStateView) findViewById(R.id.layoutMultiStateView);
         layoutMultiStateView.show(MultiStateView.STATE_LOADING);
 
-        lvDevices = (ListView) findViewById(R.id.lvDevices);
-        lvDevices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mDivider = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
+        mDivider.setMargin(ViewUtils.dpToPx(this, 68), 0, ViewUtils.dpToPx(this, 10), 0);
+        mDivider.setDividerHeight(ViewUtils.dpToPx(this, 0.5f));
+
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        rvDevices = (RecyclerView) findViewById(R.id.rvDevices);
+        rvDevices.setLayoutManager(llm);
+        rvDevices.addItemDecoration(mDivider);
+        rvDevices.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position < adapterDevices.getCount()) {
-                    Device selectedDevice = adapterDevices.getItem(position);
-                    Intent intent = new Intent(ActMain.this, ActChannelList.class);
-                    intent.putExtra(Const.EXTRA.DEVICE, selectedDevice);
-                    ActMain.this.startActivity(intent);
-                }
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if(mSearchOpened)
+                    return;
+
+                if (dy > 0)
+                    AnimationUtils.goneViewWithAnim(fabAddDevice, R.anim.bottom_sheet_slide_out);
+                else
+                    AnimationUtils.showViewWithAnim(fabAddDevice, R.anim.bottom_sheet_slide_in);
             }
         });
 
-        // Only enable multi-select mode for Android version >= 3.0
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            lvDevices.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
-            lvDevices.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-                @Override
-                public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-                    // Prints the count of selected Items in title
-                    mode.setTitle(lvDevices.getCheckedItemCount() + " " + getString(R.string.str_selected));
-                    // Toggle the state of item after every click on it
-                    adapterDevices.toggleSelection(position);
-                }
+        mDeviceActionModeCB = new ActionMode.Callback() {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                mode.getMenuInflater().inflate(R.menu.menu_act_delete, menu);
+                return true;
+            }
 
-                @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-                @Override
-                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                    mode.getMenuInflater().inflate(R.menu.menu_act_delete, menu);
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) { return false; }
+
+            @Override
+            public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
+                if (item.getItemId() == R.id.action_delete) {
+                    new AlertDialog.Builder(ActMain.this)
+                            .setTitle(getString(R.string.str_confirm))
+                            .setMessage(getString(R.string.str_device_delete_confirm))
+                            .setPositiveButton(getString(R.string.str_delete), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+
+                                    boolean result = false;
+                                    showLoadingDlg(R.string.str_doing, true);
+                                    try {
+                                        SparseBooleanArray selected = mAdapter.getSelectedIds();
+                                        int size = selected.size();
+                                        for (int i = size - 1; i >= 0; i--) {
+                                            if (selected.valueAt(i)) {
+                                                Device selectedItem = mAdapter.getItem(selected.keyAt(i));
+                                                result = DBHelper.getInstance().deleteDevice(selectedItem);
+                                                mAdapter.remove(selectedItem);
+                                            }
+                                        }
+
+                                        // Reset selected list and update ListView
+                                        lsDevices = new ArrayList<>(mAdapter.getData());
+                                        updateLayout();
+
+                                        // Close CAB (Contextual Action Bar)
+                                        mode.finish();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    } finally {
+                                        hideLoadingDlg();
+                                        Toast.makeText(ActMain.this, result ? getString(R.string.str_deleted) : getString(R.string.str_error_general), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .show();
                     return true;
                 }
+                return false;
+            }
 
-                @Override
-                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                    return false;
-                }
-
-                @Override
-                public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
-                    if (item.getItemId() == R.id.action_delete) {
-                        new AlertDialog.Builder(ActMain.this)
-                                .setTitle(getString(R.string.str_confirm))
-                                .setMessage(getString(R.string.str_device_delete_confirm))
-                                .setPositiveButton(getString(R.string.str_delete), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-
-                                        boolean result = false;
-                                        showLoadingDlg(R.string.str_doing, true);
-                                        try {
-                                            SparseBooleanArray selected = adapterDevices.getSelectedIds();
-                                            int size = selected.size();
-                                            for (int i = size - 1; i >= 0; i--) {
-                                                if (selected.valueAt(i)) {
-                                                    Device selectedItem = adapterDevices.getItem(selected.keyAt(i));
-                                                    result = DBHelper.getInstance().deleteDevice(selectedItem);
-                                                    adapterDevices.remove(selectedItem);
-                                                }
-                                            }
-
-                                            // Reset selected list and update ListView
-                                            selected.clear();
-                                            adapterDevices.notifyDataSetChanged();
-                                            lsDevices = new ArrayList<>(adapterDevices.getData());
-                                            updateLayout();
-
-                                            // Close CAB (Contextual Action Bar)
-                                            mode.finish();
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        } finally {
-                                            hideLoadingDlg();
-                                            Toast.makeText(ActMain.this, result ? getString(R.string.str_deleted) : getString(R.string.str_error_general), Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                })
-                                .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                })
-                                .show();
-                        return true;
-                    }
-                    return false;
-                }
-
-                @Override
-                public void onDestroyActionMode(ActionMode mode) {
-                    adapterDevices.getSelectedIds().clear();
-                }
-            });
-        }
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                mDeviceActionMode = null;
+                mAdapter.getSelectedIds().clear();
+                mAdapter.notifyDataSetChanged();
+            }
+        };
 
         fabAddDevice = (FloatingActionButton) findViewById(R.id.myFAB);
         fabAddDevice.setVisibility(View.GONE);
@@ -171,11 +168,27 @@ public class ActMain extends ActBase {
     @Override
     protected void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
-
-        adapterDevices = new DeviceAdapter(this);
-        adapterDevices.setOnMenuClickListener(new OnMenuClickListener() {
+        mAdapter = new DevicesAdapter(ActMain.this, new DeviceItemClickListener() {
             @Override
-            public void onMenuClick(int menuId, final Object obj) {
+            public void onItemClick(int position, Object obj) {
+                if(mDeviceActionMode != null) {
+                    toggleDeviceItem(position);
+                }
+                else if (position < mAdapter.getItemCount()) {
+                    Device selectedDevice = mAdapter.getItem(position);
+                    Intent intent = new Intent(ActMain.this, ActChannelList.class);
+                    intent.putExtra(Const.EXTRA.DEVICE, selectedDevice);
+                    ActMain.this.startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onItemLongClick(int position, Object obj) {
+                toggleDeviceItem(position);
+            }
+
+            @Override
+            public void onItemMenuClick(int menuId, final Object obj) {
                 switch (menuId) {
                     case R.id.action_edit:
                         if (obj instanceof Device) {
@@ -199,9 +212,9 @@ public class ActMain extends ActBase {
                                                 showLoadingDlg(R.string.str_doing, false);
                                                 Device selected = (Device) obj;
                                                 DBHelper.getInstance().deleteDevice(selected);
-                                                adapterDevices.remove(selected);
-                                                adapterDevices.notifyDataSetChanged();
-                                                lsDevices = new ArrayList<>(adapterDevices.getData());
+                                                mAdapter.remove(selected);
+                                                mAdapter.notifyDataSetChanged();
+                                                lsDevices = new ArrayList<>(mAdapter.getData());
                                                 updateLayout();
                                                 result = true;
                                             }
@@ -225,8 +238,20 @@ public class ActMain extends ActBase {
             }
         });
 
-        lvDevices.setAdapter(adapterDevices);
+        rvDevices.setAdapter(mAdapter);
         refreshData();
+    }
+
+    private void toggleDeviceItem(int position) {
+        mAdapter.toggleSelection(position);
+        SparseBooleanArray selectedItem = mAdapter.getSelectedIds();
+        if(selectedItem.size() > 0) {
+            if(mDeviceActionMode == null)
+                mDeviceActionMode = startSupportActionMode(mDeviceActionModeCB);
+            mDeviceActionMode.setTitle(selectedItem.size() + " " + getString(R.string.str_selected));
+        }
+        else if(mDeviceActionMode != null)
+            mDeviceActionMode.finish();
     }
 
     @Override
@@ -256,9 +281,13 @@ public class ActMain extends ActBase {
                         Device device = data.getParcelableExtra(Const.EXTRA.DEVICE);
                         if (device != null) {
                             lsDevices.add(device);
-                            adapterDevices.setData(lsDevices);
-                            adapterDevices.notifyDataSetChanged();
-                            lvDevices.smoothScrollToPosition(lsDevices.size() - 1);
+                            mAdapter.setData(lsDevices);
+                            mAdapter.notifyDataSetChanged();
+
+                            if(lsDevices.size() < 100)
+                                rvDevices.smoothScrollToPosition(lsDevices.size() - 1);
+                            else
+                                rvDevices.scrollToPosition(lsDevices.size() - 1);
 
                             new Handler().postDelayed(new Runnable() {
                                 @Override
@@ -290,9 +319,13 @@ public class ActMain extends ActBase {
                         if (device != null) {
                             if (resultType.equals(ActDevice.RESULT_ADD)) {
                                 lsDevices.add(device);
-                                adapterDevices.setData(lsDevices);
-                                adapterDevices.notifyDataSetChanged();
-                                lvDevices.smoothScrollToPosition(lsDevices.size() - 1);
+                                mAdapter.setData(lsDevices);
+                                mAdapter.notifyDataSetChanged();
+
+                                if(lsDevices.size() < 100)
+                                    rvDevices.smoothScrollToPosition(lsDevices.size() - 1);
+                                else
+                                    rvDevices.scrollToPosition(lsDevices.size() - 1);
 
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
@@ -309,8 +342,8 @@ public class ActMain extends ActBase {
                                     }
                                 }
 
-                                adapterDevices.setData(lsDevices);
-                                adapterDevices.notifyDataSetChanged();
+                                mAdapter.setData(lsDevices);
+                                mAdapter.notifyDataSetChanged();
                             }
 
                         } else {
@@ -406,17 +439,24 @@ public class ActMain extends ActBase {
     }
 
     private void refreshData() {
-        adapterDevices.getSelectedIds().clear();
-        lsDevices = DBHelper.getInstance().getAllDevices();
-        adapterDevices.setData(lsDevices);
-        adapterDevices.notifyDataSetChanged();
-
-        updateLayout();
+        mAdapter.getSelectedIds().clear();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                lsDevices = DBHelper.getInstance().getAllDevices();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.setData(lsDevices);
+                        mAdapter.notifyDataSetChanged();
+                        updateLayout();
+                    }
+                });
+            }
+        }).start();
     }
 
     private void openSearchBar() {
-        fabAddDevice.setVisibility(View.GONE);
-
         // Set custom view on action bar.
         if (mActionBar != null) {
             mActionBar.setDisplayShowCustomEnabled(true);
@@ -436,7 +476,7 @@ public class ActMain extends ActBase {
 
                     @Override
                     public void afterTextChanged(Editable s) {
-                        adapterDevices.getFilter().filter(s);
+                        mAdapter.getFilter().filter(s);
                     }
                 });
             }
@@ -448,16 +488,16 @@ public class ActMain extends ActBase {
         // Change search icon accordingly.
         mSearchOpened = true;
         mSearchAction.setIcon(R.drawable.abc_ic_clear_mtrl_alpha);
+
+        AnimationUtils.goneViewWithAnim(fabAddDevice, R.anim.bottom_sheet_slide_out);
     }
 
     private void closeSearchBar() {
-        fabAddDevice.setVisibility(View.VISIBLE);
-
         // Hide keyboard
         KeyboardUtils.hideKeyboard(mSearchEt);
 
         // Reset adapter filter to display full datalist
-        adapterDevices.getFilter().filter("");
+        mAdapter.getFilter().filter("");
 
         // Change search icon accordingly.
         mSearchAction.setIcon(R.drawable.abc_ic_search_api_mtrl_alpha);
@@ -467,20 +507,22 @@ public class ActMain extends ActBase {
         if (mActionBar != null) {
             mActionBar.setDisplayShowCustomEnabled(false);
         }
+
+        AnimationUtils.showViewWithAnim(fabAddDevice, R.anim.bottom_sheet_slide_in);
     }
 
     private void updateLayout() {
         if (lsDevices.size() > 0) {
             layoutMultiStateView.hide();
-            lvDevices.setVisibility(View.VISIBLE);
+            rvDevices.setVisibility(View.VISIBLE);
         } else {
             layoutMultiStateView.show(MultiStateView.STATE_EMPTY);
             layoutMultiStateView.setEmptyText(getResources().getString(R.string.str_empty_devices));
             layoutMultiStateView.setEmptyDrawable(R.drawable.ic_empty_tv);
-            lvDevices.setVisibility(View.GONE);
+            rvDevices.setVisibility(View.GONE);
         }
 
         if (!mSearchOpened)
-            fabAddDevice.setVisibility(View.VISIBLE);
+            AnimationUtils.showViewWithAnim(fabAddDevice, R.anim.bottom_sheet_slide_in);
     }
 }

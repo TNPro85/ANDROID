@@ -3,12 +3,9 @@ package com.tnpro85.mytvchannels.db;
 import android.content.ContentProviderOperation;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.RemoteException;
-import android.text.TextUtils;
 
 import com.tnpro.core.db.DBUtils;
 import com.tnpro85.mytvchannels.application.MainApp;
