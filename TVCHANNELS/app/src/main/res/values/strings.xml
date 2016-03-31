@@ -63,6 +63,7 @@
     <string name="str_language_hint">Language to display in app</string>
     <string name="str_backup">Backup</string>
     <string name="str_backup_hint">Save all your data to SD card</string>
+    <string name="str_backup_overwrite">This will overwrite existing backup file.\nTo make sure you don\'t press backup by mistake, please confirm to create new backup.</string>
     <string name="str_backup_notfound">No backup found</string>
     <string name="str_backup_latest">Last backup:</string>
     <string name="str_backup_success">Backup successful</string>

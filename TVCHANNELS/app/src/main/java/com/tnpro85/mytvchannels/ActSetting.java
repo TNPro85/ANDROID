@@ -91,7 +91,27 @@ public class ActSetting extends ActBase {
                 }
 
                 // If permission is granted, do the backup
-                doBackupToSdcard();
+                final String path = Utils.getBackupPath();
+                final File backupFile = new File(path);
+                if(backupFile.exists()) {
+                    new AlertDialog.Builder(ActSetting.this)
+                            .setTitle(R.string.str_confirm)
+                            .setMessage(R.string.str_backup_overwrite)
+                            .setNegativeButton(R.string.str_cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setPositiveButton(R.string.str_ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    doBackupToSdcard();
+                                }
+                            }).show();
+                }
+                else
+                    doBackupToSdcard();
             }
         });
 

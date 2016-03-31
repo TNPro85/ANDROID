@@ -63,6 +63,7 @@
     <string name="str_language_hint">Ngôn ngữ hiển thị trong ứng dụng</string>
     <string name="str_backup">Sao lưu</string>
     <string name="str_backup_hint">Lưu toàn bộ dữ liệu vào thẻ nhớ</string>
+    <string name="str_backup_overwrite">Dữ liệu sao lưu trước đó sẽ bị ghi đè.\nĐể chắc chắn bạn không bấm nhầm, vui lòng xác nhận việc bạn muốn tạo sao lưu mới nhất.</string>
     <string name="str_backup_latest">Lần sao lưu gần nhất:</string>
     <string name="str_backup_notfound">Bạn chưa sao lưu hoặc file đã bị xóa</string>
     <string name="str_backup_success">Sao lưu thành công</string>
