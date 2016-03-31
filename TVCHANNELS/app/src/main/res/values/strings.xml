@@ -37,7 +37,6 @@
     <!-- Device -->
     <string name="str_empty_devices">No devices</string>
     <string name="str_empty_devices_hint">Press + button to add a new device</string>
-    <string name="str_empty_channels">This device has no channel</string>
     <string name="str_device_add_hint">Input information about your device (TV, Radio…). All fields must not be blank.</string>
     <string name="str_device_name_hint">Samsung, LG… should be unique!</string>
     <string name="str_device_desc_hint">Description that help you determine the device</string>
@@ -48,6 +47,8 @@
     <string name="str_device_add_confirm">This device does not exist. Do you want to add it?</string>
 
     <!-- Channel -->
+    <string name="str_empty_channels">This device has no channel</string>
+    <string name="str_empty_channels_hint">Press + button to create one</string>
     <string name="str_channel_add_hint">Input information of a channel. All fields must not be blank.</string>
     <string name="str_channel_singular">Channel</string>
     <string name="str_channel_plural">Channels</string>

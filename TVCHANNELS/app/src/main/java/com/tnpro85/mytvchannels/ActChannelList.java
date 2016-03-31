@@ -345,6 +345,7 @@ public class ActChannelList extends ActBase {
         } else {
             layoutMultiStateView.show(MultiStateView.STATE_EMPTY);
             layoutMultiStateView.setEmptyText(getResources().getString(R.string.str_empty_channels));
+            layoutMultiStateView.setEmptySubText(getString(R.string.str_empty_channels_hint));
             lvChannel.setVisibility(View.GONE);
         }
 
@@ -359,8 +360,6 @@ public class ActChannelList extends ActBase {
     }
 
     private void openSearchBar() {
-        fabAddChannel.setVisibility(View.GONE);
-
         // Set custom view on action bar.
         if (mActionBar != null) {
             mActionBar.setDisplayShowCustomEnabled(true);
@@ -392,11 +391,12 @@ public class ActChannelList extends ActBase {
         // Change search icon accordingly.
         mSearchOpened = true;
         mSearchAction.setIcon(R.drawable.abc_ic_clear_mtrl_alpha);
+
+        // Hide Floating Action Button
+        AnimationUtils.goneViewWithAnim(fabAddChannel, R.anim.bottom_sheet_slide_out);
     }
 
     private void closeSearchBar() {
-        AnimationUtils.showViewWithAnim(fabAddChannel, R.anim.abc_fade_in);
-
         // Hide keyboard
         KeyboardUtils.hideKeyboard(mSearchEt);
 
@@ -411,5 +411,8 @@ public class ActChannelList extends ActBase {
         if (mActionBar != null) {
             mActionBar.setDisplayShowCustomEnabled(false);
         }
+
+        // Show Floating Action Button
+        AnimationUtils.showViewWithAnim(fabAddChannel, R.anim.bottom_sheet_slide_in);
     }
 }

@@ -36,7 +36,7 @@
 
     <!-- Device -->
     <string name="str_empty_devices">Không có thiết bị</string>
-    <string name="str_empty_channels">Thiết bị này chưa có kênh nào</string>
+    <string name="str_empty_devices_hint">Nhấn dấu + để tạo mới</string>
     <string name="str_device_add_hint">Điền thông tin về thiết bị (TV, Radio…). Tất cả các mục không được bỏ trống.</string>
     <string name="str_device_name_hint">Samsung, LG… không nên trùng!</string>
     <string name="str_device_desc_hint">Chú thích giúp bạn xác định thiết bị cần thiết</string>
@@ -47,6 +47,8 @@
     <string name="str_device_add_confirm">Thiết bị này chưa có. Bạn có muốn thêm mới nó không?</string>
 
     <!-- Channel -->
+    <string name="str_empty_channels">Thiết bị này chưa có kênh nào</string>
+    <string name="str_empty_channels_hint">Nhấn dấu + để thêm kênh mới</string>
     <string name="str_channel_add_hint">Điền thông tin của kênh này. Tất cả các mục không được bỏ trống.</string>
     <string name="str_channel_singular">Kênh</string>
     <string name="str_channel_plural">Kênh</string>
