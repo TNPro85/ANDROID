@@ -50,7 +50,6 @@ public class ActMain extends ActBase {
 
     // Main layouts
     private RecyclerView rvDevices;
-    private DividerItemDecoration mDivider;
     private FloatingActionButton fabAddDevice;
     private Snackbar sbError;
     private MultiStateView layoutMultiStateView;
@@ -64,7 +63,7 @@ public class ActMain extends ActBase {
         layoutMultiStateView = (MultiStateView) findViewById(R.id.layoutMultiStateView);
         layoutMultiStateView.show(MultiStateView.STATE_LOADING);
 
-        mDivider = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
+        DividerItemDecoration mDivider = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
         mDivider.setMargin(ViewUtils.dpToPx(this, 68), 0, ViewUtils.dpToPx(this, 10), 0);
         mDivider.setDividerHeight(ViewUtils.dpToPx(this, 0.5f));
 

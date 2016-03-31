@@ -1,37 +1,36 @@
 package com.tnpro85.mytvchannels;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.view.ActionMode;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.SparseBooleanArray;
-import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.tnpro.core.listeners.OnMenuClickListener;
 import com.tnpro.core.uicontrols.MultiStateView;
 import com.tnpro.core.utils.AnimationUtils;
 import com.tnpro.core.utils.KeyboardUtils;
-import com.tnpro85.mytvchannels.adapter.ChannelAdapter;
+import com.tnpro.core.utils.ViewUtils;
+import com.tnpro85.mytvchannels.adapter.ChannelsAdapter;
 import com.tnpro85.mytvchannels.data.Const;
 import com.tnpro85.mytvchannels.db.DBHelper;
+import com.tnpro85.mytvchannels.listener.ChannelItemClickListener;
 import com.tnpro85.mytvchannels.models.Channel;
 import com.tnpro85.mytvchannels.models.Device;
+import com.tnpro85.mytvchannels.uicontrols.DividerItemDecoration;
 
 import java.util.ArrayList;
 
@@ -39,7 +38,9 @@ public class ActChannelList extends ActBase {
 
     private Device curDevice;
     private ArrayList<Channel> lsChannels;
-    private ChannelAdapter adapterChannel;
+    private ChannelsAdapter adapterChannel;
+    private ActionMode mChannelActionMode;
+    private ActionMode.Callback mChannelActionModeCB;
 
     // Search views
     private EditText mSearchEt;
@@ -47,10 +48,210 @@ public class ActChannelList extends ActBase {
     private MenuItem mSearchAction;
 
     // Main layouts
-    private ListView lvChannel;
+    private RecyclerView rvChannel;
     private FloatingActionButton fabAddChannel;
     private Snackbar sbError;
     private MultiStateView layoutMultiStateView;
+
+    @Override
+    protected void initUI(Bundle savedInstanceState) {
+        super.initUI(savedInstanceState);
+        setContentView(R.layout.act_channel);
+        showHomeAsUpEnable(true);
+
+        vContainer = findViewById(R.id.container);
+        layoutMultiStateView = (MultiStateView) findViewById(R.id.layoutMultiStateView);
+        layoutMultiStateView.show(MultiStateView.STATE_LOADING);
+
+        DividerItemDecoration mDivider = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
+        mDivider.setMargin(ViewUtils.dpToPx(this, 68), 0, ViewUtils.dpToPx(this, 10), 0);
+        mDivider.setDividerHeight(ViewUtils.dpToPx(this, 0.5f));
+
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        rvChannel = (RecyclerView) findViewById(R.id.rvChannel);
+        rvChannel.setLayoutManager(llm);
+        rvChannel.addItemDecoration(mDivider);
+        rvChannel.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (mSearchOpened)
+                    return;
+
+                if (dy > 0)
+                    AnimationUtils.goneViewWithAnim(fabAddChannel, R.anim.bottom_sheet_slide_out);
+                else
+                    AnimationUtils.showViewWithAnim(fabAddChannel, R.anim.bottom_sheet_slide_in);
+            }
+        });
+
+        mChannelActionModeCB = new ActionMode.Callback() {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                mode.getMenuInflater().inflate(R.menu.menu_act_delete, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) { return false; }
+
+            @Override
+            public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
+                if (item.getItemId() == R.id.action_delete) {
+                    new AlertDialog.Builder(ActChannelList.this)
+                            .setTitle(R.string.str_confirm)
+                            .setMessage(R.string.str_channel_delete_multi_confirm)
+                            .setPositiveButton(R.string.str_delete, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+
+                                    boolean result = false;
+                                    showLoadingDlg(R.string.str_doing, true);
+                                    try {
+                                        SparseBooleanArray selected = adapterChannel.getSelectedIds();
+                                        int size = selected.size();
+                                        for (int i = size - 1; i >= 0; i--) {
+                                            if (selected.valueAt(i)) {
+                                                Channel selectedItem = adapterChannel.getItem(selected.keyAt(i));
+                                                DBHelper.getInstance().deleteChannel(selectedItem);
+                                                adapterChannel.remove(selectedItem);
+                                            }
+                                        }
+
+                                        // Reset selected list and update ListView
+                                        selected.clear();
+                                        adapterChannel.notifyDataSetChanged();
+                                        lsChannels = new ArrayList<>(adapterChannel.getData());
+                                        updateLayout();
+
+                                        // Close CAB (Contextual Action Bar)
+                                        mode.finish();
+                                        result = true;
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    } finally {
+                                        hideLoadingDlg();
+                                        Toast.makeText(ActChannelList.this, result ? getString(R.string.str_deleted) : getString(R.string.str_error_general), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            })
+                            .setNegativeButton(R.string.str_cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .show();
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                mChannelActionMode = null;
+                adapterChannel.getSelectedIds().clear();
+                adapterChannel.notifyDataSetChanged();
+            }
+        };
+
+        fabAddChannel = (FloatingActionButton) findViewById(R.id.myFAB);
+        fabAddChannel.setVisibility(View.GONE);
+        fabAddChannel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ActChannelList.this, ActChannelAdd.class);
+                intent.putExtra(Const.EXTRA.DEVICE, curDevice);
+                ActChannelList.this.startActivityForResult(intent, Const.REQCODE.ADD_CHANNEL);
+            }
+        });
+    }
+
+    @Override
+    protected void initData(Bundle savedInstanceState) {
+        super.initData(savedInstanceState);
+
+        Bundle data = getIntent().getExtras();
+        if (data != null) {
+            curDevice = data.getParcelable(Const.EXTRA.DEVICE);
+            if (curDevice != null)
+                setTitle(curDevice.dName);
+        }
+
+        adapterChannel = new ChannelsAdapter(this, new ChannelItemClickListener() {
+            @Override
+            public void onItemClick(int position, Object obj) {
+                if(mChannelActionMode != null) {
+                    toggleDeviceItem(position);
+                }
+            }
+
+            @Override
+            public void onItemLongClick(int position, Object obj) {
+                toggleDeviceItem(position);
+            }
+
+            @Override
+            public void onItemMenuClick(int menuId, final Object obj) {
+                switch (menuId) {
+                    case R.id.action_edit:
+                        if (obj instanceof Channel) {
+                            Channel selected = (Channel) obj;
+                            Intent intent = new Intent(ActChannelList.this, ActChannelAdd.class);
+                            intent.putExtra(Const.EXTRA.DEVICE, curDevice);
+                            intent.putExtra(Const.EXTRA.CHANNEL, selected);
+                            ActChannelList.this.startActivityForResult(intent, Const.REQCODE.EDIT_CHANNEL);
+                        }
+                        break;
+                    case R.id.action_delete:
+                        new AlertDialog.Builder(ActChannelList.this)
+                                .setTitle(R.string.str_confirm)
+                                .setMessage(R.string.str_channel_delete_single_confirm)
+                                .setPositiveButton(R.string.str_delete, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        boolean result = false;
+                                        try {
+                                            if (obj instanceof Channel) {
+                                                showLoadingDlg(R.string.str_doing, false);
+                                                Channel selected = (Channel) obj;
+                                                DBHelper.getInstance().deleteChannel(selected);
+                                                adapterChannel.remove(selected);
+                                                adapterChannel.notifyDataSetChanged();
+                                                lsChannels = new ArrayList<>(adapterChannel.getData());
+                                                updateLayout();
+                                                result = true;
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        } finally {
+                                            hideLoadingDlg();
+                                            Toast.makeText(ActChannelList.this, result ? getString(R.string.str_deleted) : getString(R.string.str_error_general), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                })
+                                .setNegativeButton(R.string.str_cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
+                        break;
+                }
+            }
+        });
+
+        rvChannel.setAdapter(adapterChannel);
+
+        lsChannels = DBHelper.getInstance().getAllChannel(curDevice);
+        adapterChannel.setData(lsChannels);
+        adapterChannel.notifyDataSetChanged();
+
+        updateLayout();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -64,7 +265,7 @@ public class ActChannelList extends ActBase {
                             lsChannels.add(channel);
                             adapterChannel.setData(lsChannels);
                             adapterChannel.notifyDataSetChanged();
-                            lvChannel.smoothScrollToPosition(lsChannels.size() - 1);
+                            rvChannel.smoothScrollToPosition(lsChannels.size() - 1);
 
                             new Handler().postDelayed(new Runnable() {
                                 @Override
@@ -150,213 +351,37 @@ public class ActChannelList extends ActBase {
         return super.onKeyUp(keyCode, event);
     }
 
-    @Override
-    protected void initUI(Bundle savedInstanceState) {
-        super.initUI(savedInstanceState);
-        setContentView(R.layout.act_channel);
-        showHomeAsUpEnable(true);
-
-        vContainer = findViewById(R.id.container);
-        layoutMultiStateView = (MultiStateView) findViewById(R.id.layoutMultiStateView);
-        layoutMultiStateView.show(MultiStateView.STATE_LOADING);
-
-        lvChannel = (ListView) findViewById(R.id.lvChannel);
-        lvChannel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                if (position < adapterChannel.getCount()) {
-//                    Channel selectedChannel = adapterChannel.getItem(position);
-//                }
-            }
-        });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            lvChannel.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
-            lvChannel.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-                @Override
-                public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-                    // Prints the count of selected Items in title
-                    mode.setTitle(lvChannel.getCheckedItemCount() + " " + getString(R.string.str_selected));
-                    // Toggle the state of item after every click on it
-                    adapterChannel.toggleSelection(position);
-                }
-
-                @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-                @Override
-                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                    mode.getMenuInflater().inflate(R.menu.menu_act_delete, menu);
-                    return true;
-                }
-
-                @Override
-                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                    return false;
-                }
-
-                @Override
-                public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
-                    if (item.getItemId() == R.id.action_delete) {
-                        new AlertDialog.Builder(ActChannelList.this)
-                                .setTitle(R.string.str_confirm)
-                                .setMessage(R.string.str_channel_delete_multi_confirm)
-                                .setPositiveButton(R.string.str_delete, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-
-                                        boolean result = false;
-                                        showLoadingDlg(R.string.str_doing, true);
-                                        try {
-                                            SparseBooleanArray selected = adapterChannel.getSelectedIds();
-                                            int size = selected.size();
-                                            for (int i = size - 1; i >= 0; i--) {
-                                                if (selected.valueAt(i)) {
-                                                    Channel selectedItem = adapterChannel.getItem(selected.keyAt(i));
-                                                    DBHelper.getInstance().deleteChannel(selectedItem);
-                                                    adapterChannel.remove(selectedItem);
-                                                }
-                                            }
-
-                                            // Reset selected list and update ListView
-                                            selected.clear();
-                                            adapterChannel.notifyDataSetChanged();
-                                            lsChannels = new ArrayList<>(adapterChannel.getData());
-                                            updateLayout();
-
-                                            // Close CAB (Contextual Action Bar)
-                                            mode.finish();
-                                            result = true;
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        } finally {
-                                            hideLoadingDlg();
-                                            Toast.makeText(ActChannelList.this, result ? getString(R.string.str_deleted) : getString(R.string.str_error_general), Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                })
-                                .setNegativeButton(R.string.str_cancel, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                })
-                                .show();
-                        return true;
-                    }
-                    return false;
-                }
-
-                @Override
-                public void onDestroyActionMode(ActionMode mode) {
-                    adapterChannel.getSelectedIds().clear();
-                }
-            });
+    private void toggleDeviceItem(int position) {
+        adapterChannel.toggleSelection(position);
+        SparseBooleanArray selectedItem = adapterChannel.getSelectedIds();
+        if(selectedItem.size() > 0) {
+            if(mChannelActionMode == null)
+                mChannelActionMode = startSupportActionMode(mChannelActionModeCB);
+            mChannelActionMode.setTitle(selectedItem.size() + " " + getString(R.string.str_selected));
         }
-
-        fabAddChannel = (FloatingActionButton) findViewById(R.id.myFAB);
-        fabAddChannel.setVisibility(View.GONE);
-        fabAddChannel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ActChannelList.this, ActChannelAdd.class);
-                intent.putExtra(Const.EXTRA.DEVICE, curDevice);
-                ActChannelList.this.startActivityForResult(intent, Const.REQCODE.ADD_CHANNEL);
-            }
-        });
+        else if(mChannelActionMode != null)
+            mChannelActionMode.finish();
     }
-
-    @Override
-    protected void initData(Bundle savedInstanceState) {
-        super.initData(savedInstanceState);
-
-        Bundle data = getIntent().getExtras();
-        if (data != null) {
-            curDevice = data.getParcelable(Const.EXTRA.DEVICE);
-            if (curDevice != null)
-                setTitle(curDevice.dName);
-        }
-
-        adapterChannel = new ChannelAdapter(this);
-        adapterChannel.setOnMenuClickListener(new OnMenuClickListener() {
-            @Override
-            public void onMenuClick(int menuId, final Object obj) {
-                switch (menuId) {
-                    case R.id.action_edit:
-                        if (obj instanceof Channel) {
-                            Channel selected = (Channel) obj;
-                            Intent intent = new Intent(ActChannelList.this, ActChannelAdd.class);
-                            intent.putExtra(Const.EXTRA.DEVICE, curDevice);
-                            intent.putExtra(Const.EXTRA.CHANNEL, selected);
-                            ActChannelList.this.startActivityForResult(intent, Const.REQCODE.EDIT_CHANNEL);
-                        }
-                        break;
-                    case R.id.action_delete:
-                        new AlertDialog.Builder(ActChannelList.this)
-                                .setTitle(R.string.str_confirm)
-                                .setMessage(R.string.str_channel_delete_single_confirm)
-                                .setPositiveButton(R.string.str_delete, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                        boolean result = false;
-                                        try {
-                                            if (obj instanceof Channel) {
-                                                showLoadingDlg(R.string.str_doing, false);
-                                                Channel selected = (Channel) obj;
-                                                DBHelper.getInstance().deleteChannel(selected);
-                                                adapterChannel.remove(selected);
-                                                adapterChannel.notifyDataSetChanged();
-                                                lsChannels = new ArrayList<>(adapterChannel.getData());
-                                                updateLayout();
-                                                result = true;
-                                            }
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        } finally {
-                                            hideLoadingDlg();
-                                            Toast.makeText(ActChannelList.this, result ? getString(R.string.str_deleted) : getString(R.string.str_error_general), Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                })
-                                .setNegativeButton(R.string.str_cancel, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                })
-                                .show();
-                        break;
-                }
-            }
-        });
-
-        lvChannel.setAdapter(adapterChannel);
-
-        lsChannels = DBHelper.getInstance().getAllChannel(curDevice);
-        adapterChannel.setData(lsChannels);
-        adapterChannel.notifyDataSetChanged();
-
-        updateLayout();
-    }
-
+    
     private void updateLayout() {
         if (lsChannels.size() > 0) {
             layoutMultiStateView.hide();
-            lvChannel.setVisibility(View.VISIBLE);
+            rvChannel.setVisibility(View.VISIBLE);
         } else {
             layoutMultiStateView.show(MultiStateView.STATE_EMPTY);
             layoutMultiStateView.setEmptyText(getResources().getString(R.string.str_empty_channels));
             layoutMultiStateView.setEmptySubText(getString(R.string.str_empty_channels_hint));
-            lvChannel.setVisibility(View.GONE);
+            rvChannel.setVisibility(View.GONE);
         }
-
-        if (!mSearchOpened)
-            fabAddChannel.setVisibility(View.VISIBLE);
 
         if (mActionBar != null) {
             mActionBar.setSubtitle(lsChannels.size()
                     + " " + (lsChannels.size() > 1 ?
                     getString(R.string.str_channel_plural).toLowerCase() : getString(R.string.str_channel_singular).toLowerCase()));
         }
+
+        if (!mSearchOpened)
+            AnimationUtils.showViewWithAnim(fabAddChannel, R.anim.bottom_sheet_slide_in);
     }
 
     private void openSearchBar() {

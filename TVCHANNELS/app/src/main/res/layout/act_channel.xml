@@ -7,12 +7,10 @@
     tools:context=".ActMain"
     tools:ignore="MergeRootFrame">
 
-    <ListView
-        android:id="@+id/lvChannel"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvChannel"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@drawable/list_divider"
-        android:dividerHeight="0.5dip" />
+        android:layout_height="match_parent"/>
 
     <com.tnpro.core.uicontrols.MultiStateView
         android:id="@+id/layoutMultiStateView"
