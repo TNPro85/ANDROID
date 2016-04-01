@@ -31,15 +31,14 @@
 
         <EditText
             android:id="@+id/etChannelNum"
+            style="@style/styleEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3.0dip"
             android:digits="0123456789"
             android:hint="@string/str_channel_num_hint"
             android:inputType="numberDecimal"
-            android:singleLine="true"
-            android:textColorHint="#888888"
-            android:textSize="15sp" />
+            android:singleLine="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -51,14 +50,13 @@
 
         <EditText
             android:id="@+id/etChannelName"
+            style="@style/styleEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3.0dip"
             android:hint="@string/str_channel_name_hint"
             android:inputType="textAutoComplete|textCapWords"
-            android:maxLines="5"
-            android:textColorHint="#888888"
-            android:textSize="15sp" />
+            android:maxLines="5" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -70,14 +68,13 @@
 
         <EditText
             android:id="@+id/etChannelDesc"
+            style="@style/styleEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3.0dip"
             android:hint="@string/str_channel_desc_hint"
             android:inputType="textAutoComplete|textCapSentences"
-            android:maxLines="5"
-            android:textColorHint="#888888"
-            android:textSize="15sp" />
+            android:maxLines="5" />
     </LinearLayout>
 
 

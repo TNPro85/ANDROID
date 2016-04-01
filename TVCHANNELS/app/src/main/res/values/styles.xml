@@ -64,4 +64,14 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:background">@drawable/selector</item>
     </style>
+
+    <!-- EditText -->
+    <style name="styleEditText">
+        <item name="android:background">@drawable/bg_edittext</item>
+        <item name="android:textCursorDrawable" tools:targetApi="honeycomb_mr1">@null</item>
+        <item name="android:textColorHint">@color/text_desc</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
 </resources>
