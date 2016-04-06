@@ -11,13 +11,15 @@ public class Const {
         public static final int EDIT_DEVICE = 10001;
         public static final int ADD_CHANNEL = 10002;
         public static final int EDIT_CHANNEL = 10003;
-        public static final int GO_SETTINGS = 10004;
+        public static final int COPY_CHANNEL = 10004;
+        public static final int GO_SETTINGS = 10005;
     }
 
     public static class EXTRA {
         public static final String DEVICE = "dv";
         public static final String RESULT_TYPE = "rt";
         public static final String CHANNEL = "cn";
+        public static final String COPYING_CHANNEL = "ccn";
     }
 
     public static class PERMISSION {

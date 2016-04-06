@@ -33,6 +33,7 @@
     <string name="menu_delete">Delete</string>
     <string name="menu_refresh">Refresh</string>
     <string name="menu_edit">Edit</string>
+    <string name="menu_copy">Copy</string>
 
     <!-- Device -->
     <string name="str_empty_devices">No devices</string>

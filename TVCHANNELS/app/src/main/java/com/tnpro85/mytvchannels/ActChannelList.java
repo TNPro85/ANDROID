@@ -17,6 +17,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -25,6 +26,8 @@ import com.tnpro.core.utils.AnimationUtils;
 import com.tnpro.core.utils.KeyboardUtils;
 import com.tnpro.core.utils.ViewUtils;
 import com.tnpro85.mytvchannels.adapter.ChannelsAdapter;
+import com.tnpro85.mytvchannels.adapter.DevicePickerAdapter;
+import com.tnpro85.mytvchannels.adapter.DevicesAdapter;
 import com.tnpro85.mytvchannels.data.Const;
 import com.tnpro85.mytvchannels.db.DBHelper;
 import com.tnpro85.mytvchannels.listener.ChannelItemClickListener;
@@ -203,6 +206,31 @@ public class ActChannelList extends ActBase {
                             intent.putExtra(Const.EXTRA.CHANNEL, selected);
                             ActChannelList.this.startActivityForResult(intent, Const.REQCODE.EDIT_CHANNEL);
                         }
+                        break;
+                    case R.id.action_copy:
+                        final ArrayList<Device> lsDevices = DBHelper.getInstance().getAllDevices();
+                        for(Device d : lsDevices) {
+                            if(d.dName.equals(curDevice.dName)) {
+                                lsDevices.remove(d);
+                                break;
+                            }
+                        }
+                        final DevicePickerAdapter arrDeviceName = new DevicePickerAdapter(ActChannelList.this, lsDevices);
+                        new AlertDialog.Builder(ActChannelList.this)
+                                .setTitle("Choose device")
+                                .setAdapter(arrDeviceName, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int pos) {
+                                        if (obj instanceof Channel) {
+                                            Channel selected = (Channel) obj;
+                                            Intent intent = new Intent(ActChannelList.this, ActChannelAdd.class);
+                                            intent.putExtra(Const.EXTRA.DEVICE, lsDevices.get(pos));
+                                            intent.putExtra(Const.EXTRA.CHANNEL, selected);
+                                            intent.putExtra(Const.EXTRA.COPYING_CHANNEL, true);
+                                            ActChannelList.this.startActivityForResult(intent, Const.REQCODE.COPY_CHANNEL);
+                                        }
+                                    }
+                                }).show();
                         break;
                     case R.id.action_delete:
                         new AlertDialog.Builder(ActChannelList.this)

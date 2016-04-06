@@ -20,6 +20,7 @@ public class ActChannelAdd extends ActBase {
     private EditText etChannelNum, etChannelName, etChannelDesc;
     private Device curDevice;
     private Channel curChannel;
+    private boolean mIsCopyingChannel;
 
     @Override
     protected void initUI(Bundle savedInstanceState) {
@@ -41,11 +42,12 @@ public class ActChannelAdd extends ActBase {
         if (data != null) {
             curDevice = data.getParcelable(Const.EXTRA.DEVICE);
             curChannel = data.getParcelable(Const.EXTRA.CHANNEL);
+            mIsCopyingChannel = data.getBoolean(Const.EXTRA.COPYING_CHANNEL, false);
         }
 
         if (curChannel != null) {
             etChannelNum.setText(curChannel.cNum + "");
-            etChannelNum.setEnabled(false);
+            etChannelNum.setEnabled(mIsCopyingChannel);
             etChannelName.setText(curChannel.cName);
             etChannelName.requestFocus();
             etChannelDesc.setText(curChannel.cDesc);
@@ -87,6 +89,7 @@ public class ActChannelAdd extends ActBase {
                 }
 
                 Channel channel = new Channel(curDevice.dName, Integer.parseInt(num), name, desc);
+                // TODO: handle copy case
                 if (curChannel != null) {
                     if(name.equals(curChannel.cName) && desc.equals(curChannel.cDesc)) {
                         setResult(RESULT_CANCELED);

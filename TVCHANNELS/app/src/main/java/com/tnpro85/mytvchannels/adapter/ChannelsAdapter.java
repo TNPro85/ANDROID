@@ -79,7 +79,7 @@ public class ChannelsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onClick(View v) {
                     PopupManager.getInstance().buildMenu(v.getContext(),
-                            v, R.menu.menu_device_action, new PopupMenu.OnMenuItemClickListener() {
+                            v, R.menu.menu_channel_action, new PopupMenu.OnMenuItemClickListener() {
                                 @Override
                                 public boolean onMenuItemClick(MenuItem item) {
                                     if(listener != null)
