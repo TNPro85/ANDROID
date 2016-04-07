@@ -6,6 +6,7 @@
     <string name="title_activity_act_device">Thêm thiết bị</string>
     <string name="title_activity_act_channel">Danh sách kênh</string>
     <string name="title_activity_act_channel_add">Thêm kênh</string>
+    <string name="title_activity_act_channel_copy">Sao chép kênh</string>
     <string name="title_activity_act_setting">Thiết lập</string>
 
     <string name="str_loading">Đang tải…</string>
@@ -22,6 +23,9 @@
     <string name="str_ok">OK</string>
     <string name="str_update">Cập nhật</string>
     <string name="str_added">Đã thêm</string>
+    <string name="str_copied">Sao chép thành công</string>
+    <string name="str_copy_to">Đang sao chép kênh sang %s</string>
+    <string name="str_device_picker">Chọn thiết bị</string>
 
     <!-- Main -->
     <string name="str_back_confirm">Bấm back lần nữa để thoát</string>
@@ -83,7 +87,9 @@
     <!-- Error -->
     <string name="str_error_general">Có lỗi xảy ra. Vui lòng thử lại sau.</string>
     <string name="str_error_must_not_empty">Không được trống</string>
+    <string name="str_error_duplicated">Không được trùng</string>
     <string name="str_error_invalid_data">Dữ liệu không hợp lệ. Vui lòng kiểm tra và thử lại.</string>
     <string name="str_error_backup_not_found">Bạn chưa thực hiện sao lưu hoặc đã xóa file sao lưu.</string>
     <string name="str_error_backup_nodata">Bạn chưa có dữ liệu để sao lưu.\nVui lòng kiểm tra và thử lại sau.</string>
+    <string name="str_error_channel_exist">Kênh này đã tồn tại.\nVui lòng kiểm tra và thử lại.</string>
 </resources>

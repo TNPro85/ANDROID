@@ -6,6 +6,7 @@
     <string name="title_activity_act_device">Add Device</string>
     <string name="title_activity_act_channel">Channels</string>
     <string name="title_activity_act_channel_add">Add channel</string>
+    <string name="title_activity_act_channel_copy">Copy channel</string>
     <string name="title_activity_act_setting">Settings</string>
 
     <string name="str_loading">Loading…</string>
@@ -22,6 +23,9 @@
     <string name="str_ok">OK</string>
     <string name="str_update">Update</string>
     <string name="str_added">Added</string>
+    <string name="str_copied">Copy successful</string>
+    <string name="str_copy_to">Copying to %s</string>
+    <string name="str_device_picker">Choose device</string>
 
     <!-- Main -->
     <string name="str_back_confirm">Touch back again to exit</string>
@@ -83,7 +87,9 @@
     <!-- Error -->
     <string name="str_error_general">Unexpected error. Try again later.</string>
     <string name="str_error_must_not_empty">Must not empty</string>
+    <string name="str_error_duplicated">Duplicated</string>
     <string name="str_error_invalid_data">Invalid data. Please check and try again.</string>
     <string name="str_error_backup_not_found">You haven\'t created any backup or file was deleted.</string>
     <string name="str_error_backup_nodata">You have no data to backup.\nPlease input some data and try again.</string>
+    <string name="str_error_channel_exist">Channel already exists.\nPlease check and try again.</string>
 </resources>

@@ -7,18 +7,24 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tnpro85.mytvchannels.data.Const;
 import com.tnpro85.mytvchannels.db.DBHelper;
 import com.tnpro85.mytvchannels.models.Channel;
 import com.tnpro85.mytvchannels.models.Device;
+import com.tnpro85.mytvchannels.utils.Utils;
 
 public class ActChannelAdd extends ActBase {
 
     private EditText etChannelNum, etChannelName, etChannelDesc;
     private Device curDevice;
+    private TextView tvDeviceCopyHeader;
+    private View vDeviceCopyDivider;
+
     private Channel curChannel;
     private boolean mIsCopyingChannel;
 
@@ -33,6 +39,9 @@ public class ActChannelAdd extends ActBase {
         etChannelNum.requestFocus();
         etChannelName = (EditText) findViewById(R.id.etChannelName);
         etChannelDesc = (EditText) findViewById(R.id.etChannelDesc);
+
+        tvDeviceCopyHeader = (TextView) findViewById(R.id.tvDeviceCopyHeader);
+        vDeviceCopyDivider = findViewById(R.id.vDeviceCopyDivider);
     }
 
     @Override
@@ -49,7 +58,16 @@ public class ActChannelAdd extends ActBase {
             etChannelNum.setText(curChannel.cNum + "");
             etChannelNum.setEnabled(mIsCopyingChannel);
             etChannelName.setText(curChannel.cName);
-            etChannelName.requestFocus();
+            if(mIsCopyingChannel) {
+                setTitle(getString(R.string.title_activity_act_channel_copy));
+                String headerStr = String.format(getString(R.string.str_copy_to), curDevice.dName);
+                tvDeviceCopyHeader.setVisibility(View.VISIBLE);
+                tvDeviceCopyHeader.setText(headerStr);
+                vDeviceCopyDivider.setVisibility(View.VISIBLE);
+                etChannelNum.requestFocus();
+            }
+            else
+                etChannelName.requestFocus();
             etChannelDesc.setText(curChannel.cDesc);
         }
     }
@@ -89,18 +107,33 @@ public class ActChannelAdd extends ActBase {
                 }
 
                 Channel channel = new Channel(curDevice.dName, Integer.parseInt(num), name, desc);
-                // TODO: handle copy case
                 if (curChannel != null) {
-                    if(name.equals(curChannel.cName) && desc.equals(curChannel.cDesc)) {
-                        setResult(RESULT_CANCELED);
-                        finish();
-                    }
-                    else {
-                        DBHelper.getInstance().updateChannel(channel);
-                        Intent result = new Intent();
-                        result.putExtra(Const.EXTRA.CHANNEL, channel);
-                        setResult(RESULT_OK, result);
-                        finish();
+                    if(mIsCopyingChannel) {
+                        Channel existChannel = DBHelper.getInstance().getChannel(curDevice.dName, channel.cNum);
+                        if(existChannel != null) {
+                            Utils.showMsg(ActChannelAdd.this, R.string.str_error_channel_exist);
+                            etChannelNum.setError(getString(R.string.str_error_duplicated));
+                            etChannelNum.requestFocus();
+                        }
+                        else {
+                            DBHelper.getInstance().addChannel(channel);
+                            Intent result = new Intent();
+                            result.putExtra(Const.EXTRA.CHANNEL, channel);
+                            setResult(RESULT_OK, result);
+                            finish();
+                        }
+                    } else {
+                        if(name.equals(curChannel.cName) && desc.equals(curChannel.cDesc)) {
+                            setResult(RESULT_CANCELED);
+                            finish();
+                        }
+                        else {
+                            DBHelper.getInstance().updateChannel(channel);
+                            Intent result = new Intent();
+                            result.putExtra(Const.EXTRA.CHANNEL, channel);
+                            setResult(RESULT_OK, result);
+                            finish();
+                        }
                     }
                 } else {
                     DBHelper.getInstance().addChannel(channel);

@@ -314,7 +314,7 @@ public class ActSetting extends ActBase {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Utils.showToast(ActSetting.this, msg);
+                                            Utils.showMsg(ActSetting.this, msg);
                                         }
                                     });
                                 }

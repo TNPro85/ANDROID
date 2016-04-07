@@ -8,7 +8,11 @@ public class Utils {
         return IOUtils.getBackupFolder() + "backup.dat";
     }
 
-    public static void showToast(Context context, String msg) {
+    public static void showMsg(Context context, String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void showMsg(Context context, int strId) {
+        Toast.makeText(context, context.getString(strId), Toast.LENGTH_SHORT).show();
     }
 }

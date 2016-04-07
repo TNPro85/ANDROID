@@ -17,7 +17,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -27,7 +26,6 @@ import com.tnpro.core.utils.KeyboardUtils;
 import com.tnpro.core.utils.ViewUtils;
 import com.tnpro85.mytvchannels.adapter.ChannelsAdapter;
 import com.tnpro85.mytvchannels.adapter.DevicePickerAdapter;
-import com.tnpro85.mytvchannels.adapter.DevicesAdapter;
 import com.tnpro85.mytvchannels.data.Const;
 import com.tnpro85.mytvchannels.db.DBHelper;
 import com.tnpro85.mytvchannels.listener.ChannelItemClickListener;
@@ -217,7 +215,7 @@ public class ActChannelList extends ActBase {
                         }
                         final DevicePickerAdapter arrDeviceName = new DevicePickerAdapter(ActChannelList.this, lsDevices);
                         new AlertDialog.Builder(ActChannelList.this)
-                                .setTitle("Choose device")
+                                .setTitle(R.string.str_device_picker)
                                 .setAdapter(arrDeviceName, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int pos) {
@@ -333,6 +331,13 @@ public class ActChannelList extends ActBase {
                         adapterChannel.setData(lsChannels);
                         adapterChannel.notifyDataSetChanged();
                     }
+                }
+                break;
+
+            case Const.REQCODE.COPY_CHANNEL:
+                if(resultCode == RESULT_OK) {
+                    sbError = Snackbar.make(vContainer, getString(R.string.str_copied), Snackbar.LENGTH_SHORT);
+                    sbError.show();
                 }
                 break;
         }
