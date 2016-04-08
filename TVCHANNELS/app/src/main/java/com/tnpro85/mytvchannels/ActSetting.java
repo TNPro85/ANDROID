@@ -10,7 +10,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -45,8 +49,7 @@ import java.util.Locale;
 public class ActSetting extends ActBase {
 
     private AppCompatSpinner spLanguage;
-    private ArrayAdapter<String> arrayAdapter;
-    private String arrLangKey[], arrLang[], curLang;
+    private String arrLangKey[];
     private TextView tvLastBackup;
 
     @Override
@@ -189,13 +192,13 @@ public class ActSetting extends ActBase {
 
     private void setupSettings() {
         arrLangKey = getResources().getStringArray(R.array.arr_lang_key);
-        arrLang = getResources().getStringArray(R.array.arr_lang);
-        arrayAdapter = new ArrayAdapter<>(this,
+        String[] arrLang = getResources().getStringArray(R.array.arr_lang);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
                 R.layout.support_simple_spinner_dropdown_item, arrLang);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spLanguage.setAdapter(arrayAdapter);
-        curLang = SharedPrefData.getAppLanguage();
+        String curLang = SharedPrefData.getAppLanguage();
         for(int i = 0; i < arrLangKey.length; i++) {
             if(curLang.equals(arrLangKey[i]))
                 spLanguage.setSelection(i);
@@ -382,10 +385,15 @@ public class ActSetting extends ActBase {
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm", locale);
 
         if(tvLastBackup != null) {
-            String time = getString(R.string.str_backup_latest)
-                    + " "
-                    + (backupFile.exists()? df.format(new Date(backupFile.lastModified())) : getString(R.string.str_backup_notfound)) ;
-            tvLastBackup.setText(time);
+            String title = getString(R.string.str_backup_latest) + " ";
+            String time = backupFile.exists() ? df.format(new Date(backupFile.lastModified())) : getString(R.string.str_backup_notfound);
+            String text = title + time;
+            final ForegroundColorSpan fcs = new ForegroundColorSpan(getResources().getColor(R.color.text_main));
+            final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
+            SpannableStringBuilder ssb = new SpannableStringBuilder(text);
+            ssb.setSpan(fcs, title.length(), text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ssb.setSpan(bss, title.length(), text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            tvLastBackup.setText(ssb);
         }
     }
 }

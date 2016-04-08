@@ -361,6 +361,7 @@ public class ActMain extends ActBase {
             case Const.REQCODE.GO_SETTINGS:
                 LocaleUtil.loadLocale(getBaseContext());
                 invalidateOptionsMenu();
+                updateLayout();
                 break;
         }
     }
