@@ -1,8 +1,6 @@
 package com.tnpro85.mytvchannels;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -23,11 +21,6 @@ public abstract class ActBase extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActionBar = getSupportActionBar();
-        if(mActionBar != null) {
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-                mActionBar.setElevation(0);
-            mActionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.main_color)));
-        }
 
         initUI(savedInstanceState);
         initData(savedInstanceState);
