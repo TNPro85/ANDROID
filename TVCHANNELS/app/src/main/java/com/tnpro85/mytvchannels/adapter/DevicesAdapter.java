@@ -28,12 +28,10 @@ public class DevicesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private ArrayList<Device> filteredData;
     private DeviceFilter deviceFilter;
     private SparseBooleanArray mSelectedItemsIds;
-    private int mSelectedBgColor;
     private DeviceItemClickListener onDeviceItemClickListener;
 
     public DevicesAdapter(Context context, DeviceItemClickListener deviceItemClickListener) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mSelectedBgColor = context.getResources().getColor(R.color.list_selected_bg);
         mSelectedItemsIds = new SparseBooleanArray();
         this.onDeviceItemClickListener = deviceItemClickListener;
     }

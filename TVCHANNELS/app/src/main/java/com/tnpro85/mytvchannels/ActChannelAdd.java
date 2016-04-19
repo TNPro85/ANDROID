@@ -25,7 +25,7 @@ public class ActChannelAdd extends ActBase {
     private TextView tvDeviceCopyHeader;
     private View vDeviceCopyDivider;
 
-    private Channel curChannel;
+    private Channel curChannel; // Use in editor mode
     private boolean mIsCopyingChannel;
 
     @Override
@@ -55,7 +55,8 @@ public class ActChannelAdd extends ActBase {
         }
 
         if (curChannel != null) {
-            etChannelNum.setText(curChannel.cNum + "");
+            String cNum = curChannel.cNum + "";
+            etChannelNum.setText(cNum);
             etChannelNum.setEnabled(mIsCopyingChannel);
             etChannelName.setText(curChannel.cName);
             if(mIsCopyingChannel) {
@@ -65,9 +66,12 @@ public class ActChannelAdd extends ActBase {
                 tvDeviceCopyHeader.setText(headerStr);
                 vDeviceCopyDivider.setVisibility(View.VISIBLE);
                 etChannelNum.requestFocus();
+                etChannelNum.setSelection(cNum.length());
             }
-            else
+            else {
                 etChannelName.requestFocus();
+                etChannelName.setSelection(curChannel.cName.length());
+            }
             etChannelDesc.setText(curChannel.cDesc);
         }
     }
@@ -107,9 +111,10 @@ public class ActChannelAdd extends ActBase {
                 }
 
                 Channel channel = new Channel(curDevice.dName, Integer.parseInt(num), name, desc);
+                Channel existChannel = DBHelper.getInstance().getChannel(curDevice.dName, channel.cNum);
                 if (curChannel != null) {
+                    // If copying a channel, channel exists -> show error message. Otherwise, add it into selected device.
                     if(mIsCopyingChannel) {
-                        Channel existChannel = DBHelper.getInstance().getChannel(curDevice.dName, channel.cNum);
                         if(existChannel != null) {
                             Utils.showMsg(ActChannelAdd.this, R.string.str_error_channel_exist);
                             etChannelNum.setError(getString(R.string.str_error_duplicated));
@@ -122,7 +127,9 @@ public class ActChannelAdd extends ActBase {
                             setResult(RESULT_OK, result);
                             finish();
                         }
-                    } else {
+                    }
+                    // If editing a channel, data has been changed -> update channel. Otherwise, do nothing.
+                    else {
                         if(name.equals(curChannel.cName) && desc.equals(curChannel.cDesc)) {
                             setResult(RESULT_CANCELED);
                             finish();
@@ -135,12 +142,21 @@ public class ActChannelAdd extends ActBase {
                             finish();
                         }
                     }
-                } else {
-                    DBHelper.getInstance().addChannel(channel);
-                    Intent result = new Intent();
-                    result.putExtra(Const.EXTRA.CHANNEL, channel);
-                    setResult(RESULT_OK, result);
-                    finish();
+                }
+                // Adding a new channel
+                else {
+                    if(existChannel != null) {
+                        Utils.showMsg(ActChannelAdd.this, R.string.str_error_channel_exist);
+                        etChannelNum.setError(getString(R.string.str_error_duplicated));
+                        etChannelNum.requestFocus();
+                    }
+                    else {
+                        DBHelper.getInstance().addChannel(channel);
+                        Intent result = new Intent();
+                        result.putExtra(Const.EXTRA.CHANNEL, channel);
+                        setResult(RESULT_OK, result);
+                        finish();
+                    }
                 }
             } catch (SQLiteConstraintException e) {
                 e.printStackTrace();
