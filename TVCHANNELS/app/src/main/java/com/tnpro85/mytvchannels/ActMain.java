@@ -88,7 +88,7 @@ public class ActMain extends ActBase {
         mDeviceActionModeCB = new ActionMode.Callback() {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                mode.getMenuInflater().inflate(R.menu.menu_act_delete, menu);
+                mode.getMenuInflater().inflate(R.menu.menu_actionmode_device, menu);
                 return true;
             }
 
@@ -97,50 +97,56 @@ public class ActMain extends ActBase {
 
             @Override
             public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
-                if (item.getItemId() == R.id.action_delete) {
-                    new AlertDialog.Builder(ActMain.this)
-                            .setTitle(getString(R.string.str_confirm))
-                            .setMessage(getString(R.string.str_device_delete_confirm))
-                            .setPositiveButton(getString(R.string.str_delete), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
+                switch (item.getItemId()) {
+                    case R.id.action_copy: {
+                        // TODO: start ActDevice here, and handle activity result.
+                        return true;
+                    }
+                    case R.id.action_delete: {
+                        new AlertDialog.Builder(ActMain.this)
+                                .setTitle(getString(R.string.str_confirm))
+                                .setMessage(getString(R.string.str_device_delete_confirm))
+                                .setPositiveButton(getString(R.string.str_delete), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
 
-                                    boolean result = false;
-                                    showLoadingDlg(R.string.str_doing, true);
-                                    try {
-                                        SparseBooleanArray selected = mAdapter.getSelectedIds();
-                                        int size = selected.size();
-                                        for (int i = size - 1; i >= 0; i--) {
-                                            if (selected.valueAt(i)) {
-                                                Device selectedItem = mAdapter.getItem(selected.keyAt(i));
-                                                result = DBHelper.getInstance().deleteDevice(selectedItem);
-                                                mAdapter.remove(selectedItem);
+                                        boolean result = false;
+                                        showLoadingDlg(R.string.str_doing, true);
+                                        try {
+                                            SparseBooleanArray selected = mAdapter.getSelectedIds();
+                                            int size = selected.size();
+                                            for (int i = size - 1; i >= 0; i--) {
+                                                if (selected.valueAt(i)) {
+                                                    Device selectedItem = mAdapter.getItem(selected.keyAt(i));
+                                                    result = DBHelper.getInstance().deleteDevice(selectedItem);
+                                                    mAdapter.remove(selectedItem);
+                                                }
                                             }
+
+                                            // Reset selected list and update ListView
+                                            lsDevices = new ArrayList<>(mAdapter.getData());
+                                            updateLayout();
+
+                                            // Close CAB (Contextual Action Bar)
+                                            mode.finish();
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        } finally {
+                                            hideLoadingDlg();
+                                            Toast.makeText(ActMain.this, result ? getString(R.string.str_deleted) : getString(R.string.str_error_general), Toast.LENGTH_SHORT).show();
                                         }
-
-                                        // Reset selected list and update ListView
-                                        lsDevices = new ArrayList<>(mAdapter.getData());
-                                        updateLayout();
-
-                                        // Close CAB (Contextual Action Bar)
-                                        mode.finish();
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    } finally {
-                                        hideLoadingDlg();
-                                        Toast.makeText(ActMain.this, result ? getString(R.string.str_deleted) : getString(R.string.str_error_general), Toast.LENGTH_SHORT).show();
                                     }
-                                }
-                            })
-                            .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .show();
-                    return true;
+                                })
+                                .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
+                        return true;
+                    }
                 }
                 return false;
             }
