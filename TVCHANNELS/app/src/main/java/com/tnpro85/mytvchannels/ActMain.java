@@ -88,7 +88,7 @@ public class ActMain extends ActBase {
         mDeviceActionModeCB = new ActionMode.Callback() {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                mode.getMenuInflater().inflate(R.menu.menu_actionmode_device, menu);
+                mode.getMenuInflater().inflate(R.menu.menu_act_delete, menu);
                 return true;
             }
 
@@ -98,10 +98,6 @@ public class ActMain extends ActBase {
             @Override
             public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.action_copy: {
-                        // TODO: start ActDevice here, and handle activity result.
-                        return true;
-                    }
                     case R.id.action_delete: {
                         new AlertDialog.Builder(ActMain.this)
                                 .setTitle(getString(R.string.str_confirm))
@@ -201,6 +197,14 @@ public class ActMain extends ActBase {
                             Intent intent = new Intent(ActMain.this, ActDevice.class);
                             intent.putExtra(Const.EXTRA.DEVICE, selected);
                             ActMain.this.startActivityForResult(intent, Const.REQCODE.EDIT_DEVICE);
+                        }
+                        break;
+                    case R.id.action_copy:
+                        if (obj instanceof Device) {
+                            Device selected = (Device) obj;
+                            Intent intent = new Intent(ActMain.this, ActDevice.class);
+                            intent.putExtra(Const.EXTRA.DEVICE, selected);
+                            ActMain.this.startActivityForResult(intent, Const.REQCODE.ADD_DEVICE);
                         }
                         break;
                     case R.id.action_delete:
