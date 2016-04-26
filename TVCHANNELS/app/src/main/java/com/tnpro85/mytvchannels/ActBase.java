@@ -2,6 +2,8 @@ package com.tnpro85.mytvchannels;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -92,5 +94,11 @@ public abstract class ActBase extends AppCompatActivity {
     protected void hideLoadingDlg() {
         if(mLoadingDialog.isShowing())
             mLoadingDialog.dismiss();
+    }
+
+    protected void runOnUI(Runnable runnable) {
+        if(runnable != null && !isFinishing()) {
+            new Handler(Looper.getMainLooper()).post(runnable);
+        }
     }
 }

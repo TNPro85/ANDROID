@@ -9,7 +9,9 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tnpro85.mytvchannels.data.Const;
@@ -21,7 +23,7 @@ public class ActDevice extends ActBase {
     public static final String RESULT_ADD = "added", RESULT_UPDATE = "updated";
 
     private Device mDeviceToEdit;
-    EditText etDeviceName, etDeviceDesc;
+    private EditText etDeviceName, etDeviceDesc;
 
     @Override
     protected void initUI(Bundle savedInstanceState) {
@@ -31,8 +33,18 @@ public class ActDevice extends ActBase {
         setTitle(getString(R.string.title_activity_act_device));
 
         etDeviceName = (EditText) findViewById(R.id.etDeviceName);
-        etDeviceName.requestFocus();
         etDeviceDesc = (EditText) findViewById(R.id.etDeviceDesc);
+        etDeviceDesc.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                switch (actionId) {
+                    case EditorInfo.IME_ACTION_DONE:
+                        onActionDone();
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -43,6 +55,7 @@ public class ActDevice extends ActBase {
         if(data != null) {
             mDeviceToEdit = data.getParcelable(Const.EXTRA.DEVICE);
             if(mDeviceToEdit != null) {
+                etDeviceName.requestFocus();
                 etDeviceName.setText(mDeviceToEdit.dName);
                 etDeviceName.setSelection(mDeviceToEdit.dName.length());
                 etDeviceDesc.setText(mDeviceToEdit.dDesc);
@@ -60,66 +73,7 @@ public class ActDevice extends ActBase {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_done) {
-            try {
-                etDeviceName.setError(null);
-                etDeviceDesc.setError(null);
-
-                final String name = etDeviceName.getText().toString();
-                final String desc = etDeviceDesc.getText().toString();
-
-                if (TextUtils.isEmpty(name)) {
-                    etDeviceName.setError(getString(R.string.str_error_must_not_empty));
-                    etDeviceName.requestFocus();
-                    return true;
-                } else if (TextUtils.isEmpty(desc)) {
-                    etDeviceDesc.setError(getString(R.string.str_error_must_not_empty));
-                    etDeviceDesc.requestFocus();
-                    return true;
-                }
-
-                if(DBHelper.getInstance().getDevice(name) != null) {
-                    new AlertDialog.Builder(ActDevice.this)
-                            .setTitle(R.string.str_confirm)
-                            .setMessage(R.string.str_device_update_confirm)
-                            .setPositiveButton(R.string.str_update, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                    addDevice(new Device(name, desc), RESULT_UPDATE);
-                                }
-                            })
-                            .setNegativeButton(R.string.str_cancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            }).show();
-                }
-                else if(mDeviceToEdit != null) {
-                        new AlertDialog.Builder(ActDevice.this)
-                                .setTitle(getString(R.string.str_confirm))
-                                .setMessage(R.string.str_device_add_confirm)
-                                .setPositiveButton(R.string.str_ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                        addDevice(new Device(name, desc), RESULT_ADD);
-                                    }
-                                })
-                                .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                }).show();
-                }
-                else
-                    addDevice(new Device(name, desc), null);
-            }
-            catch (SQLiteConstraintException e) {
-                e.printStackTrace();
-                Toast.makeText(ActDevice.this, getString(R.string.str_error_invalid_data), Toast.LENGTH_SHORT).show();
-            }
+            onActionDone();
             return true;
         }
 
@@ -135,6 +89,69 @@ public class ActDevice extends ActBase {
                 return true;
         }
         return super.onKeyUp(keyCode, event);
+    }
+
+    private void onActionDone() {
+        try {
+            etDeviceName.setError(null);
+            etDeviceDesc.setError(null);
+
+            final String name = etDeviceName.getText().toString();
+            final String desc = etDeviceDesc.getText().toString();
+
+            if (TextUtils.isEmpty(name)) {
+                etDeviceName.setError(getString(R.string.str_error_must_not_empty));
+                etDeviceName.requestFocus();
+                return;
+            } else if (TextUtils.isEmpty(desc)) {
+                etDeviceDesc.setError(getString(R.string.str_error_must_not_empty));
+                etDeviceDesc.requestFocus();
+                return;
+            }
+
+            if(DBHelper.getInstance().getDevice(name) != null) {
+                new AlertDialog.Builder(ActDevice.this)
+                        .setTitle(R.string.str_confirm)
+                        .setMessage(R.string.str_device_update_confirm)
+                        .setPositiveButton(R.string.str_update, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                addDevice(new Device(name, desc), RESULT_UPDATE);
+                            }
+                        })
+                        .setNegativeButton(R.string.str_cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+            }
+            else if(mDeviceToEdit != null) {
+                new AlertDialog.Builder(ActDevice.this)
+                        .setTitle(getString(R.string.str_confirm))
+                        .setMessage(R.string.str_device_add_confirm)
+                        .setPositiveButton(R.string.str_ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                addDevice(new Device(name, desc), RESULT_ADD);
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+            }
+            else
+                addDevice(new Device(name, desc), null);
+        }
+        catch (SQLiteConstraintException e) {
+            e.printStackTrace();
+            Toast.makeText(ActDevice.this, getString(R.string.str_error_invalid_data), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void addDevice(Device device, String resultType) {

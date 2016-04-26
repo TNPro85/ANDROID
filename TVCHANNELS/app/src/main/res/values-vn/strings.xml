@@ -38,6 +38,7 @@
     <string name="menu_refresh">Làm mới</string>
     <string name="menu_edit">Sửa</string>
     <string name="menu_copy">Sao chép</string>
+    <string name="menu_select_all">Chọn tất cả</string>
 
     <!-- Device -->
     <string name="str_empty_devices">Không có thiết bị</string>
@@ -62,6 +63,7 @@
     <string name="str_channel_desc_hint">Chú thích giúp bạn xác định nội dung kênh</string>
     <string name="str_channel_delete_single_confirm">Bạn có chắc muốn xóa kênh này không?</string>
     <string name="str_channel_delete_multi_confirm">Bạn có chắc muốn xóa những kênh đã chọn không?</string>
+    <string name="str_channel_overwrite_confirm">Các kênh hiện có trong thiết bị này sẽ bị ghi đè.\nBạn có chắc muốn sao chép không?</string>
 
     <!-- Setting -->
     <string name="str_language">Ngôn ngữ</string>

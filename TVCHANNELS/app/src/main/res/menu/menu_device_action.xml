@@ -4,9 +4,6 @@
         android:id="@+id/action_edit"
         android:title="@string/menu_edit" />
     <item
-        android:id="@+id/action_copy"
-        android:title="@string/menu_copy" />
-    <item
         android:id="@+id/action_delete"
         android:title="@string/menu_delete" />
 </menu>

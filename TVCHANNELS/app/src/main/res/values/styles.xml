@@ -9,6 +9,7 @@
         <item name="colorPrimary">@color/main_color</item>
         <item name="actionBarStyle">@style/themeActionBar</item>
         <item name="actionModeBackground">@color/main_color</item>
+        <item name="actionModeCloseDrawable">@drawable/ic_clear_white_24dp</item>
         <!--<item name="actionBarTabTextStyle">@style/styleActionBarTabText</item>-->
         <!--<item name="actionMenuTextColor">@color/actionbar_text</item>-->
         <!--<item name="actionBarTabStyle">@style/styleActionBarTabs</item>-->

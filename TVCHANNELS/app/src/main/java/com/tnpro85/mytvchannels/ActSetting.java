@@ -159,7 +159,7 @@ public class ActSetting extends ActBase {
         findViewById(R.id.vAbout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ActSetting.this, "TNpro85", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActSetting.this, R.string.app_copyright, Toast.LENGTH_SHORT).show();
             }
         });
 
