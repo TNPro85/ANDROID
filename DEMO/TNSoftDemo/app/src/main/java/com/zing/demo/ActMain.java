@@ -49,7 +49,8 @@ public class ActMain extends ActionBarActivity {
                 "Draw on View",
                 "Split string and combine",
                 "Folder last access",
-                "Custom View Group"
+                "Custom View Group",
+                "AES128 Base64"
         };
         Arrays.sort(s);
 
@@ -87,6 +88,9 @@ public class ActMain extends ActionBarActivity {
                         break;
                     case "Custom View Group":
                         intent = new Intent(ActMain.this, ActCustomViewGroup.class);
+                        break;
+                    case "AES128 Base64":
+                        intent = new Intent(ActMain.this, ActAES128.class);
                         break;
                 }
 
