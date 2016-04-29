@@ -13,6 +13,6 @@ public class Utils {
     }
 
     public static void showMsg(Context context, int strId) {
-        Toast.makeText(context, context.getString(strId), Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, strId, Toast.LENGTH_SHORT).show();
     }
 }
