@@ -92,7 +92,7 @@ public abstract class ActBase extends AppCompatActivity {
     }
 
     protected void hideLoadingDlg() {
-        if(mLoadingDialog.isShowing())
+        if(mLoadingDialog != null && mLoadingDialog.isShowing())
             mLoadingDialog.dismiss();
     }
 

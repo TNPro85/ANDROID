@@ -19,7 +19,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.tnpro.core.utils.VersionUtils;
 import com.tnpro85.mytvchannels.application.MainApp;
@@ -159,7 +158,7 @@ public class ActSetting extends ActBase {
         findViewById(R.id.vAbout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ActSetting.this, R.string.app_copyright, Toast.LENGTH_SHORT).show();
+                Utils.showMsg(v.getContext(), R.string.app_copyright);
             }
         });
 
@@ -229,7 +228,7 @@ public class ActSetting extends ActBase {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(ActSetting.this, getString(R.string.str_error_backup_nodata), Toast.LENGTH_SHORT).show();
+                                Utils.showMsg(ActSetting.this, R.string.str_error_backup_nodata);
                             }
                         });
                         return;
@@ -270,7 +269,7 @@ public class ActSetting extends ActBase {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(ActSetting.this, msg, Toast.LENGTH_SHORT).show();
+                        Utils.showMsg(ActSetting.this, msg);
                         updateBackupTime();
                     }
                 });
@@ -282,7 +281,7 @@ public class ActSetting extends ActBase {
         final String path = Utils.getBackupPath();
         final File backupFile = new File(path);
         if(!backupFile.exists()) {
-            Toast.makeText(ActSetting.this, getString(R.string.str_error_backup_not_found), Toast.LENGTH_SHORT).show();
+            Utils.showMsg(ActSetting.this, R.string.str_error_backup_not_found);
             return;
         }
 

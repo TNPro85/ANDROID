@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.tnpro.core.uicontrols.MultiStateView;
 import com.tnpro.core.utils.AnimationUtils;
@@ -368,7 +367,7 @@ public class ActChannelList extends ActBase {
                                             e.printStackTrace();
                                         } finally {
                                             hideLoadingDlg();
-                                            Toast.makeText(ActChannelList.this, result ? getString(R.string.str_deleted) : getString(R.string.str_error_general), Toast.LENGTH_SHORT).show();
+                                            Utils.showMsg(ActChannelList.this, result ? R.string.str_deleted : R.string.str_error_general);
                                         }
                                     }
                                 })
@@ -386,11 +385,20 @@ public class ActChannelList extends ActBase {
 
         rvChannel.setAdapter(adapterChannel);
 
-        lsChannels = DBHelper.getInstance().getAllChannel(curDevice);
-        adapterChannel.setData(lsChannels);
-        adapterChannel.notifyDataSetChanged();
-
-        updateLayout();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                lsChannels = DBHelper.getInstance().getAllChannel(curDevice);
+                adapterChannel.setData(lsChannels);
+                runOnUI(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapterChannel.notifyDataSetChanged();
+                        updateLayout();
+                    }
+                });
+            }
+        }).start();
     }
 
     @Override
@@ -542,13 +550,9 @@ public class ActChannelList extends ActBase {
                 mSearchEt = (EditText) mActionBar.getCustomView().findViewById(R.id.etSearch);
                 mSearchEt.addTextChangedListener(new TextWatcher() {
                     @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                     @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    }
-
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
                     @Override
                     public void afterTextChanged(Editable s) {
                         adapterChannel.getFilter().filter(s);

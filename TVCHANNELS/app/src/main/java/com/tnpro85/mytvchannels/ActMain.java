@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.tnpro.core.uicontrols.MultiStateView;
 import com.tnpro.core.utils.AnimationUtils;
@@ -32,6 +31,7 @@ import com.tnpro85.mytvchannels.listener.DeviceItemClickListener;
 import com.tnpro85.mytvchannels.models.Device;
 import com.tnpro85.mytvchannels.uicontrols.DividerItemDecoration;
 import com.tnpro85.mytvchannels.utils.LocaleUtil;
+import com.tnpro85.mytvchannels.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -75,7 +75,7 @@ public class ActMain extends ActBase {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if(mSearchOpened)
+                if (mSearchOpened)
                     return;
 
                 if (dy > 0)
@@ -93,7 +93,9 @@ public class ActMain extends ActBase {
             }
 
             @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) { return false; }
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
 
             @Override
             public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
@@ -106,32 +108,41 @@ public class ActMain extends ActBase {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
-
-                                        boolean result = false;
                                         showLoadingDlg(R.string.str_doing, true);
-                                        try {
-                                            SparseBooleanArray selected = mAdapter.getSelectedIds();
-                                            int size = selected.size();
-                                            for (int i = size - 1; i >= 0; i--) {
-                                                if (selected.valueAt(i)) {
-                                                    Device selectedItem = mAdapter.getItem(selected.keyAt(i));
-                                                    result = DBHelper.getInstance().deleteDevice(selectedItem);
-                                                    mAdapter.remove(selectedItem);
+
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                boolean result = false;
+                                                try {
+                                                    SparseBooleanArray selected = mAdapter.getSelectedIds();
+                                                    int size = selected.size();
+                                                    for (int i = size - 1; i >= 0; i--) {
+                                                        if (selected.valueAt(i)) {
+                                                            Device selectedItem = mAdapter.getItem(selected.keyAt(i));
+                                                            result = DBHelper.getInstance().deleteDevice(selectedItem);
+                                                            mAdapter.remove(selectedItem);
+                                                        }
+                                                    }
+
+                                                    // Reset selected list and update ListView
+                                                    lsDevices = new ArrayList<>(mAdapter.getData());
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                } finally {
+                                                    final String msg = result ? getString(R.string.str_deleted) : getString(R.string.str_error_general);
+                                                    runOnUI(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            updateLayout();
+                                                            mode.finish();
+                                                            hideLoadingDlg();
+                                                            Utils.showMsg(ActMain.this, msg);
+                                                        }
+                                                    });
                                                 }
                                             }
-
-                                            // Reset selected list and update ListView
-                                            lsDevices = new ArrayList<>(mAdapter.getData());
-                                            updateLayout();
-
-                                            // Close CAB (Contextual Action Bar)
-                                            mode.finish();
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        } finally {
-                                            hideLoadingDlg();
-                                            Toast.makeText(ActMain.this, result ? getString(R.string.str_deleted) : getString(R.string.str_error_general), Toast.LENGTH_SHORT).show();
-                                        }
+                                        }).start();
                                     }
                                 })
                                 .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
@@ -172,10 +183,9 @@ public class ActMain extends ActBase {
         mAdapter = new DevicesAdapter(ActMain.this, new DeviceItemClickListener() {
             @Override
             public void onItemClick(int position, Object obj) {
-                if(mDeviceActionMode != null) {
+                if (mDeviceActionMode != null) {
                     toggleDeviceItem(position);
-                }
-                else if (position < mAdapter.getItemCount()) {
+                } else if (position < mAdapter.getItemCount()) {
                     Device selectedDevice = mAdapter.getItem(position);
                     Intent intent = new Intent(ActMain.this, ActChannelList.class);
                     intent.putExtra(Const.EXTRA.DEVICE, selectedDevice);
@@ -223,7 +233,7 @@ public class ActMain extends ActBase {
                                             e.printStackTrace();
                                         } finally {
                                             hideLoadingDlg();
-                                            Toast.makeText(ActMain.this, result ? getString(R.string.str_deleted) : getString(R.string.str_error_general), Toast.LENGTH_SHORT).show();
+                                            Utils.showMsg(ActMain.this, result ? R.string.str_deleted : R.string.str_error_general);
                                         }
                                     }
                                 })
@@ -240,35 +250,26 @@ public class ActMain extends ActBase {
         });
 
         rvDevices.setAdapter(mAdapter);
-        refreshData();
+        refreshData(false);
     }
 
     private void toggleDeviceItem(int position) {
         mAdapter.toggleSelection(position);
         SparseBooleanArray selectedItem = mAdapter.getSelectedIds();
-        if(selectedItem.size() > 0) {
-            if(mDeviceActionMode == null)
+        if (selectedItem.size() > 0) {
+            if (mDeviceActionMode == null)
                 mDeviceActionMode = startSupportActionMode(mDeviceActionModeCB);
             mDeviceActionMode.setTitle(selectedItem.size() + " " + getString(R.string.str_selected));
-        }
-        else if(mDeviceActionMode != null)
+        } else if (mDeviceActionMode != null)
             mDeviceActionMode.finish();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(Global.isNeedToRefreshMain) {
+        if (Global.isNeedToRefreshMain) {
             Global.isNeedToRefreshMain = false;
-            showLoadingDlg(R.string.str_doing, false);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    refreshData();
-                    hideLoadingDlg();
-                    Toast.makeText(ActMain.this, getString(R.string.str_refreshed), Toast.LENGTH_SHORT).show();
-                }
-            }, 1000);
+            refreshData(true);
         }
     }
 
@@ -285,7 +286,7 @@ public class ActMain extends ActBase {
                             mAdapter.setData(lsDevices);
                             mAdapter.notifyDataSetChanged();
 
-                            if(lsDevices.size() < 100)
+                            if (lsDevices.size() < 100)
                                 rvDevices.smoothScrollToPosition(lsDevices.size() - 1);
                             else
                                 rvDevices.scrollToPosition(lsDevices.size() - 1);
@@ -323,7 +324,7 @@ public class ActMain extends ActBase {
                                 mAdapter.setData(lsDevices);
                                 mAdapter.notifyDataSetChanged();
 
-                                if(lsDevices.size() < 100)
+                                if (lsDevices.size() < 100)
                                     rvDevices.smoothScrollToPosition(lsDevices.size() - 1);
                                 else
                                     rvDevices.scrollToPosition(lsDevices.size() - 1);
@@ -393,13 +394,12 @@ public class ActMain extends ActBase {
             }
 
             case R.id.action_refresh: {
-                showLoadingDlg(R.string.str_doing, false);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        refreshData();
+                        refreshData(true);
                         hideLoadingDlg();
-                        Toast.makeText(ActMain.this, getString(R.string.str_refreshed), Toast.LENGTH_SHORT).show();
+                        Utils.showMsg(ActMain.this, R.string.str_refreshed);
                     }
                 }, 700);
                 return true;
@@ -425,13 +425,13 @@ public class ActMain extends ActBase {
 
                 if (confirmExit) {
                     confirmExit = false;
-                    Toast.makeText(ActMain.this, getString(R.string.str_back_confirm), Toast.LENGTH_SHORT).show();
+                    Utils.showMsg(ActMain.this, R.string.str_back_confirm);
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             confirmExit = true;
                         }
-                    }, 1500);
+                    }, 2000);
                     return true;
                 }
             }
@@ -440,8 +440,11 @@ public class ActMain extends ActBase {
         return super.onKeyUp(keyCode, event);
     }
 
-    private void refreshData() {
+    private void refreshData(final boolean showLoading) {
         mAdapter.getSelectedIds().clear();
+        if(showLoading)
+            showLoadingDlg(R.string.str_doing, false);
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -452,6 +455,9 @@ public class ActMain extends ActBase {
                         mAdapter.setData(lsDevices);
                         mAdapter.notifyDataSetChanged();
                         updateLayout();
+
+                        if(showLoading)
+                            hideLoadingDlg();
                     }
                 });
             }
@@ -469,13 +475,9 @@ public class ActMain extends ActBase {
                 mSearchEt = (EditText) mActionBar.getCustomView().findViewById(R.id.etSearch);
                 mSearchEt.addTextChangedListener(new TextWatcher() {
                     @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                     @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    }
-
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
                     @Override
                     public void afterTextChanged(Editable s) {
                         mAdapter.getFilter().filter(s);

@@ -12,11 +12,11 @@ import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.tnpro85.mytvchannels.data.Const;
 import com.tnpro85.mytvchannels.db.DBHelper;
 import com.tnpro85.mytvchannels.models.Device;
+import com.tnpro85.mytvchannels.utils.Utils;
 
 public class ActDevice extends ActBase {
 
@@ -150,7 +150,7 @@ public class ActDevice extends ActBase {
         }
         catch (SQLiteConstraintException e) {
             e.printStackTrace();
-            Toast.makeText(ActDevice.this, getString(R.string.str_error_invalid_data), Toast.LENGTH_SHORT).show();
+            Utils.showMsg(ActDevice.this, R.string.str_error_invalid_data);
         }
     }
 

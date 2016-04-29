@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.tnpro85.mytvchannels.data.Const;
 import com.tnpro85.mytvchannels.db.DBHelper;
@@ -160,7 +159,7 @@ public class ActChannelAdd extends ActBase {
                 }
             } catch (SQLiteConstraintException e) {
                 e.printStackTrace();
-                Toast.makeText(ActChannelAdd.this, getString(R.string.str_error_invalid_data), Toast.LENGTH_SHORT).show();
+                Utils.showMsg(ActChannelAdd.this, R.string.str_error_invalid_data);
             }
             return true;
         }
