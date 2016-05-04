@@ -28,6 +28,6 @@ public class ActSplash extends Activity {
                 overridePendingTransition(R.anim.transition_right_to_left, R.anim.transition_right_to_left_out);
                 finish();
             }
-        }, 800);
+        }, 700);
     }
 }

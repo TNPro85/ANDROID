@@ -94,4 +94,6 @@
     <string name="str_error_backup_not_found">Bạn chưa thực hiện sao lưu hoặc đã xóa file sao lưu.</string>
     <string name="str_error_backup_nodata">Bạn chưa có dữ liệu để sao lưu.\nVui lòng kiểm tra và thử lại sau.</string>
     <string name="str_error_channel_exist">Kênh này đã tồn tại.\nVui lòng kiểm tra và thử lại.</string>
+    <string name="str_channel_no_selected">Chưa có kênh nào được chọn</string>
+    <string name="str_device_no_selected">Chưa có thiết bị nào được chọn</string>
 </resources>

@@ -103,19 +103,25 @@ public class ActChannelList extends ActBase {
                     case R.id.action_selectall: {
                         SparseBooleanArray selected = adapterChannel.getSelectedIds();
                         if(selected.size() == lsChannels.size())
-                            return true;
+                            selected.clear();
                         else {
                             selected.clear();
                             for(int i = 0; i < adapterChannel.getItemCount(); i++) {
                                 selected.put(i, true);
                             }
-                            mChannelActionMode.setTitle(selected.size() + " " + getString(R.string.str_selected));
-                            adapterChannel.notifyDataSetChanged();
                         }
+
+                        mChannelActionMode.setTitle(selected.size() + " " + getString(R.string.str_selected));
+                        adapterChannel.notifyDataSetChanged();
                         return true;
                     }
                     case R.id.action_copy: {
                         final SparseBooleanArray selected = adapterChannel.getSelectedIds();
+                        if(selected.size() == 0) {
+                            Utils.showMsg(ActChannelList.this, R.string.str_channel_no_selected);
+                            return true;
+                        }
+
                         if(lsDevices == null) {
                             lsDevices = DBHelper.getInstance().getAllDevices();
                             for(Device d : lsDevices) {
@@ -196,6 +202,12 @@ public class ActChannelList extends ActBase {
                         return true;
                     }
                     case R.id.action_delete: {
+                        final SparseBooleanArray selected = adapterChannel.getSelectedIds();
+                        if(selected.size() == 0) {
+                            Utils.showMsg(ActChannelList.this, R.string.str_channel_no_selected);
+                            return true;
+                        }
+
                         new AlertDialog.Builder(ActChannelList.this)
                                 .setTitle(R.string.str_confirm)
                                 .setMessage(R.string.str_channel_delete_multi_confirm)
@@ -210,7 +222,6 @@ public class ActChannelList extends ActBase {
                                             public void run() {
                                                 boolean result = false;
                                                 try {
-                                                    SparseBooleanArray selected = adapterChannel.getSelectedIds();
                                                     int size = selected.size();
                                                     for (int i = size - 1; i >= 0; i--) {
                                                         if (selected.valueAt(i)) {
@@ -524,6 +535,7 @@ public class ActChannelList extends ActBase {
             rvChannel.setVisibility(View.VISIBLE);
         } else {
             layoutMultiStateView.show(MultiStateView.STATE_EMPTY);
+            layoutMultiStateView.setEmptyDrawable(R.drawable.ic_empty_channel);
             layoutMultiStateView.setEmptyText(getResources().getString(R.string.str_empty_channels));
             layoutMultiStateView.setEmptySubText(getString(R.string.str_empty_channels_hint));
             rvChannel.setVisibility(View.GONE);

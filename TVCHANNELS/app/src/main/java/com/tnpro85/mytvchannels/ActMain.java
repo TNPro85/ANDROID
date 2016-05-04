@@ -39,7 +39,7 @@ public class ActMain extends ActBase {
 
     private boolean confirmExit = true;
     private ArrayList<Device> lsDevices;
-    private DevicesAdapter mAdapter;
+    private DevicesAdapter devicesAdapter;
     private ActionMode mDeviceActionMode;
     private ActionMode.Callback mDeviceActionModeCB;
 
@@ -88,7 +88,7 @@ public class ActMain extends ActBase {
         mDeviceActionModeCB = new ActionMode.Callback() {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                mode.getMenuInflater().inflate(R.menu.menu_act_delete, menu);
+                mode.getMenuInflater().inflate(R.menu.menu_actionmode_device, menu);
                 return true;
             }
 
@@ -100,7 +100,27 @@ public class ActMain extends ActBase {
             @Override
             public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
                 switch (item.getItemId()) {
+                    case R.id.action_selectall: {
+                        SparseBooleanArray selected = devicesAdapter.getSelectedIds();
+                        if(selected.size() == lsDevices.size())
+                            selected.clear();
+                        else {
+                            selected.clear();
+                            for(int i = 0; i < devicesAdapter.getItemCount(); i++) {
+                                selected.put(i, true);
+                            }
+                        }
+
+                        mDeviceActionMode.setTitle(selected.size() + " " + getString(R.string.str_selected));
+                        devicesAdapter.notifyDataSetChanged();
+                        return true;
+                    }
                     case R.id.action_delete: {
+                        final SparseBooleanArray selected = devicesAdapter.getSelectedIds();
+                        if(selected.size() == 0) {
+                            Utils.showMsg(ActMain.this, R.string.str_device_no_selected);
+                            return true;
+                        }
                         new AlertDialog.Builder(ActMain.this)
                                 .setTitle(getString(R.string.str_confirm))
                                 .setMessage(getString(R.string.str_device_delete_confirm))
@@ -108,25 +128,24 @@ public class ActMain extends ActBase {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
-                                        showLoadingDlg(R.string.str_doing, true);
+                                        showLoadingDlg(R.string.str_doing, false);
 
                                         new Thread(new Runnable() {
                                             @Override
                                             public void run() {
                                                 boolean result = false;
                                                 try {
-                                                    SparseBooleanArray selected = mAdapter.getSelectedIds();
                                                     int size = selected.size();
                                                     for (int i = size - 1; i >= 0; i--) {
                                                         if (selected.valueAt(i)) {
-                                                            Device selectedItem = mAdapter.getItem(selected.keyAt(i));
+                                                            Device selectedItem = devicesAdapter.getItem(selected.keyAt(i));
                                                             result = DBHelper.getInstance().deleteDevice(selectedItem);
-                                                            mAdapter.remove(selectedItem);
+                                                            devicesAdapter.remove(selectedItem);
                                                         }
                                                     }
 
                                                     // Reset selected list and update ListView
-                                                    lsDevices = new ArrayList<>(mAdapter.getData());
+                                                    lsDevices = new ArrayList<>(devicesAdapter.getData());
                                                 } catch (Exception e) {
                                                     e.printStackTrace();
                                                 } finally {
@@ -161,8 +180,8 @@ public class ActMain extends ActBase {
             @Override
             public void onDestroyActionMode(ActionMode mode) {
                 mDeviceActionMode = null;
-                mAdapter.getSelectedIds().clear();
-                mAdapter.notifyDataSetChanged();
+                devicesAdapter.getSelectedIds().clear();
+                devicesAdapter.notifyDataSetChanged();
             }
         };
 
@@ -180,13 +199,13 @@ public class ActMain extends ActBase {
     @Override
     protected void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
-        mAdapter = new DevicesAdapter(ActMain.this, new DeviceItemClickListener() {
+        devicesAdapter = new DevicesAdapter(ActMain.this, new DeviceItemClickListener() {
             @Override
             public void onItemClick(int position, Object obj) {
                 if (mDeviceActionMode != null) {
                     toggleDeviceItem(position);
-                } else if (position < mAdapter.getItemCount()) {
-                    Device selectedDevice = mAdapter.getItem(position);
+                } else if (position < devicesAdapter.getItemCount()) {
+                    Device selectedDevice = devicesAdapter.getItem(position);
                     Intent intent = new Intent(ActMain.this, ActChannelList.class);
                     intent.putExtra(Const.EXTRA.DEVICE, selectedDevice);
                     ActMain.this.startActivity(intent);
@@ -223,9 +242,9 @@ public class ActMain extends ActBase {
                                                 showLoadingDlg(R.string.str_doing, false);
                                                 Device selected = (Device) obj;
                                                 DBHelper.getInstance().deleteDevice(selected);
-                                                mAdapter.remove(selected);
-                                                mAdapter.notifyDataSetChanged();
-                                                lsDevices = new ArrayList<>(mAdapter.getData());
+                                                devicesAdapter.remove(selected);
+                                                devicesAdapter.notifyDataSetChanged();
+                                                lsDevices = new ArrayList<>(devicesAdapter.getData());
                                                 updateLayout();
                                                 result = true;
                                             }
@@ -249,13 +268,13 @@ public class ActMain extends ActBase {
             }
         });
 
-        rvDevices.setAdapter(mAdapter);
+        rvDevices.setAdapter(devicesAdapter);
         refreshData(false);
     }
 
     private void toggleDeviceItem(int position) {
-        mAdapter.toggleSelection(position);
-        SparseBooleanArray selectedItem = mAdapter.getSelectedIds();
+        devicesAdapter.toggleSelection(position);
+        SparseBooleanArray selectedItem = devicesAdapter.getSelectedIds();
         if (selectedItem.size() > 0) {
             if (mDeviceActionMode == null)
                 mDeviceActionMode = startSupportActionMode(mDeviceActionModeCB);
@@ -283,8 +302,8 @@ public class ActMain extends ActBase {
                         Device device = data.getParcelableExtra(Const.EXTRA.DEVICE);
                         if (device != null) {
                             lsDevices.add(device);
-                            mAdapter.setData(lsDevices);
-                            mAdapter.notifyDataSetChanged();
+                            this.devicesAdapter.setData(lsDevices);
+                            this.devicesAdapter.notifyDataSetChanged();
 
                             if (lsDevices.size() < 100)
                                 rvDevices.smoothScrollToPosition(lsDevices.size() - 1);
@@ -321,8 +340,8 @@ public class ActMain extends ActBase {
                         if (device != null) {
                             if (resultType.equals(ActDevice.RESULT_ADD)) {
                                 lsDevices.add(device);
-                                mAdapter.setData(lsDevices);
-                                mAdapter.notifyDataSetChanged();
+                                this.devicesAdapter.setData(lsDevices);
+                                this.devicesAdapter.notifyDataSetChanged();
 
                                 if (lsDevices.size() < 100)
                                     rvDevices.smoothScrollToPosition(lsDevices.size() - 1);
@@ -344,8 +363,8 @@ public class ActMain extends ActBase {
                                     }
                                 }
 
-                                mAdapter.setData(lsDevices);
-                                mAdapter.notifyDataSetChanged();
+                                this.devicesAdapter.setData(lsDevices);
+                                this.devicesAdapter.notifyDataSetChanged();
                             }
 
                         } else {
@@ -394,14 +413,8 @@ public class ActMain extends ActBase {
             }
 
             case R.id.action_refresh: {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshData(true);
-                        hideLoadingDlg();
-                        Utils.showMsg(ActMain.this, R.string.str_refreshed);
-                    }
-                }, 700);
+                refreshData(true);
+                Utils.showMsg(ActMain.this, R.string.str_refreshed);
                 return true;
             }
 
@@ -441,7 +454,7 @@ public class ActMain extends ActBase {
     }
 
     private void refreshData(final boolean showLoading) {
-        mAdapter.getSelectedIds().clear();
+        devicesAdapter.getSelectedIds().clear();
         if(showLoading)
             showLoadingDlg(R.string.str_doing, false);
 
@@ -452,8 +465,8 @@ public class ActMain extends ActBase {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.setData(lsDevices);
-                        mAdapter.notifyDataSetChanged();
+                        devicesAdapter.setData(lsDevices);
+                        devicesAdapter.notifyDataSetChanged();
                         updateLayout();
 
                         if(showLoading)
@@ -480,7 +493,7 @@ public class ActMain extends ActBase {
                     public void onTextChanged(CharSequence s, int start, int before, int count) {}
                     @Override
                     public void afterTextChanged(Editable s) {
-                        mAdapter.getFilter().filter(s);
+                        devicesAdapter.getFilter().filter(s);
                     }
                 });
             }
@@ -501,7 +514,7 @@ public class ActMain extends ActBase {
         KeyboardUtils.hideKeyboard(mSearchEt);
 
         // Reset adapter filter to display full datalist
-        mAdapter.getFilter().filter("");
+        devicesAdapter.getFilter().filter("");
 
         // Change search icon accordingly.
         mSearchAction.setIcon(R.drawable.abc_ic_search_api_mtrl_alpha);
