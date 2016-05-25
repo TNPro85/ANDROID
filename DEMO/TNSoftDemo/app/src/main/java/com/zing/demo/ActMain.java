@@ -50,7 +50,8 @@ public class ActMain extends ActionBarActivity {
                 "Split string and combine",
                 "Folder last access",
                 "Custom View Group",
-                "AES128 Base64"
+                "AES128 Base64",
+                "NDK JNI"
         };
         Arrays.sort(s);
 
@@ -91,6 +92,9 @@ public class ActMain extends ActionBarActivity {
                         break;
                     case "AES128 Base64":
                         intent = new Intent(ActMain.this, ActAES128.class);
+                        break;
+                    case "NDK JNI":
+                        intent = new Intent(ActMain.this, ActJNI.class);
                         break;
                 }
 

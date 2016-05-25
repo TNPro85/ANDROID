@@ -55,6 +55,9 @@
         <activity
             android:name=".ActAES128"
             android:configChanges="orientation|keyboard|screenSize|screenLayout" />
+        <activity
+            android:name=".ActJNI"
+            android:configChanges="orientation|keyboard|screenSize|screenLayout" />
     </application>
 
 </manifest>
