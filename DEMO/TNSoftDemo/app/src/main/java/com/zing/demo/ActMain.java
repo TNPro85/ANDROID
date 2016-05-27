@@ -19,9 +19,6 @@ import com.zing.demo.utils.KeyboardUtils;
 
 import java.util.Arrays;
 
-/**
- * Created by CPU10819-local on 10/04/2015.
- */
 public class ActMain extends ActionBarActivity {
 
     private ListView lvDemoCategory;

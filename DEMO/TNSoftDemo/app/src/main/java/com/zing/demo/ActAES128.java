@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import javax.crypto.Cipher;
@@ -25,7 +26,8 @@ public class ActAES128 extends ActBase {
     TextView tvEncrypt, tvResult;
     EditText etInput;
 
-    String strKey = "N2UWNwIDKg17TwsMDQ8HAQ==";
+//    String strKey = "N2UWNwIDKg17TwsMDQ8HAQ==";
+    String strKey = "7f39a980096521740ca0a5f0a07bfed9";
     String encryptedString, decryptedString;
     byte[] encrypted;
 
@@ -57,11 +59,9 @@ public class ActAES128 extends ActBase {
                         String data = etInput.getText().toString();
 
                         byte[] key = Base64.decode(strKey, Base64.DEFAULT);
-                        byte[] iv = Base64.decode(strKey, Base64.DEFAULT);
-
                         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
                         SecretKeySpec sks = new SecretKeySpec(key, "AES");
-                        IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+                        IvParameterSpec ivParameterSpec = new IvParameterSpec(getIvKey(strKey));
                         cipher.init(Cipher.ENCRYPT_MODE, sks, ivParameterSpec);
 
                         encrypted = cipher.doFinal(data.getBytes("UTF-8"));
@@ -81,11 +81,10 @@ public class ActAES128 extends ActBase {
                 try {
                     if(!TextUtils.isEmpty(encryptedString)) {
                         byte[] key = Base64.decode(strKey, Base64.DEFAULT);
-                        byte[] iv = Base64.decode(strKey, Base64.DEFAULT);
 
                         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
                         SecretKeySpec sks = new SecretKeySpec(key, "AES");
-                        IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+                        IvParameterSpec ivParameterSpec = new IvParameterSpec(getIvKey(strKey));
                         cipher.init(Cipher.DECRYPT_MODE, sks, ivParameterSpec);
 
                         byte[] decrypted = cipher.doFinal(Base64.decode(encryptedString, Base64.DEFAULT));
@@ -97,5 +96,12 @@ public class ActAES128 extends ActBase {
                 }
             }
         });
+    }
+
+    private byte[] getIvKey(String sk) throws UnsupportedEncodingException {
+        String key = "";
+        while (key.length() < 16)
+            key += sk;
+        return sk.substring(0, 16).getBytes("UTF-8");
     }
 }
