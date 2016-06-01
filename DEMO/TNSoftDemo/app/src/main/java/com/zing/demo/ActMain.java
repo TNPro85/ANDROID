@@ -1,6 +1,12 @@
 package com.zing.demo;
 
+import android.app.ActivityManager;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -10,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -33,7 +40,31 @@ public class ActMain extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        Bundle data = getIntent().getExtras();
+        if(data != null) {
+            boolean forceClose = data.getBoolean("forceClose");
+            if(forceClose) {
+                supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+                getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                super.onCreate(savedInstanceState);
+                getSupportActionBar().hide();
+                setContentView(R.layout.act_lock);
+                DevicePolicyManager deviceManger = (DevicePolicyManager)getSystemService(Context.DEVICE_POLICY_SERVICE);
+                ComponentName compName = new ComponentName(this, ActLockScreen.MyAdmin.class);
+                if (deviceManger.isAdminActive(compName)) {
+                    deviceManger.lockNow();
+                    finish();
+
+                    return;
+                }
+            }
+            else
+                super.onCreate(savedInstanceState);
+        }
+        else
+            super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.act_main);
         setTitle("TNSoft - Demo");
 
@@ -48,7 +79,8 @@ public class ActMain extends ActionBarActivity {
                 "Folder last access",
                 "Custom View Group",
                 "AES128 Base64",
-                "NDK JNI"
+                "NDK JNI",
+                "Lock Screen"
         };
         Arrays.sort(s);
 
@@ -92,6 +124,9 @@ public class ActMain extends ActionBarActivity {
                         break;
                     case "NDK JNI":
                         intent = new Intent(ActMain.this, ActJNI.class);
+                        break;
+                    case "Lock Screen":
+                        intent = new Intent(ActMain.this, ActLockScreen.class);
                         break;
                 }
 

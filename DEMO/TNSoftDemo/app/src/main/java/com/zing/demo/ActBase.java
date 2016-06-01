@@ -18,6 +18,7 @@ public class ActBase extends ActionBarActivity {
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(this.getClass().getSimpleName());
         }
     }
 

@@ -26,7 +26,6 @@ public class ActAES128 extends ActBase {
     TextView tvEncrypt, tvResult;
     EditText etInput;
 
-//    String strKey = "N2UWNwIDKg17TwsMDQ8HAQ==";
     String strKey = "7f39a980096521740ca0a5f0a07bfed9";
     String encryptedString, decryptedString;
     byte[] encrypted;
