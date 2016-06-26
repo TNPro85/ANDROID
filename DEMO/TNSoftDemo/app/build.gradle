@@ -10,6 +10,12 @@ android {
         }
     }
 
+    signingConfigs {
+        debug {
+            storeFile file('androidebug.keystore')
+        }
+    }
+
     defaultConfig {
         applicationId "com.zing.demo"
         minSdkVersion 9

@@ -5,6 +5,7 @@ include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES     := \
             native.c \
+            md5.c \
 
 LOCAL_C_INCLUDES    += $(LOCAL_PATH)
 

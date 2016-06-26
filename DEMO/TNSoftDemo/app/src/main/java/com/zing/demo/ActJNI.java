@@ -6,6 +6,8 @@ import android.util.Base64;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zing.demo.utils.ToastUtils;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -28,8 +30,11 @@ public class ActJNI extends ActBase {
         String sk = null;
         String iv = "";
         try {
-            sk = getKey();
-            iv = getIvKey();
+            sk = getSK(getPackageName().split("\\."));
+            ToastUtils.showToast(this, sk);
+            return;
+//            sk = getKey();
+//            iv = getIvKey();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -64,6 +69,7 @@ public class ActJNI extends ActBase {
             Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
     }
 
+    private native String getSK(String[] arr);
     private native String getKey();
     private native String getIvKey();
 }
