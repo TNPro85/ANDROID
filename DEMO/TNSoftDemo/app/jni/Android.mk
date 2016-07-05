@@ -4,8 +4,7 @@ LOCAL_PATH := $(PROJECT_ROOT_PATH)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES     := \
-            native.c \
-            md5.c \
+            1mlcore.cpp \
 
 LOCAL_C_INCLUDES    += $(LOCAL_PATH)
 

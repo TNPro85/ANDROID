@@ -31,10 +31,7 @@ public class ActJNI extends ActBase {
         String iv = "";
         try {
             sk = getSK(getPackageName().split("\\."));
-            ToastUtils.showToast(this, sk);
-            return;
-//            sk = getKey();
-//            iv = getIvKey();
+            iv = getIv(sk);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -70,6 +67,16 @@ public class ActJNI extends ActBase {
     }
 
     private native String getSK(String[] arr);
-    private native String getKey();
-    private native String getIvKey();
+
+    private String getIv(String key) {
+        if(!TextUtils.isEmpty(key)) {
+            while(key.length() < 16) {
+                key += key;
+            }
+
+            return key.substring(0, 16);
+        }
+
+        return null;
+    }
 }
