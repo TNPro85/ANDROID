@@ -28,13 +28,21 @@ JNICALL Java_com_zing_demo_ActJNI_getSK(JNIEnv * env, jobject object, jobjectArr
 
     sort(arr, arrSize);
 
-    resultLength += 1;
+    int kSize = 7;
+    const char* k[kSize] = {"1", "m", "a", "n", "l", "a", "b"};
+    sort(k, kSize);
+
+    resultLength += (kSize + 1);
 
     result = (char*) malloc(resultLength);
     memset(result, '\0', resultLength);
 
     for(i = 0; i < arrSize; i++) {
         strcat(result, arr[i]);
+    }
+
+    for(i = 0; i < kSize; i++) {
+        strcat(result, k[i]);
     }
 
     //result = digestString(result);
