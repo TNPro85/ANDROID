@@ -71,7 +71,6 @@ public class ActMain extends ActionBarActivity {
         s = new String[] {
                 "Unique Id",
                 "Subsequence Emoji",
-                "Xml 2 Java",
                 "File Observer",
                 "Convert number to K,M,B",
                 "Draw on View",
@@ -97,9 +96,6 @@ public class ActMain extends ActionBarActivity {
                         break;
                     case "Subsequence Emoji":
                         intent = new Intent(ActMain.this, ActSubsequenceEmoji.class);
-                        break;
-                    case "Xml 2 Java":
-                        intent = new Intent(ActMain.this, ActXml2Java.class);
                         break;
                     case "File Observer":
                         intent = new Intent(ActMain.this, ActFileObserver.class);
