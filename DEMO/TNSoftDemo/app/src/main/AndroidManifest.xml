@@ -54,6 +54,9 @@
         <activity
             android:name=".ActLockScreen"
             android:configChanges="orientation|keyboard|screenSize|screenLayout" />
+        <activity
+            android:name=".ActDeviceID"
+            android:configChanges="orientation|keyboard|screenSize|screenLayout" />
 
         <receiver
             android:name=".ActLockScreen$MyAdmin"

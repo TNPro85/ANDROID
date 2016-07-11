@@ -79,7 +79,8 @@ public class ActMain extends ActionBarActivity {
                 "Custom View Group",
                 "AES128 Base64",
                 "NDK JNI",
-                "Lock Screen"
+                "Lock Screen",
+                "Device ID"
         };
         Arrays.sort(s);
 
@@ -123,6 +124,9 @@ public class ActMain extends ActionBarActivity {
                         break;
                     case "Lock Screen":
                         intent = new Intent(ActMain.this, ActLockScreen.class);
+                        break;
+                    case "Device ID":
+                        intent = new Intent(ActMain.this, ActDeviceID.class);
                         break;
                 }
 
