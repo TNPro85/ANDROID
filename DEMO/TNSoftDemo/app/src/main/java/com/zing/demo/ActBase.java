@@ -3,9 +3,10 @@ package com.zing.demo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-public class ActBase extends ActionBarActivity {
+public class ActBase extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,7 +17,6 @@ public class ActBase extends ActionBarActivity {
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) {
             actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(this.getClass().getSimpleName());
         }

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class ActCustomViewGroup extends ActionBarActivity {
+public class ActCustomViewGroup extends ActBase {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
