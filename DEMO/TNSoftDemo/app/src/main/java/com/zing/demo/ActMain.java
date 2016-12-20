@@ -1,11 +1,9 @@
 package com.zing.demo;
 
-import android.app.ActivityManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -80,7 +78,8 @@ public class ActMain extends ActionBarActivity {
                 "AES128 Base64",
                 "NDK JNI",
                 "Lock Screen",
-                "Device ID"
+                "Device ID",
+                "Detect Wifi/Gsm strength"
         };
         Arrays.sort(s);
 
@@ -127,6 +126,9 @@ public class ActMain extends ActionBarActivity {
                         break;
                     case "Device ID":
                         intent = new Intent(ActMain.this, ActDeviceID.class);
+                        break;
+                    case "Detect Wifi/Gsm strength":
+                        intent = new Intent(ActMain.this, ActNetworkStrength.class);
                         break;
                 }
 
