@@ -20,6 +20,8 @@ import android.telephony.CellSignalStrengthGsm;
 import android.telephony.CellSignalStrengthLte;
 import android.telephony.CellSignalStrengthWcdma;
 import android.telephony.TelephonyManager;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +35,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class ActNetworkStrength extends ActBase {
-    private TextView tvResult;
+    private TextView tvResult, tvLatency;
+    private Button btnTestLatency;
     private Timer timer;
 
     @Override
@@ -42,6 +45,14 @@ public class ActNetworkStrength extends ActBase {
         setContentView(R.layout.act_newwork_strength);
 
         tvResult = (TextView) findViewById(R.id.tvResult);
+        tvLatency = (TextView) findViewById(R.id.tvLatency);
+        btnTestLatency = (Button) findViewById(R.id.btnTestLatency);
+        btnTestLatency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkLatency();
+            }
+        });
 
 //        Generally --------------------------------------------------------------------------------
 //        db >= -50 db = 100% quality
@@ -131,13 +142,7 @@ public class ActNetworkStrength extends ActBase {
             }
         }, 300, 1500);
 
-//        checkLatency();
-        try {
-            Ping p = ping(new URL("https://www.google.com.vn/"), this);
-            Toast.makeText(this, "cnt: "+p.cnt+",dns:"+p.dns+",host:"+p.host+",ip:"+p.ip+",net:"+p.net, Toast.LENGTH_LONG).show();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        checkLatency();
     }
 
     private String getWifiStrength(int speed) {
@@ -168,34 +173,67 @@ public class ActNetworkStrength extends ActBase {
         else return "SIGNAL_STRENGTH_POOR";
     }
 
+    private boolean isTestingLatency;
     private void checkLatency() {
-        try {
-            long BeforeTime = System.currentTimeMillis();
-            URL u = new URL("http://www.google.com.vn");
-            HttpURLConnection httpUrlConnection = (HttpURLConnection) u.openConnection();
-            httpUrlConnection.setUseCaches(true);
-            httpUrlConnection.setConnectTimeout(30000);
-            httpUrlConnection.setReadTimeout(30000);
-            try {
-                httpUrlConnection.setRequestProperty("device_version", String.valueOf(Build.VERSION.SDK_INT));
-                httpUrlConnection.setRequestProperty("device_model", String.valueOf(Build.MODEL));
-                httpUrlConnection.setRequestProperty("device_brand", String.valueOf(Build.BRAND));
-                httpUrlConnection.setRequestProperty("device_manufacturer", String.valueOf(Build.MANUFACTURER));
-                httpUrlConnection.setRequestProperty("device_name", String.valueOf(Build.DEVICE));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            long AfterTime = System.currentTimeMillis();
-            final Long TimeDifference = AfterTime - BeforeTime;
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(ActNetworkStrength.this, TimeDifference + "", Toast.LENGTH_LONG).show();
+        if(isTestingLatency) return;
+
+        isTestingLatency = true;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if(!isFinishing()) {
+                        final Ping p = ping(new URL("https://www.google.com.vn/"), ActNetworkStrength.this);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                String latency = "cnt: " + p.cnt
+                                        +"\ndns:" + p.dns
+                                        +"\nhost:" + p.host
+                                        +"\nip:" + p.ip
+                                        +"\nnet:" +p.net;
+
+                                if(tvLatency != null)
+                                    tvLatency.setText(latency);
+
+                                isTestingLatency = false;
+                            }
+                        });
+                    }
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                    isTestingLatency = false;
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        }).start();
+
+//        try {
+//            long BeforeTime = System.currentTimeMillis();
+//            URL u = new URL("http://www.google.com.vn");
+//            HttpURLConnection httpUrlConnection = (HttpURLConnection) u.openConnection();
+//            httpUrlConnection.setUseCaches(true);
+//            httpUrlConnection.setConnectTimeout(30000);
+//            httpUrlConnection.setReadTimeout(30000);
+//            try {
+//                httpUrlConnection.setRequestProperty("device_version", String.valueOf(Build.VERSION.SDK_INT));
+//                httpUrlConnection.setRequestProperty("device_model", String.valueOf(Build.MODEL));
+//                httpUrlConnection.setRequestProperty("device_brand", String.valueOf(Build.BRAND));
+//                httpUrlConnection.setRequestProperty("device_manufacturer", String.valueOf(Build.MANUFACTURER));
+//                httpUrlConnection.setRequestProperty("device_name", String.valueOf(Build.DEVICE));
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            long AfterTime = System.currentTimeMillis();
+//            final Long TimeDifference = AfterTime - BeforeTime;
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Toast.makeText(ActNetworkStrength.this, TimeDifference + "", Toast.LENGTH_LONG).show();
+//                }
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
 
@@ -227,7 +265,7 @@ public class ActNetworkStrength extends ActBase {
                 long start = System.currentTimeMillis();
                 hostAddress = InetAddress.getByName(url.getHost()).getHostAddress();
                 long dnsResolved = System.currentTimeMillis();
-                Socket socket = new Socket(hostAddress, url.getPort());
+                Socket socket = new Socket(hostAddress, 80);
                 socket.close();
                 long probeFinish = System.currentTimeMillis();
                 r.dns = (int) (dnsResolved - start);
