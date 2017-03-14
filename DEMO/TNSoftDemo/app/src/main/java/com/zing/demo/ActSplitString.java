@@ -33,7 +33,9 @@ public class ActSplitString extends ActBase {
             @Override
             public void onClick(View v) {
                 String str = etInput.getText().toString();
-                String[] resultSplit = TextUtils.split(str, etSeparator.getText().toString());
+                String expression = etSeparator.getText().toString();
+                if(expression.equals(".")) expression = "\\.";
+                String[] resultSplit = TextUtils.split(str, expression);
                 String result = "";
                 for(int i = 0; i < resultSplit.length; i++) {
                     result += resultSplit[i] + (i < resultSplit.length - 1 ? "\n" : "");
