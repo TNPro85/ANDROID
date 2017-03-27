@@ -79,7 +79,8 @@ public class ActMain extends ActionBarActivity {
                 "NDK JNI",
                 "Lock Screen",
                 "Device ID",
-                "Detect Wifi/Gsm strength"
+                "Detect Wifi/Gsm strength",
+                "Circle Animation"
         };
         Arrays.sort(s);
 
@@ -129,6 +130,9 @@ public class ActMain extends ActionBarActivity {
                         break;
                     case "Detect Wifi/Gsm strength":
                         intent = new Intent(ActMain.this, ActNetworkStrength.class);
+                        break;
+                    case "Circle Animation":
+                        intent = new Intent(ActMain.this, ActCircleAnimation.class);
                         break;
                 }
 

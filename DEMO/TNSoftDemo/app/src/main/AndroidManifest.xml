@@ -64,6 +64,9 @@
         <activity
             android:name=".ActNetworkStrength"
             android:configChanges="orientation|keyboard|screenSize|screenLayout" />
+        <activity
+            android:name=".ActCircleAnimation"
+            android:configChanges="orientation|keyboard|screenSize|screenLayout" />
 
         <receiver
             android:name=".ActLockScreen$MyAdmin"
