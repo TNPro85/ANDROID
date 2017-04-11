@@ -4,6 +4,10 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 
+/**
+ * Here is a great website to find gradient combinations: https://uigradients.com
+ */
+
 public class ActGradientAnimation extends ActBase {
 
     private AnimationDrawable animationDrawable;
