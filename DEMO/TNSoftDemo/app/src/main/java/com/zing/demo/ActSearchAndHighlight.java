@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 public class ActSearchAndHighlight extends ActBase {
 
-    private TextView mTextView;
+    private TextView mTextView, mTextCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +20,8 @@ public class ActSearchAndHighlight extends ActBase {
         setContentView(R.layout.act_search_and_highlight);
 
         mTextView = (TextView) findViewById(R.id.text_view);
+        mTextCount = (TextView) findViewById(R.id.text_count);
+
         EditText mSearchEditText = (EditText) findViewById(R.id.search_edit_text);
         mSearchEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -50,8 +52,10 @@ public class ActSearchAndHighlight extends ActBase {
 
         //Search for all occurrences of the keyword in the string
         int indexOfKeyword = spannableString.toString().toLowerCase().indexOf(input.toLowerCase());
+        int count = 0;
 
         while (indexOfKeyword > 0) {
+            count++;
             //Create a background color span on the keyword
             spannableString.setSpan(new BackgroundColorSpan(Color.YELLOW), indexOfKeyword, indexOfKeyword + input.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
@@ -61,5 +65,8 @@ public class ActSearchAndHighlight extends ActBase {
 
         //Set the final text on TextView
         mTextView.setText(spannableString);
+
+        String strCount = count + " " + (count >= 2 ? "results" : "result");
+        mTextCount.setText(strCount);
     }
 }
