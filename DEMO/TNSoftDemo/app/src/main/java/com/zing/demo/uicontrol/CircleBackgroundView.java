@@ -23,7 +23,7 @@ public class CircleBackgroundView extends View {
     private ObjectAnimator mDrawAnimator;
     private float animationProgress;
     private boolean isRunningAnimation = false;
-    private float maxRadius = 0.0f;
+    private View mParentView;
 
     public CircleBackgroundView(Context context) {
         super(context);
@@ -43,6 +43,11 @@ public class CircleBackgroundView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        if(mParentView != null) {
+            mXCenterCir = mParentView.getX() + (mParentView.getWidth() / 2);
+            mYCenterCir = mParentView.getY() + (mParentView.getHeight() / 2);
+        }
 
         if (mXCenterCir < 0f) {
             mXCenterCir = getWidth() / 2f;
@@ -110,7 +115,7 @@ public class CircleBackgroundView extends View {
     private void setup() {
         float width = mXCenterCir > 0 ? mXCenterCir : -mXCenterCir;
         float height = mYCenterCir > 0 ? mYCenterCir : -mYCenterCir;
-        maxRadius = Math.max(width, height);
+        float maxRadius = Math.max(width, height);
         float range = maxRadius + (RANGE_RADIUS * 2 - 0.5f) * getRadius();
         if (range < 0.0f) {
             range = 50.0f;
@@ -169,6 +174,10 @@ public class CircleBackgroundView extends View {
     public void setCenterCircle(float xValue, float yValue) {
         this.mXCenterCir = xValue;
         this.mYCenterCir = yValue;
+    }
+
+    public void setParentView(View view) {
+        this.mParentView = view;
     }
 
     public void setCircleColor(int color) {

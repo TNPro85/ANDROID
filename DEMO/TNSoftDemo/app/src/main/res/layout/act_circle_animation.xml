@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+    <com.zing.demo.uicontrol.CircleBackgroundView
+        android:id="@+id/cbvCircle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/imvCircle"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_oval_img_solid"
+        android:onClick="onCircleClick"
+        android:scaleType="centerInside"
+        android:src="@mipmap/ic_launcher" />
+
+</FrameLayout>

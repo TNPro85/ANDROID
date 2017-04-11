@@ -2,7 +2,6 @@ package com.zing.demo;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 
 import com.zing.demo.uicontrol.CircleBackgroundView;
@@ -25,15 +24,7 @@ public class ActCircleAnimation extends ActBase {
         cbv = (CircleBackgroundView) findViewById(R.id.cbvCircle);
         cbv.setDiameter(ViewUtils.dpToPx(this, 100f));
         cbv.setCircleColor(Color.parseColor("#8947AD"));
-
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                float x = (cbv.getX() + cbv.getWidth()) / 2;
-                float y = (cbv.getY() + cbv.getHeight()) / 2;
-                cbv.setCenterCircle(x, y);
-            }
-        });
+        cbv.setParentView(findViewById(R.id.imvCircle));
     }
 
     @Override

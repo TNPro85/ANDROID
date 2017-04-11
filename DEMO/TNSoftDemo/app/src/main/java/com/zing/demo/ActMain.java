@@ -80,7 +80,8 @@ public class ActMain extends ActionBarActivity {
                 "Lock Screen",
                 "Device ID",
                 "Detect Wifi/Gsm strength",
-                "Circle Animation"
+                "Circle Animation",
+                "Gradient Animation"
         };
         Arrays.sort(s);
 
@@ -133,6 +134,9 @@ public class ActMain extends ActionBarActivity {
                         break;
                     case "Circle Animation":
                         intent = new Intent(ActMain.this, ActCircleAnimation.class);
+                        break;
+                    case "Gradient Animation":
+                        intent = new Intent(ActMain.this, ActGradientAnimation.class);
                         break;
                 }
 
