@@ -3,4 +3,6 @@
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
     <string name="str_device_admin">Lock screen admin example</string>
+
+    <string name="long_text">My Android career started two-and-a-half years ago, when I transitioned from back-end development to mobile development, along with the support of a four-person Android team. A year later, I joined a series-B startup, where I was one of two Android engineers for most of my time there. Working on small teams was a great way to have independence and also learn from other engineers.\n\nBut then, five months ago, I took a leap from small team to no team when I joined a seed-funded startup of six employees as their only Android engineer. In my new role, I’ve been building the Winnie app from scratch, which just got released!\n\nIt turns out this was a big leap. Flying solo has been a challenge, but it’s also been extremely rewarding. I’ve learned along the way that there are pros and cons to working alone. Most importantly, there are things you can do to set yourself up for success. Here are some of the tactics that have helped me thus far.</string>
 </resources>

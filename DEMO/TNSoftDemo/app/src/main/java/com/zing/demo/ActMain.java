@@ -81,7 +81,8 @@ public class ActMain extends ActionBarActivity {
                 "Device ID",
                 "Detect Wifi/Gsm strength",
                 "Circle Animation",
-                "Gradient Animation"
+                "Gradient Animation",
+                "Search & Highlight"
         };
         Arrays.sort(s);
 
@@ -137,6 +138,9 @@ public class ActMain extends ActionBarActivity {
                         break;
                     case "Gradient Animation":
                         intent = new Intent(ActMain.this, ActGradientAnimation.class);
+                        break;
+                    case "Search & Highlight":
+                        intent = new Intent(ActMain.this, ActSearchAndHighlight.class);
                         break;
                 }
 
