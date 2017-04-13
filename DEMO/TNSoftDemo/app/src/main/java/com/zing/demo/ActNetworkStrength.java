@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -23,9 +22,7 @@ import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.Socket;
@@ -91,7 +88,7 @@ public class ActNetworkStrength extends ActBase {
                     @Override
                     public void run() {
                         try {
-                            WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+                            WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                             int linkSpeed = wifiManager.getConnectionInfo().getRssi();
                             String result = "WIFI: " + linkSpeed + " " + getWifiStrength(linkSpeed);
 
