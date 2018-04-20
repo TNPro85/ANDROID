@@ -71,6 +71,10 @@
             android:name=".ActGradientAnimation"
             android:configChanges="orientation|keyboard|screenSize|screenLayout" />
 
+        <activity
+            android:name=".ActSearchAndHighlight"
+            android:configChanges="orientation|keyboard|screenSize|screenLayout"/>
+
         <receiver
             android:name=".ActLockScreen$MyAdmin"
             android:description="@string/str_device_admin"
@@ -85,7 +89,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ActSearchAndHighlight"></activity>
     </application>
 
 </manifest>

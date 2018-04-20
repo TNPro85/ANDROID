@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -24,7 +24,7 @@ import com.zing.demo.utils.KeyboardUtils;
 
 import java.util.Arrays;
 
-public class ActMain extends ActionBarActivity {
+public class ActMain extends AppCompatActivity {
 
     private ListView lvDemoCategory;
     private EditText mSearchEt;

@@ -118,13 +118,14 @@ public class ActNetworkStrength extends ActBase {
                                         int gsmLevel = cellSignalStrengthLte.getAsuLevel();
                                         result += "\nLTE: " + speed + " " + getGsmStrength(gsmLevel);
                                     }
-                                    else if(listGsm.get(0) instanceof CellInfoWcdma
-                                            && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                                        CellInfoWcdma cellInfoWcdma = (CellInfoWcdma) listGsm.get(0);
-                                        CellSignalStrengthWcdma cellSignalStrengthWcdma = cellInfoWcdma.getCellSignalStrength();
-                                        int speed = cellSignalStrengthWcdma.getDbm();
-                                        int gsmLevel = cellSignalStrengthWcdma.getAsuLevel();
-                                        result += "\nWCDMA: " + speed + " " + getGsmStrength(gsmLevel);
+                                    else if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                                        if(listGsm.get(0) instanceof CellInfoWcdma) {
+                                            CellInfoWcdma cellInfoWcdma = (CellInfoWcdma) listGsm.get(0);
+                                            CellSignalStrengthWcdma cellSignalStrengthWcdma = cellInfoWcdma.getCellSignalStrength();
+                                            int speed = cellSignalStrengthWcdma.getDbm();
+                                            int gsmLevel = cellSignalStrengthWcdma.getAsuLevel();
+                                            result += "\nWCDMA: " + speed + " " + getGsmStrength(gsmLevel);
+                                        }
                                     }
                                 }
 
